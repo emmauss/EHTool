@@ -101,16 +101,29 @@
     </Compile>
     <Compile Include="Common\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Common\Converters\Converter.cs" />
+    <Compile Include="Common\Converters\TimeSpanToDoubleConverter.cs" />
     <Compile Include="Common\Extension\HtmlNodeExtension.cs" />
     <Compile Include="Common\Extension\JsonValueExtension.cs" />
     <Compile Include="Common\Helpers\CacheHelper.cs" />
-    <Compile Include="Common\Helpers\CookieHelper.cs" />
+    <Compile Include="Common\Helpers\EnumHelper.cs" />
+    <Compile Include="Common\Helpers\FileTypeHelper.cs" />
     <Compile Include="Common\Helpers\HttpHelper.cs" />
+    <Compile Include="Common\Helpers\JsonHelper.cs" />
     <Compile Include="Common\Helpers\SettingHelper.cs" />
     <Compile Include="Common\NotifyPropertyChanged.cs" />
+    <Compile Include="Common\Triggers\ControlSizeTrigger.cs" />
+    <Compile Include="DHPlayer\Entities\FileType.cs" />
+    <Compile Include="DHPlayer\Model\MainListModel.cs" />
+    <Compile Include="DHPlayer\Model\MusicListModel.cs" />
+    <Compile Include="DHPlayer\Model\SplitViewPaneModel.cs" />
+    <Compile Include="DHPlayer\Model\VideoListModel.cs" />
+    <Compile Include="DHPlayer\VideoPlayPage.xaml.cs">
+      <DependentUpon>VideoPlayPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EHTool\Common\Gallery.cs" />
     <Compile Include="EHTool\Common\GalleryDetail.cs" />
     <Compile Include="EHTool\Common\GalleryImages.cs" />
+    <Compile Include="EHTool\Common\Helpers\CookieHelper.cs" />
     <Compile Include="EHTool\Common\Login.cs" />
     <Compile Include="EHTool\Entities\ServerTypes.cs" />
     <Compile Include="EHTool\Interface\ISearchOption.cs" />
@@ -146,6 +159,13 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avcodec-56.dll" />
+    <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avdevice-56.dll" />
+    <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avfilter-5.dll" />
+    <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avformat-56.dll" />
+    <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avutil-54.dll" />
+    <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\swresample-1.dll" />
+    <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\swscale-3.dll" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -155,6 +175,10 @@
     <Page Include="DHPlayer\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DHPlayer\VideoPlayPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +191,13 @@
     <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FFmpegInterop">
+      <HintPath>FFmpegInterop\$(PlatformTarget)\FFmpegInterop.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+      <Implementation>FFmpegInterop.dll</Implementation>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DHPlayer\View\" />

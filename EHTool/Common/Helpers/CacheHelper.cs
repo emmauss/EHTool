@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using EHTool.Common.Converters;
+using Common.Converters;
 using Windows.Storage;
 
-namespace EHTool.Common.Helpers
+namespace Common.Helpers
 {
     public static class CacheHelper
     {

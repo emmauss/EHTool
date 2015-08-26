@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace EHTool.Common
+namespace Common
 {
     public abstract class NotifyPropertyChanged : INotifyPropertyChanged
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace EHTool.Common.Extension
+namespace Common.Extension
 {
     public static class HtmlNodeExtension
     {

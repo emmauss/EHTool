@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace EHTool.Common.Converters
+namespace Common.Converters
 {
     public class BoolToVisibilityConverter : IValueConverter
     {

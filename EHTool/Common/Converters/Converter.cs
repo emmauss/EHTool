@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace EHTool.Common.Converters
+namespace Common.Converters
 {
     public static class Converter
     {

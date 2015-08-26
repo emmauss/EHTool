@@ -1,11 +1,11 @@
 ﻿using System.IO;
-using EHTool.Common;
+using Common;
 using System.Net.NetworkInformation;
 using Windows.UI.Xaml.Media.Imaging;
 using static EHTool.Common.Helpers.CookieHelper;
-using static EHTool.Common.Helpers.CacheHelper;
-using static EHTool.Common.Helpers.HttpHelper;
-using static EHTool.Common.Converters.Converter;
+using static Common.Helpers.CacheHelper;
+using static Common.Helpers.HttpHelper;
+using static Common.Converters.Converter;
 
 namespace EHTool.EHTool.Model
 {

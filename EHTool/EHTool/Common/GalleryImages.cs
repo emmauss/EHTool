@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using EHTool.EHTool.Model;
 using HtmlAgilityPack;
 
-using static EHTool.Common.Helpers.HttpHelper;
+using static Common.Helpers.HttpHelper;
 using static EHTool.Common.Helpers.CookieHelper;
 
 namespace EHTool.EHTool.Common

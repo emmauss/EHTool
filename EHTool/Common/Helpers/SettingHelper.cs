@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EHTool.Common.Helpers
+namespace Common.Helpers
 {
     public class SettingException : Exception
     {

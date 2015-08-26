@@ -1,4 +1,4 @@
-﻿using static EHTool.Common.Helpers.SettingHelpers;
+﻿using static Common.Helpers.SettingHelpers;
 using static System.Text.RegularExpressions.Regex;
 
 namespace EHTool.Common.Helpers

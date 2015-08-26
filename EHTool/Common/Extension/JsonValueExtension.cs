@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.Data.Json;
 
-namespace EHTool.Common.Extension
+namespace Common.Extension
 {
     public static class JsonValueExtension
     {

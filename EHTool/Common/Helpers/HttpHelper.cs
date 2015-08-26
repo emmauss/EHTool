@@ -4,9 +4,9 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using EHTool.Common.Converters;
+using Common.Converters;
 
-namespace EHTool.Common.Helpers
+namespace Common.Helpers
 {
     public static class HttpHelper
     {

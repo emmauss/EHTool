@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EHTool.Common.Extension;
+using Common.Extension;
 using EHTool.EHTool.Model;
 using HtmlAgilityPack;
 
-using static EHTool.Common.Helpers.CacheHelper;
+using static Common.Helpers.CacheHelper;
 using static System.Text.RegularExpressions.Regex;
 using static HtmlAgilityPack.HtmlEntity;
-using static EHTool.Common.Helpers.HttpHelper;
+using static Common.Helpers.HttpHelper;
 using static EHTool.Common.Helpers.CookieHelper;
 
 namespace EHTool.EHTool.Common
