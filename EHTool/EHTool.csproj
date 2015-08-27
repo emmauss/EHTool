@@ -17,7 +17,10 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>EHTool_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>EHTool_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>FC5D2D4208D3B6A5B7B7918B3391EDE5C6494BCE</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -93,6 +96,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="EHTool_StoreKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -114,10 +118,12 @@
     <Compile Include="Common\Triggers\ControlSizeTrigger.cs" />
     <Compile Include="DHPlayer\Entities\FileType.cs" />
     <Compile Include="DHPlayer\Model\MainListModel.cs" />
-    <Compile Include="DHPlayer\Model\MusicListModel.cs" />
     <Compile Include="DHPlayer\Model\SplitViewPaneModel.cs" />
     <Compile Include="DHPlayer\Model\VideoListModel.cs" />
-    <Compile Include="DHPlayer\VideoPlayPage.xaml.cs">
+    <Compile Include="DHPlayer\View\SearchResultPage.xaml.cs">
+      <DependentUpon>SearchResultPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DHPlayer\View\VideoPlayPage.xaml.cs">
       <DependentUpon>VideoPlayPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="EHTool\Common\Gallery.cs" />
@@ -139,8 +145,11 @@
     <Compile Include="EHTool\Model\TorrentModel.cs" />
     <Compile Include="EHTool\Model\TorrentSearchOption.cs" />
     <Compile Include="EHTool\Model\UpLoadModel.cs" />
-    <Compile Include="DHPlayer\MainPage.xaml.cs">
+    <Compile Include="DHPlayer\View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EHTool\View\EHMainPage.xaml.cs">
+      <DependentUpon>EHMainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -151,14 +160,12 @@
     <None Include="EHTool_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avcodec-56.dll" />
     <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avdevice-56.dll" />
     <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avfilter-5.dll" />
@@ -172,11 +179,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="DHPlayer\MainPage.xaml">
+    <Page Include="DHPlayer\View\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DHPlayer\VideoPlayPage.xaml">
+    <Page Include="DHPlayer\View\SearchResultPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DHPlayer\View\VideoPlayPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EHTool\View\EHMainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,9 +214,7 @@
       <Implementation>FFmpegInterop.dll</Implementation>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DHPlayer\View\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -248,14 +248,24 @@
         </Storyboard>
     </Page.Resources>
 
-    <Grid PointerPressed="Grid_PointerPressed" AllowDrop="True" DragOver="Grid_DragOver" Drop="Grid_Drop" Background="Black">
-        <SplitView PaneBackground="#BF000000" PanePlacement="Right" DisplayMode="Overlay">
+    <Grid DoubleTapped="Grid_DoubleTapped" PointerPressed="Grid_PointerPressed" AllowDrop="True" DragOver="Grid_DragOver" Drop="Grid_Drop" Background="Black">
+        <SplitView IsPaneOpen="{x:Bind IsPaneOpen,Mode=TwoWay}" PaneBackground="#BF000000" PanePlacement="Right" DisplayMode="Overlay">
             <SplitView.Pane>
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Height="{x:Bind TitleBarHeight,Mode=OneWay}"/>
+                    <StackPanel Margin="8" Grid.Row="1" Orientation="Vertical">
+                        <ToggleSwitch OffContent="FFmpeg" OnContent="System" IsOn="{x:Bind IsSystemPlay,Mode=TwoWay}" Header="Decode Type"/>
+                        <ToggleSwitch Visibility="{x:Bind IsSystemPlay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" IsOn="{x:Bind IsForceDecodeAudio,Mode=TwoWay}" Header="Force Decode Audio"/>
+                        <ToggleSwitch Visibility="{x:Bind IsSystemPlay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" IsOn="{x:Bind IsForceDecodeVideo,Mode=TwoWay}" Header="Force Decode Video"/>
+                    </StackPanel>
                 </Grid>
             </SplitView.Pane>
             <Grid>
-                <MediaElement CurrentStateChanged="mediaElement_CurrentStateChanged" AutoPlay="True" x:Name="mediaElement" AreTransportControlsEnabled="False" AudioCategory="ForegroundOnlyMedia"/>
+                <MediaElement MediaFailed="mediaElement_MediaFailed" CurrentStateChanged="mediaElement_CurrentStateChanged" AutoPlay="True" x:Name="mediaElement" AreTransportControlsEnabled="False" AudioCategory="ForegroundOnlyMedia"/>
             </Grid>
         </SplitView>
         <Grid x:Name="ControlPanel">
@@ -272,17 +282,19 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="1" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Padding="16,0" Style="{ThemeResource BaseTextBlockStyle}" Text="{x:Bind ItemTitle,Mode=OneWay}" VerticalAlignment="Center"/>
                 <Rectangle Grid.ColumnSpan="3" x:Name="TitleBarRect" Fill="#26000000"/>
-                <Button Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="0" Content="&#xE112;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind BackClick}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <Button Visibility="{x:Bind CanGoBack,Converter={StaticResource BoolToVisibilityConverter}}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="0" Content="&#xE112;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind BackClick}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 <Button Grid.Column="2" Margin="{x:Bind TitleBarPadding,Mode=OneWay}" Content="{x:Bind FullScreenButtonContent,Mode=OneWay}" FontFamily="Segoe MDL2 Assets" Height="{x:Bind TitleBarHeight,Mode=OneWay}" Click="{x:Bind FullScreenClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </Grid>
             <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited" Grid.Row="2" RequestedTheme="Dark" Background="#BF000000">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <Slider VerticalAlignment="Center" Maximum="{Binding NaturalDuration.TimeSpan.TotalSeconds, ElementName=mediaElement, Mode=OneWay}" Minimum="0" Value="{Binding Position, Converter={StaticResource TimeSpanToDoubleConverter}, ElementName=mediaElement, Mode=TwoWay}" Template="{StaticResource SliderControlTemplate1}"/>
-                <Grid Padding="0,8" Grid.Row="1">
-                    <Button HorizontalAlignment="Center" x:Name="PlayButton" Click="{x:Bind PlayClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Content="&#xE102;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" HorizontalAlignment="Center" x:Name="PlayButton" Click="{x:Bind PlayClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Content="&#xE102;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
+                <Slider Margin="8,0" Grid.Column="1" VerticalAlignment="Center" Maximum="{Binding NaturalDuration.TimeSpan.TotalSeconds, ElementName=mediaElement, Mode=OneWay}" Minimum="0" Value="{Binding Position, Converter={StaticResource TimeSpanToDoubleConverter}, ElementName=mediaElement, Mode=TwoWay}" Template="{StaticResource SliderControlTemplate1}"/>
+                <Grid Padding="0,8" Grid.Column="2">
                     <Grid HorizontalAlignment="Right">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -292,6 +304,7 @@
                         <Slider Grid.Column="1" Width="200" Template="{StaticResource SliderControlTemplate1}" Maximum="1" StepFrequency="0.01" Minimum="0" Value="{Binding Volume, ElementName=mediaElement,Mode=TwoWay}"/>
                     </Grid>
                 </Grid>
+                <Button Grid.Column="3" HorizontalAlignment="Center" Click="{x:Bind SettingButtonClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
             </Grid>
 
         </Grid>

@@ -12,12 +12,15 @@ using EHTool.Common.Helpers;
 using EHTool.DHPlayer;
 using EHTool.DHPlayer.Entities;
 using EHTool.DHPlayer.Model;
+using EHTool.DHPlayer.View;
+using EHTool.EHTool.View;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -162,7 +165,6 @@ namespace EHTool
                                     ThumbImage = await Converter.ByteArrayToBitmapImage(bytes),
                                     Detail = await file.Properties.GetVideoPropertiesAsync(),
                                     FilePath = file.Path,
-                                    CanSystemPlay = true,
                                 });
                             }
                         }
@@ -237,9 +239,25 @@ namespace EHTool
 
         }
 
-        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-
+            if (args.QueryText.ToUpper() == "I AM HENTAI")
+            {
+                MessageDialog dialog = new MessageDialog("Sure?");
+                dialog.Commands.Add(new UICommand("Yes", (IUICommand command) =>
+                {
+                    Frame.Navigate(typeof(EHMainPage));
+                }));
+                dialog.Commands.Add(new UICommand("No", (IUICommand command) =>
+                 {
+                     Frame.Navigate(typeof(SearchResultPage), args.QueryText);
+                 }));
+                await dialog.ShowAsync();
+            }
+            else
+            {
+                Frame.Navigate(typeof(SearchResultPage), args.QueryText);
+            }
         }
     }
 }

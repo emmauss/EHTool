@@ -224,17 +224,6 @@
                 <TextBlock Grid.Column="1" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}" Text="{x:Bind Name}" VerticalAlignment="Center"/>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="VideoListTemplate" x:DataType="model:VideoListModel">
-            <Grid MaxWidth="300" Padding="4">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <Image Source="{x:Bind ThumbImage}"/>
-                <TextBlock TextWrapping="WrapWholeWords" MaxLines="2" Grid.Row="1" Text="{x:Bind Title}" TextTrimming="CharacterEllipsis"/>
-            </Grid>
-        </DataTemplate>
     </Page.Resources>
     <Grid DragOver="Grid_DragOver" AllowDrop="True" Drop="Grid_Drop" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -271,7 +260,20 @@
         </Grid>
         <SplitView Grid.Row="2" PaneBackground="{StaticResource AppTheme}" PanePlacement="Right" DisplayMode="Overlay" IsPaneOpen="{x:Bind IsPaneOpen,Mode=TwoWay}">
             <SplitView.Content>
-                <GridView SelectionMode="None" IsItemClickEnabled="True" ItemClick="{x:Bind VideoItemClick}" ItemTemplate="{StaticResource VideoListTemplate}" Grid.Row="1" ItemsSource="{x:Bind VideoList,Mode=OneWay}">
+                <GridView SelectionMode="None" IsItemClickEnabled="True" ItemClick="{x:Bind VideoItemClick}" Grid.Row="1" ItemsSource="{x:Bind VideoList,Mode=OneWay}">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="model:VideoListModel">
+                            <Grid MaxWidth="300" Padding="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="{x:Bind ThumbImage}"/>
+                                <TextBlock TextWrapping="WrapWholeWords" MaxLines="2" Grid.Row="1" Text="{x:Bind Title}" TextTrimming="CharacterEllipsis"/>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
                 </GridView>
             </SplitView.Content>
             <SplitView.Pane>

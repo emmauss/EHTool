@@ -15,6 +15,7 @@ using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -54,6 +55,13 @@ namespace EHTool.DHPlayer
         }
 
         #region Properties        
+        public bool CanGoBack
+        {
+            get
+            {
+                return Frame.CanGoBack;
+            }
+        }
         public string ItemTitle { get; set; }
         public string FullScreenButtonContent
         {
@@ -86,8 +94,51 @@ namespace EHTool.DHPlayer
         #endregion
         #endregion
 
+        public bool IsForceDecodeAudio
+        {
+            get
+            {
+                return SettingHelpers.GetSetting<bool>("IsForceDecodeAudio");
+            }
+            set
+            {
+                SettingHelpers.SetSetting(nameof(IsForceDecodeAudio), value);
+                ReloadVideo();
+            }
+        }
+        public bool IsForceDecodeVideo
+        {
+            get
+            {
+                return SettingHelpers.GetSetting<bool>("IsForceDecodeVideo");
+            }
+            set
+            {
+                SettingHelpers.SetSetting(nameof(IsForceDecodeVideo), value);
+                ReloadVideo();
+            }
+        }
+        public bool IsPaneOpen { get; set; }
+
+
         private FFmpegInteropMSS _ffmpegMSS;
         private IRandomAccessStream _fileStream;
+        private string _fileType;
+
+        private bool _isSystemPlay;
+        public bool IsSystemPlay
+        {
+            get
+            {
+                return _isSystemPlay;
+            }
+            set
+            {
+                _isSystemPlay = value;
+                ReloadVideo();
+            }
+        }
+
 
 
 
@@ -137,15 +188,12 @@ namespace EHTool.DHPlayer
             StorageFile file = await StorageFile.GetFileFromPathAsync(item.FilePath);
             await LoadVideo(file);
         }
-
-        private async Task LoadVideo(StorageFile file)
+        private void ReloadVideo()
         {
-            ItemTitle = Path.GetFileNameWithoutExtension(file.Path);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemTitle)));
-            _fileStream = await file.OpenAsync(FileAccessMode.Read);
-            if (file.ContentType.ToLower().Contains("video"))
+            if (IsSystemPlay)
             {
-                mediaElement.SetSource(_fileStream, file.ContentType);
+                mediaElement.SetSource(_fileStream, _fileType);
+                _isSystemPlay = true;
             }
             else
             {
@@ -155,9 +203,33 @@ namespace EHTool.DHPlayer
                 {
                     mediaElement.SetMediaStreamSource(mss);
                 }
-                _fileStream.Dispose();
-                _fileStream = null;
             }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSystemPlay)));
+        }
+        public async Task LoadVideo(StorageFile file)
+        {
+            mediaElement.Stop();
+            _isSystemPlay = false;
+            ItemTitle = Path.GetFileNameWithoutExtension(file.Path);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemTitle)));
+            _fileStream = await file.OpenAsync(FileAccessMode.Read);
+            _fileType = file.ContentType;
+            if (file.ContentType.ToLower().Contains("video"))
+            {
+                mediaElement.SetSource(_fileStream, _fileType);
+                IsSystemPlay = true;
+            }
+            else
+            {
+                IsSystemPlay = false;
+                _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, SettingHelpers.GetSetting<bool>("IsForceDecodeAudio"), SettingHelpers.GetSetting<bool>("IsForceDecodeVideo"));
+                MediaStreamSource mss = _ffmpegMSS.GetMediaStreamSource();
+                if (mss != null)
+                {
+                    mediaElement.SetMediaStreamSource(mss);
+                }
+            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSystemPlay)));
         }
 
         
@@ -177,13 +249,11 @@ namespace EHTool.DHPlayer
                 case MediaElementState.Playing:
                     if (mediaElement.CanPause)
                     {
-                        button.Content = "\uE103";
                         mediaElement.Pause();
                     }
                     break;
                 case MediaElementState.Paused:
                 case MediaElementState.Stopped:
-                    button.Content = "\uE102";
                     mediaElement.Play();
                     break;
                 default:
@@ -254,6 +324,36 @@ namespace EHTool.DHPlayer
         private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             HideControlPanel.Begin();
+        }
+
+        private async void mediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            if (_isSystemPlay)
+            {
+                _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, SettingHelpers.GetSetting<bool>("IsForceDecodeAudio"), SettingHelpers.GetSetting<bool>("IsForceDecodeVideo"));
+                MediaStreamSource mss = _ffmpegMSS.GetMediaStreamSource();
+                if (mss != null)
+                {
+                    mediaElement.SetMediaStreamSource(mss);
+                }
+                _isSystemPlay = false;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSystemPlay)));
+            }
+            else
+            {
+                MessageDialog dialog = new MessageDialog("can not play this video");
+                await dialog.ShowAsync();
+            }
+        }
+        public void SettingButtonClick()
+        {
+            IsPaneOpen = !IsPaneOpen;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPaneOpen)));
+        }
+
+        private void Grid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            FullScreenClick();
         }
     }
 }

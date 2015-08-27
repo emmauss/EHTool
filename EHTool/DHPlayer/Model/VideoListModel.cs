@@ -1,12 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Windows.Storage.FileProperties;
 
 namespace EHTool.DHPlayer.Model
 {
     public class VideoListModel : MainListModel
     {
-        public VideoProperties Detail { get; set; }
-        public bool CanSystemPlay { get; set; }
+        public VideoProperties Detail { get; internal set; }
         public string Title
         {
             get
@@ -21,5 +21,6 @@ namespace EHTool.DHPlayer.Model
                 return $"{(Detail.Duration.Hours == 0 ? null : $"{Detail.Duration.Hours}:D2:")}{Detail.Duration.Minutes:D2}:{Detail.Duration.Seconds:D2}";
             }
         }
+        
     }
 }

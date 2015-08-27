@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="b789517f-735b-465d-90f0-2262585c953c" Publisher="CN=Jades" Version="1.0.0.0" />
+  <Identity Name="51945Tlaster.DHPlayer" Publisher="CN=F82B0EE7-EF8D-4515-BEAB-DD968D07D67F" Version="1.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="b789517f-735b-465d-90f0-2262585c953c" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>EHTool</DisplayName>
-    <PublisherDisplayName>Jades</PublisherDisplayName>
+    <DisplayName>DHPlayer</DisplayName>
+    <PublisherDisplayName>Tlaster</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -15,11 +15,74 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="EHTool.App">
-      <uap:VisualElements DisplayName="EHTool" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="EHTool" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+      <uap:VisualElements DisplayName="DHPlayer" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="EHTool" BackgroundColor="transparent">
+        <uap:DefaultTile>
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo" />
+          </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="video">
+            <uap:SupportedFileTypes>
+              <uap:FileType>.3gp2</uap:FileType>
+              <uap:FileType>.3gp</uap:FileType>
+              <uap:FileType>.3gpp</uap:FileType>
+              <uap:FileType>.amr</uap:FileType>
+              <uap:FileType>.amv</uap:FileType>
+              <uap:FileType>.asf</uap:FileType>
+              <uap:FileType>.avi</uap:FileType>
+              <uap:FileType>.divx</uap:FileType>
+              <uap:FileType>.dpg</uap:FileType>
+              <uap:FileType>.dpl</uap:FileType>
+              <uap:FileType>.dvr-ms</uap:FileType>
+              <uap:FileType>.evo</uap:FileType>
+              <uap:FileType>.f4v</uap:FileType>
+              <uap:FileType>.flv</uap:FileType>
+              <uap:FileType>.ifo</uap:FileType>
+              <uap:FileType>.k3g</uap:FileType>
+              <uap:FileType>.m1v</uap:FileType>
+              <uap:FileType>.m2t</uap:FileType>
+              <uap:FileType>.m2ts</uap:FileType>
+              <uap:FileType>.m2v</uap:FileType>
+              <uap:FileType>.m4b</uap:FileType>
+              <uap:FileType>.m4p</uap:FileType>
+              <uap:FileType>.m4v</uap:FileType>
+              <uap:FileType>.mkv</uap:FileType>
+              <uap:FileType>.mov</uap:FileType>
+              <uap:FileType>.mp2v</uap:FileType>
+              <uap:FileType>.mp4</uap:FileType>
+              <uap:FileType>.mpe</uap:FileType>
+              <uap:FileType>.mpeg</uap:FileType>
+              <uap:FileType>.mpg</uap:FileType>
+              <uap:FileType>.mpv2</uap:FileType>
+              <uap:FileType>.mts</uap:FileType>
+              <uap:FileType>.nsr</uap:FileType>
+              <uap:FileType>.nsv</uap:FileType>
+              <uap:FileType>.ogm</uap:FileType>
+              <uap:FileType>.ogv</uap:FileType>
+              <uap:FileType>.qt</uap:FileType>
+              <uap:FileType>.ram</uap:FileType>
+              <uap:FileType>.rm</uap:FileType>
+              <uap:FileType>.rmvb</uap:FileType>
+              <uap:FileType>.rpm</uap:FileType>
+              <uap:FileType>.skm</uap:FileType>
+              <uap:FileType>.swf</uap:FileType>
+              <uap:FileType>.tp</uap:FileType>
+              <uap:FileType>.tpr</uap:FileType>
+              <uap:FileType>.ts</uap:FileType>
+              <uap:FileType>.vob</uap:FileType>
+              <uap:FileType>.webm</uap:FileType>
+              <uap:FileType>.wm</uap:FileType>
+              <uap:FileType>.wmp</uap:FileType>
+              <uap:FileType>.wmv</uap:FileType>
+              <uap:FileType>.wtv</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>

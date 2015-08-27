@@ -9,8 +9,8 @@ namespace EHTool.DHPlayer.Model
 {
     public class MainListModel
     {
-        public BitmapImage ThumbImage { get; set; }
-        public string Name { get; set; }
-        public string FilePath { get; set; }
+        public BitmapImage ThumbImage { get; internal set; }
+        public string Name { get; internal set; }
+        public string FilePath { get; internal set; }
     }
 }
