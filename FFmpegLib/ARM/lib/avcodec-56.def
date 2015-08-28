@@ -12,7 +12,6 @@ EXPORTS
     av_codec_ffversion
     av_codec_get_chroma_intra_matrix
     av_codec_get_codec_descriptor
-    av_codec_get_codec_properties
     av_codec_get_lowres
     av_codec_get_max_lowres
     av_codec_get_pkt_timebase

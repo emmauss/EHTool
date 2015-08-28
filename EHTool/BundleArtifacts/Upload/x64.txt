@@ -1,0 +1,2 @@
+MainPackage=C:\Users\Jades\Documents\Visual Studio 2015\Projects\EHTool\EHTool\bin\x64\Release\Upload\EHTool_1.1.0.0_x64.appx
+SymbolPackage=C:\Users\Jades\Documents\Visual Studio 2015\Projects\EHTool\EHTool\AppPackages\EHTool_1.1.0.0\EHTool_1.1.0.0_x64.appxsym

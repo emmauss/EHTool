@@ -11,7 +11,6 @@ EXPORTS
     av_audio_fifo_alloc
     av_audio_fifo_drain
     av_audio_fifo_free
-    av_audio_fifo_peek
     av_audio_fifo_read
     av_audio_fifo_realloc
     av_audio_fifo_reset
@@ -21,7 +20,6 @@ EXPORTS
     av_base64_decode
     av_base64_encode
     av_basename
-    av_blowfish_alloc
     av_blowfish_crypt
     av_blowfish_crypt_ecb
     av_blowfish_init
@@ -78,7 +76,6 @@ EXPORTS
     av_d2str
     av_default_get_category
     av_default_item_name
-    av_des_alloc
     av_des_crypt
     av_des_init
     av_des_mac
@@ -111,7 +108,6 @@ EXPORTS
     av_fifo_drain
     av_fifo_free
     av_fifo_freep
-    av_fifo_generic_peek
     av_fifo_generic_read
     av_fifo_generic_write
     av_fifo_grow
@@ -337,7 +333,6 @@ EXPORTS
     av_pix_fmt_swap_endianness
     av_pixelutils_get_sad_fn
     av_q2intfloat
-    av_rc4_alloc
     av_rc4_crypt
     av_rc4_init
     av_read_image_line
@@ -399,10 +394,6 @@ EXPORTS
     av_strtod
     av_strtok
     av_sub_q
-    av_tea_alloc
-    av_tea_crypt
-    av_tea_init
-    av_tea_size
     av_tempfile
     av_thread_message_queue_alloc
     av_thread_message_queue_free
@@ -433,10 +424,8 @@ EXPORTS
     av_utf8_decode
     av_util_ffversion
     av_vbprintf
-    av_version_info
     av_vlog
     av_write_image_line
-    av_xtea_alloc
     av_xtea_crypt
     av_xtea_init
     avpriv_alloc_fixed_dsp

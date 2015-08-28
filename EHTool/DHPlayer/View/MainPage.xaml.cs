@@ -239,25 +239,26 @@ namespace EHTool
 
         }
 
-        private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (args.QueryText.ToUpper() == "I AM HENTAI")
-            {
-                MessageDialog dialog = new MessageDialog("Sure?");
-                dialog.Commands.Add(new UICommand("Yes", (IUICommand command) =>
-                {
-                    Frame.Navigate(typeof(EHMainPage));
-                }));
-                dialog.Commands.Add(new UICommand("No", (IUICommand command) =>
-                 {
-                     Frame.Navigate(typeof(SearchResultPage), args.QueryText);
-                 }));
-                await dialog.ShowAsync();
-            }
-            else
-            {
-                Frame.Navigate(typeof(SearchResultPage), args.QueryText);
-            }
+
+            Frame.Navigate(typeof(SearchResultPage), args.QueryText);
+            //if (args.QueryText.ToUpper() == "I AM HENTAI")
+            //{
+            //    MessageDialog dialog = new MessageDialog("Sure?");
+            //    dialog.Commands.Add(new UICommand("Yes", (IUICommand command) =>
+            //    {
+            //        Frame.Navigate(typeof(EHMainPage));
+            //    }));
+            //    dialog.Commands.Add(new UICommand("No", (IUICommand command) =>
+            //     {
+            //         Frame.Navigate(typeof(SearchResultPage), args.QueryText);
+            //     }));
+            //    await dialog.ShowAsync();
+            //}
+            //else
+            //{
+            //}
         }
     }
 }
