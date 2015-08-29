@@ -258,9 +258,9 @@
                     </Grid.RowDefinitions>
                     <Rectangle Height="{x:Bind TitleBarHeight,Mode=OneWay}"/>
                     <StackPanel Margin="8" Grid.Row="1" Orientation="Vertical">
-                        <ToggleSwitch OffContent="FFmpeg" OnContent="System" IsOn="{x:Bind IsSystemPlay,Mode=TwoWay}" Header="Decode Type"/>
-                        <ToggleSwitch Visibility="{x:Bind IsSystemPlay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" IsOn="{x:Bind IsForceDecodeAudio,Mode=TwoWay}" Header="Force Decode Audio"/>
-                        <ToggleSwitch Visibility="{x:Bind IsSystemPlay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" IsOn="{x:Bind IsForceDecodeVideo,Mode=TwoWay}" Header="Force Decode Video"/>
+                        <ToggleSwitch x:Uid="DecodeTypeSwitch" OffContent="FFmpeg" OnContent="System" IsOn="{x:Bind IsSystemPlay,Mode=TwoWay}" Header="Decode Type"/>
+                        <ToggleSwitch x:Uid="ForceDecodeAudioSwitch" Visibility="{x:Bind IsSystemPlay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" IsOn="{x:Bind IsForceDecodeAudio,Mode=TwoWay}" Header="Force Decode Audio"/>
+                        <ToggleSwitch x:Uid="ForceDecodeVideoSwitch" Visibility="{x:Bind IsSystemPlay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" IsOn="{x:Bind IsForceDecodeVideo,Mode=TwoWay}" Header="Force Decode Video"/>
                     </StackPanel>
                 </Grid>
             </SplitView.Pane>

@@ -248,7 +248,7 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="8" Text="Video Library" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <TextBlock x:Uid="MainPageHeader" Margin="8" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
             <AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8" Grid.Column="1" Width="200">
                 <AutoSuggestBox.QueryIcon>
                     <SymbolIcon Symbol="Find"/>
@@ -283,17 +283,17 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <StackPanel Margin="8,0" Orientation="Vertical">
-                        <Button Click="{x:Bind OpenFileClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Content="Open File"/>
+                        <Button Click="{x:Bind OpenFileClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" x:Uid="OpenFileButton" Content="Open File"/>
                         <Button Visibility="Collapsed" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Content="Open Stream"/>
-                        <ToggleSwitch IsOn="{x:Bind IsForceDecodeAudio,Mode=TwoWay}" Header="Force Decode Audio"/>
-                        <ToggleSwitch IsOn="{x:Bind IsForceDecodeVideo,Mode=TwoWay}" Header="Force Decode Video"/>
+                        <ToggleSwitch IsOn="{x:Bind IsForceDecodeAudio,Mode=TwoWay}" x:Uid="ForceDecodeAudioSwitch" Header="Force Decode Audio"/>
+                        <ToggleSwitch IsOn="{x:Bind IsForceDecodeVideo,Mode=TwoWay}" x:Uid="ForceDecodeVideoSwitch" Header="Force Decode Video"/>
                     </StackPanel>
                     <Grid Grid.Row="1" BorderBrush="White" BorderThickness="0,2,0,0">
                         <StackPanel Orientation="Vertical">
                             <Button Click="{x:Bind AboutClick}" HorizontalAlignment="Stretch" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Margin="4" Text="&#xE946;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}" VerticalAlignment="Center"/>
-                                    <TextBlock Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}" VerticalAlignment="Center" Text="About"/>
+                                    <TextBlock Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}" x:Uid="AboutButton" VerticalAlignment="Center" Text="About"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>

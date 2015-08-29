@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="zh-TW" original="EHTOOL/STRINGS/EN-US/RESOURCES.RESW" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.1413.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="EHTOOL/STRINGS/EN-US/RESOURCES.RESW" datatype="resx">
+        <trans-unit id="AboutButton.Text" translate="yes" xml:space="preserve">
+          <source>About</source>
+          <target state="translated">關於</target>
+        </trans-unit>
+        <trans-unit id="DecodeTypeSwitch.Header" translate="yes" xml:space="preserve">
+          <source>Decode Type</source>
+          <target state="translated">解碼類型</target>
+        </trans-unit>
+        <trans-unit id="DecodeTypeSwitch.OffContent" translate="yes" xml:space="preserve">
+          <source>FFmpeg</source>
+          <target state="translated">FFmpeg</target>
+        </trans-unit>
+        <trans-unit id="DecodeTypeSwitch.OnContent" translate="yes" xml:space="preserve">
+          <source>System</source>
+          <target state="translated">系統</target>
+        </trans-unit>
+        <trans-unit id="ForceDecodeAudioSwitch.Header" translate="yes" xml:space="preserve">
+          <source>Force Decode Audio</source>
+          <target state="translated">強制解碼音訊</target>
+        </trans-unit>
+        <trans-unit id="ForceDecodeVideoSwitch.Header" translate="yes" xml:space="preserve">
+          <source>Force Decode Video</source>
+          <target state="translated">強制解碼視頻</target>
+        </trans-unit>
+        <trans-unit id="MainPageHeader.Text" translate="yes" xml:space="preserve">
+          <source>Video Library</source>
+          <target state="translated">視訊媒體櫃</target>
+        </trans-unit>
+        <trans-unit id="OpenFileButton.Content" translate="yes" xml:space="preserve">
+          <source>Open File</source>
+          <target state="translated">開啟檔案</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
