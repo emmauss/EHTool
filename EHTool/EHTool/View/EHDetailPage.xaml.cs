@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Common.Helpers;
-using EHTool.Common.Helpers;
-using EHTool.EHTool.Common;
 using EHTool.EHTool.Model;
 using EHTool.EHTool.ViewModel;
 using Windows.ApplicationModel.Core;
@@ -30,11 +27,8 @@ namespace EHTool.EHTool.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class EHMainPage : Page,INotifyPropertyChanged
+    public sealed partial class EHDetailPage : Page,INotifyPropertyChanged
     {
-        public MainViewModel MainVM { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
         #region TitleBarMember
         private void TitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
@@ -85,10 +79,13 @@ namespace EHTool.EHTool.View
         }
         #endregion
         #endregion
-        public bool IsMainPaneOpen { get; set; }
-        public bool IsFavorPaneOpen { get; set; }
-        public bool IsSearchOptionShow { get; set; } = true;
-        public bool HasLogin => CookieHelper.CheckCookie();
+        
+        public DetailViewModel DetailVM { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public double ImageWidth { get; private set; }
+        public double ImageHeight { get; private set; }
+        public bool IsPaneOpen { get; set; }
+        
         public bool IsReadingDoublePage
         {
             get
@@ -100,83 +97,50 @@ namespace EHTool.EHTool.View
                 SettingHelpers.SetSetting("IsReadingDoublePage", value);
             }
         }
-       
 
-        public EHMainPage()
+        public EHDetailPage()
         {
             this.InitializeComponent();
-            NavigationCacheMode = NavigationCacheMode.Required;
-            CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += TitleBar_LayoutMetricsChanged;
-            MainVM = new MainViewModel();
+            ImageWidth = Window.Current.Bounds.Width / 4d - 10d;
+            ImageHeight = Width * 4d / 3d;
+            SizeChanged += EHDetailPage_SizeChanged;
         }
 
+        private void EHDetailPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ImageWidth = Window.Current.Bounds.Width / 4d - 10d;
+            ImageHeight = Width * 4d / 3d;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImageWidth)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImageHeight)));
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Window.Current.SetTitleBar(TitleBarRect);
+            DetailVM = e.Parameter as DetailViewModel;
             base.OnNavigatedTo(e);
         }
-
-        private void RefreshClick(object sender, RoutedEventArgs e)
+        public void SettingButtonClick()
         {
-            MainVM.Initialize();
+            IsPaneOpen = !IsPaneOpen;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPaneOpen)));
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void BackClick()
         {
-            switch (pivot.SelectedIndex)
+            if (Frame.CanGoBack)
             {
-                case 0:
-                    IsMainPaneOpen = !IsMainPaneOpen;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMainPaneOpen)));
-                    break;
-                case 1:
-                    IsFavorPaneOpen = !IsFavorPaneOpen;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFavorPaneOpen)));
-                    break;
-                default:
-                    break;
+                Frame.GoBack();
             }
         }
-
-        private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        public async void DownloadTorrentClick()
         {
-            await MainVM.Search(args.QueryText);
+            var torrentDialog = new TorrentDialog(DetailVM.GetTorrentList());
+            await torrentDialog.ShowAsync();
         }
 
-        public void SearchOptionTapped()
+        public void ReadButtonClick()
         {
-            IsSearchOptionShow = !IsSearchOptionShow;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSearchOptionShow)));
-        }
-        public async void LoginClick()
-        {
-            if (HasLogin)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
-                return;
-            }
-            LoginDialog dialog = new LoginDialog();
-            await dialog.ShowAsync();
-            if (dialog.IsSuccess)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
-            }
-        }
-        public async void CacheClearClick()
-        {
-            await CacheHelper.ClearCache();
-            MessageDialog dialog = new MessageDialog("Chche cleared");
-            await dialog.ShowAsync();
-        }
-        public async void LoadMoreClick()
-        {
-            await MainVM.LoadMore();
-        }
-
-        public void MainItemClick(object sender, ItemClickEventArgs e)
-        {
-            Frame.Navigate(typeof(EHDetailPage), new DetailViewModel(e.ClickedItem as GalleryListModel));
+            Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.GetImagePageListTask(),DetailVM.Id));
         }
     }
 }

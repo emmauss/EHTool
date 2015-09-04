@@ -1,0 +1,44 @@
+﻿<ContentDialog
+    x:Class="EHTool.EHTool.View.TorrentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EHTool.EHTool.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:model="using:EHTool.EHTool.Model"
+    Title="Download Torrent"
+    PrimaryButtonText="Copy Link"
+    SecondaryButtonText="Back"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock TextWrapping="WrapWholeWords" Text="Double click to download,it will download to you download library"/>
+        <ProgressBar Grid.Row="1" Background="Transparent" x:Name="progressBar"/>
+        <ListView Grid.Row="2" x:Name="listView" DoubleTapped="{x:Bind ListDoubleTapped}" ItemsSource="{x:Bind TorrentList,Mode=OneWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:TorrentModel">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock TextWrapping="WrapWholeWords" Text="{x:Bind Name}"/>
+                        <Grid Grid.Row="1">
+                            <TextBlock>
+                                <Run Text="{x:Bind Downloads}"/>
+                                <Run Text="{x:Bind PostDate}"/>
+                                <Run Text="{x:Bind Size}"/>
+                            </TextBlock>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentDialog>

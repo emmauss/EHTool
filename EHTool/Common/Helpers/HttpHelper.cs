@@ -10,20 +10,12 @@ namespace Common.Helpers
 {
     public static class HttpHelper
     {
-        public static async Task<byte[]> GetByteArray(string imgUri)
-        {
-            byte[] bit;
-            using (HttpClient client = new HttpClient())
-            {
-                bit = await client.GetByteArrayAsync(imgUri);
-            }
-            return bit;
-        }
 
-        public static async Task<byte[]> GetByteArrayWith(string method, string link, string cookie)
+        public static async Task<byte[]> GetByteArrayWith(string method, string link, string cookie, string referer)
         {
             var req = WebRequest.CreateHttp(link);
             req.Headers["Cookie"] = cookie;
+            req.Headers["Referer"] = referer;
             req.Method = method;
             var res = await req.GetResponseAsync();
             using (var resStream = res.GetResponseStream())
@@ -39,18 +31,6 @@ namespace Common.Helpers
                 client.DefaultRequestHeaders.Add("Cookie", cookie);
                 return await client.GetByteArrayAsync(link);
             }
-        }
-        public async static Task<string> GetStringWithPostMethod(string uriString)
-        {
-            HttpWebRequest req = WebRequest.CreateHttp(uriString);
-            req.Method = "POST";
-            HttpWebResponse res = await req.GetResponseAsync() as HttpWebResponse;
-            string returnStr;
-            using (var getcontent = new StreamReader(res.GetResponseStream(), Encoding.UTF8))
-            {
-                returnStr = getcontent.ReadToEnd();
-            }
-            return returnStr;
         }
 
         public async static Task<string> GetStringWithPostString(string uriString, string postStr, string contentType)
@@ -85,16 +65,6 @@ namespace Common.Helpers
                 {
                     returnStr = await getContent.ReadToEndAsync();
                 }
-            }
-            return returnStr;
-        }
-
-        public async static Task<string> GetString(string uriString)
-        {
-            string returnStr;
-            using (HttpClient client = new HttpClient())
-            {
-                returnStr = await (await client.GetAsync(new Uri(uriString))).Content.ReadAsStringAsync();
             }
             return returnStr;
         }

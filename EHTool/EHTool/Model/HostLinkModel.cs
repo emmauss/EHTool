@@ -8,7 +8,7 @@ namespace EHTool.EHTool.Model
         private const string EHentaiLink = "http://g.e-hentai.org/";
         private const string ExHentaiLink = "http://exhentai.org/";
 
-        protected ServerTypes ServerType { get; set; }
+        public ServerTypes ServerType { get; internal set; }
 
         protected bool NetworkAvailable => NetworkInterface.GetIsNetworkAvailable();
         protected string HostLink =>

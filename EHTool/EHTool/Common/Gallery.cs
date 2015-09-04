@@ -18,21 +18,23 @@ namespace EHTool.EHTool.Common
     public class Gallery : HostLinkModel
     {
         public Gallery() : this(ServerTypes.EHentai) { }
-
+        protected int MaxPageCount;
         public Gallery(ServerTypes type)
         {
             ServerType = type;
         }
-        
-
 
         public async Task<IEnumerable<GalleryListModel>> GetGalleryList()
         {
+            if (ServerType == ServerTypes.ExHentai && !CheckCookie())
+            {
+                throw new ExHentaiAccessException();
+            }
             string folderName = ServerType.ToString();
             string htmlStr = "";
             if (NetworkAvailable)
             {
-                htmlStr = await GetStringWithCookie($"{HostLink}?page=0", Cookie + Unconfig);
+                htmlStr = await GetStringWithCookie($"{HostLink}?page=0", (ServerType == ServerTypes.ExHentai ? Cookie : null) + Unconfig);
                 await SaveTextCache(folderName, "Main", htmlStr);
             }
             else
@@ -44,14 +46,12 @@ namespace EHTool.EHTool.Common
         }
 
 
-        public async Task<IEnumerable<GalleryListModel>> GetGalleryList(int page)
-        {
-            return await GetGalleryList(null, page);
-        }
+        public async Task<IEnumerable<GalleryListModel>> GetGalleryList(int page) =>
+            await GetGalleryList(null, page);
 
         public async Task<IEnumerable<GalleryListModel>> GetGalleryList(GallerySearchOption option, int page = 0)
         {
-            var htmlStr = NetworkAvailable ? await GetStringWithCookie($"{HostLink}?page={page}{option?.GetLinkExtension()}", Cookie + Unconfig) : "";
+            var htmlStr = NetworkAvailable ? await GetStringWithCookie($"{HostLink}?page={page}{option?.GetLinkExtension()}", (ServerType == ServerTypes.ExHentai ? Cookie : null) + Unconfig) : "";
             return htmlStr != "" ? GetGalleryListFromString(htmlStr) : null;
         }
 
@@ -59,6 +59,8 @@ namespace EHTool.EHTool.Common
         {
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlString);
+            var ptt = doc.DocumentNode.GetNodebyClassName("ptt").FirstChild;
+            MaxPageCount = int.Parse(ptt.ChildNodes[ptt.ChildNodes.Count - 2].InnerText);
             var htmlnode = doc.DocumentNode.GetNodebyClassName("itg");
             return from a in htmlnode.ChildNodes
                    where a.HasChildNodes
@@ -67,9 +69,10 @@ namespace EHTool.EHTool.Common
                        Title = DeEntitize(a.GetNodebyClassName("id2").InnerText),
                        ImageLink = (a.GetNodebyClassName("id3").Element("a").Element("img").Attributes["src"].Value),
                        Link = (a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value),
-                       FliesCount = (a.GetNodebyClassName("id42").InnerText),
+                       FileCount = (a.GetNodebyClassName("id42").InnerText),
                        LinkMatch = Match(a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value, "/g/([^/]+)/([^-]+)/"),
-                       SaveFolder = ServerType.ToString(),
+                       Type = a.GetNodebyClassName("id41").Attributes["title"].Value,
+                       ServerType = ServerType,
                    };
         }
 

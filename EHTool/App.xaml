@@ -6,8 +6,13 @@
     xmlns:converter="using:Common.Converters"
     RequestedTheme="Light">
     <Application.Resources>
-        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <SolidColorBrush x:Key="AppTheme" Color="SlateBlue"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="EHTool/View/FlipBookControl.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <SolidColorBrush x:Key="AppTheme" Color="SlateBlue"/>
+        </ResourceDictionary>
     </Application.Resources>
 
 </Application>

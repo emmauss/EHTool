@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using EHTool.DHPlayer;
+using EHTool.EHTool.View;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -83,6 +84,7 @@ namespace EHTool
                 // 并通过将所需信息作为导航参数传入来配置
                 // 参数
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                //rootFrame.Navigate(typeof(EHMainPage), e.Arguments);
             }
             // 确保当前窗口处于活动状态
             Window.Current.Activate();

@@ -10,19 +10,31 @@ using static System.Text.RegularExpressions.Regex;
 using static HtmlAgilityPack.HtmlEntity;
 using static Common.Helpers.HttpHelper;
 using static EHTool.Common.Helpers.CookieHelper;
+using EHTool.EHTool.Entities;
 
 namespace EHTool.EHTool.Common
 {
     public class GalleryDetail : HostLinkModel
     {
-
-        protected string _id;
-        protected string _token;
-
-        public GalleryDetail(string id, string token)
+        public string Id { get; protected set; }
+        public string Token { get; protected set; }
+        public GalleryDetail()
         {
-            _id = id;
-            _token = token;
+
+        }
+
+        public GalleryDetail(string id, string token,ServerTypes type)
+        {
+            Id = id;
+            Token = token;
+            ServerType = type;
+        }
+
+        public GalleryDetail(GalleryListModel item)
+        {
+            Id = item.ID;
+            Token = item.Token;
+            ServerType = item.ServerType;
         }
 
 
@@ -54,7 +66,7 @@ namespace EHTool.EHTool.Common
 
         public async Task<DetailModel> GetDetail(int page = 0)
         {
-            string link = $"{HostLink}g/{_id}/{_token}/?p={page}";
+            string link = $"{HostLink}g/{Id}/{Token}/?p={page}";
             string htmlStr = await CheckIfCached(link, page == 0);
             var detailItem = htmlStr != "" ? GetDetailFromString(htmlStr) : null;
             return detailItem;
@@ -67,11 +79,11 @@ namespace EHTool.EHTool.Common
                 if (NetworkAvailable)
                 {
                     htmlStr = await GetStringWithCookie(link, Cookie + Unconfig);
-                    await SaveTextCache(ServerType.ToString(), _id, htmlStr);
+                    await SaveTextCache(ServerType.ToString(), Id, htmlStr);
                 }
                 else
                 {
-                    htmlStr = await GetTextCache(ServerType.ToString(), _id);
+                    htmlStr = await GetTextCache(ServerType.ToString(), Id);
                 }
             }
             else
@@ -84,7 +96,7 @@ namespace EHTool.EHTool.Common
 
         public async Task<IEnumerable<TorrentModel>> GetTorrentList()
         {
-            var link = $"{HostLink}gallerytorrents.php?gid={_id}&t={_token}";
+            var link = $"{HostLink}gallerytorrents.php?gid={Id}&t={Token}";
 
             var htmlstr = await GetStringWithCookie(link, Cookie + Unconfig);
             HtmlDocument doc = new HtmlDocument();
@@ -115,32 +127,30 @@ namespace EHTool.EHTool.Common
             doc.LoadHtml(htmlstring);
             return new DetailModel
             {
-                HeaderModel = new HeaderModel
+                Header = new HeaderModel
                 {
                     ImageLink = (doc.GetElementbyId("gd1").Element("img").Attributes["src"].Value),
                     TitleEn = DeEntitize(doc.GetElementbyId("gn").InnerText),
                     TitleJp = DeEntitize(doc.GetElementbyId("gj").InnerText),
-                    TagModel = (from a in doc.GetElementbyId("taglist").FirstChild.ChildNodes
-                                select new TagModel
-                                {
-                                    Name = DeEntitize(a.FirstChild.InnerText),
-                                    Value = (from b in a.LastChild.ChildNodes
-                                             select DeEntitize(b.InnerText)).ToArray(),
-                                }).ToList(),
+                    Tags = (from a in doc.GetElementbyId("taglist").FirstChild.ChildNodes
+                            select new TagModel
+                            {
+                                Name = DeEntitize(a.FirstChild.InnerText),
+                                Value = (from b in a.LastChild.ChildNodes
+                                         select DeEntitize(b.InnerText)).ToArray(),
+                            }).ToList(),
                 },
                 TorrentCount = int.Parse(Match(doc.GetElementbyId("gd5").InnerHtml, "Torrent Download \\( ([0-9]+) \\)").Groups[1].Value),
                 RateValue = double.Parse(Match(doc.GetElementbyId("rating_label").InnerText, "([0-9]+.[0-9]+)").Value),
-                UpLoadModel = (from a in doc.GetElementbyId("gdd").FirstChild.ChildNodes
-                               select new UpLoadModel
-                               {
-                                   Value = DeEntitize(a.InnerText),
-                               }).ToList(),
+                UpLoadInformation = (from a in doc.GetElementbyId("gdd").FirstChild.ChildNodes
+                                     select DeEntitize(a.InnerText)).ToArray(),
                 MaxImageCount = GetMaxImageCount(doc.DocumentNode.GetNodebyClassName("gpc").InnerText),
-                DetailPageCount = doc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes.Count - 2,
+                DetailPageCount = int.Parse(doc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes[doc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes.Count - 2].InnerText),
                 ImageList = (from a in doc.GetElementbyId("gdt").ChildNodes
                              where a.HasChildNodes
                              select new ImageListModel
                              {
+                                 ServerType = ServerType,
                                  ImageName = (a.InnerText),
                                  ImageIndex = a.FirstChild.FirstChild.Attributes["alt"].Value,
                                  ImageLink = a.FirstChild.FirstChild.Attributes["src"].Value,

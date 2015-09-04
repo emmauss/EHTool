@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Common.Helpers;
-using EHTool.Common.Helpers;
-using EHTool.EHTool.Common;
 using EHTool.EHTool.Model;
 using EHTool.EHTool.ViewModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -30,11 +27,8 @@ namespace EHTool.EHTool.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class EHMainPage : Page,INotifyPropertyChanged
+    public sealed partial class EHReadingPage : Page ,INotifyPropertyChanged
     {
-        public MainViewModel MainVM { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
         #region TitleBarMember
         private void TitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
@@ -85,98 +79,49 @@ namespace EHTool.EHTool.View
         }
         #endregion
         #endregion
-        public bool IsMainPaneOpen { get; set; }
-        public bool IsFavorPaneOpen { get; set; }
-        public bool IsSearchOptionShow { get; set; } = true;
-        public bool HasLogin => CookieHelper.CheckCookie();
-        public bool IsReadingDoublePage
-        {
-            get
-            {
-                return SettingHelpers.GetSetting<bool>("IsReadingDoublePage");
-            }
-            set
-            {
-                SettingHelpers.SetSetting("IsReadingDoublePage", value);
-            }
-        }
-       
+        public ReadingViewModel ReadingVM { get; private set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public EHMainPage()
+        public EHReadingPage()
         {
             this.InitializeComponent();
-            NavigationCacheMode = NavigationCacheMode.Required;
-            CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += TitleBar_LayoutMetricsChanged;
-            MainVM = new MainViewModel();
         }
 
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Window.Current.SetTitleBar(TitleBarRect);
+            ReadingVM = e.Parameter as ReadingViewModel;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReadingVM)));
             base.OnNavigatedTo(e);
         }
-
-        private void RefreshClick(object sender, RoutedEventArgs e)
+        public void BackClick()
         {
-            MainVM.Initialize();
+            Frame.GoBack();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            switch (pivot.SelectedIndex)
+            e.Handled = true;
+            if (ControlPanel.Opacity == 0d)
             {
-                case 0:
-                    IsMainPaneOpen = !IsMainPaneOpen;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMainPaneOpen)));
-                    break;
-                case 1:
-                    IsFavorPaneOpen = !IsFavorPaneOpen;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFavorPaneOpen)));
-                    break;
-                default:
-                    break;
+                ShowControlPanel.Begin();
+            }
+            else
+            {
+                HideControlPanel.Begin();
             }
         }
 
-        private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            await MainVM.Search(args.QueryText);
+            ShowControlPanel.Begin();
         }
 
-        public void SearchOptionTapped()
+        private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            IsSearchOptionShow = !IsSearchOptionShow;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSearchOptionShow)));
-        }
-        public async void LoginClick()
-        {
-            if (HasLogin)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
-                return;
-            }
-            LoginDialog dialog = new LoginDialog();
-            await dialog.ShowAsync();
-            if (dialog.IsSuccess)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
-            }
-        }
-        public async void CacheClearClick()
-        {
-            await CacheHelper.ClearCache();
-            MessageDialog dialog = new MessageDialog("Chche cleared");
-            await dialog.ShowAsync();
-        }
-        public async void LoadMoreClick()
-        {
-            await MainVM.LoadMore();
+            HideControlPanel.Begin();
         }
 
-        public void MainItemClick(object sender, ItemClickEventArgs e)
-        {
-            Frame.Navigate(typeof(EHDetailPage), new DetailViewModel(e.ClickedItem as GalleryListModel));
-        }
     }
 }

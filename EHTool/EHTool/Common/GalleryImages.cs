@@ -12,6 +12,11 @@ namespace EHTool.EHTool.Common
     {
         private IEnumerable<ImageListModel> _imagePageList;
 
+        public GalleryImages()
+        {
+
+        }
+
         public GalleryImages(IEnumerable<ImageListModel> list)
         {
             _imagePageList = list;

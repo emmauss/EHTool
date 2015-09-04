@@ -18,7 +18,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>EHTool_StoreKey.pfx</PackageCertificateKeyFile>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>FC5D2D4208D3B6A5B7B7918B3391EDE5C6494BCE</PackageCertificateThumbprint>
   </PropertyGroup>
@@ -122,7 +122,6 @@
     <Compile Include="Common\Helpers\HttpHelper.cs" />
     <Compile Include="Common\Helpers\JsonHelper.cs" />
     <Compile Include="Common\Helpers\SettingHelper.cs" />
-    <Compile Include="Common\NotifyPropertyChanged.cs" />
     <Compile Include="Common\Triggers\ControlSizeTrigger.cs" />
     <Compile Include="DHPlayer\Entities\FileType.cs" />
     <Compile Include="DHPlayer\Model\MainListModel.cs" />
@@ -139,6 +138,8 @@
     <Compile Include="EHTool\Common\GalleryImages.cs" />
     <Compile Include="EHTool\Common\Helpers\CookieHelper.cs" />
     <Compile Include="EHTool\Common\Login.cs" />
+    <Compile Include="EHTool\Common\ReadingViewSelector.cs" />
+    <Compile Include="EHTool\Entities\CurrentState.cs" />
     <Compile Include="EHTool\Entities\ServerTypes.cs" />
     <Compile Include="EHTool\Interface\ISearchOption.cs" />
     <Compile Include="EHTool\Model\BaseModel.cs" />
@@ -149,15 +150,31 @@
     <Compile Include="EHTool\Model\HeaderModel.cs" />
     <Compile Include="EHTool\Model\HostLinkModel.cs" />
     <Compile Include="EHTool\Model\ImageListModel.cs" />
+    <Compile Include="EHTool\Model\ImageModel.cs" />
     <Compile Include="EHTool\Model\TagModel.cs" />
     <Compile Include="EHTool\Model\TorrentModel.cs" />
     <Compile Include="EHTool\Model\TorrentSearchOption.cs" />
-    <Compile Include="EHTool\Model\UpLoadModel.cs" />
     <Compile Include="DHPlayer\View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EHTool\ViewModel\DetailViewModel.cs" />
+    <Compile Include="EHTool\ViewModel\MainViewModel.cs" />
+    <Compile Include="EHTool\ViewModel\ReadingViewModel.cs" />
+    <Compile Include="EHTool\View\EHDetailPage.xaml.cs">
+      <DependentUpon>EHDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EHTool\View\EHMainPage.xaml.cs">
       <DependentUpon>EHMainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EHTool\View\EHReadingPage.xaml.cs">
+      <DependentUpon>EHReadingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EHTool\View\FlipBookControl.cs" />
+    <Compile Include="EHTool\View\LoginDialog.xaml.cs">
+      <DependentUpon>LoginDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EHTool\View\TorrentDialog.xaml.cs">
+      <DependentUpon>TorrentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -169,10 +186,32 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
-    <None Include="Package.StoreAssociation.xml" />
+    <None Include="Package.StoreAssociation.xml">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avcodec-56.dll" />
     <Content Include="$(ProjectDir)..\FFmpegLib\$(PlatformTarget)\bin\avdevice-56.dll" />
@@ -199,7 +238,28 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EHTool\View\EHDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EHTool\View\EHMainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EHTool\View\EHReadingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EHTool\View\FlipBookControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="EHTool\View\LoginDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EHTool\View\TorrentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

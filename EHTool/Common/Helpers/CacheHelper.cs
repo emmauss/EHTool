@@ -67,6 +67,11 @@ namespace Common.Helpers
             {
                 await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
             }
+            folderlist = await ApplicationData.Current.LocalCacheFolder.GetFoldersAsync();
+            foreach (var folder in folderlist)
+            {
+                await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            }
         }
     }
 }
