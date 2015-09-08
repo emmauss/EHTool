@@ -65,6 +65,8 @@ namespace EHTool.EHTool.ViewModel
             }
             catch (ExHentaiAccessException)
             {
+                IsLoading = false;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
                 LoginDialog dialog = new LoginDialog();
                 await dialog.ShowAsync();
                 if (dialog.IsSuccess)

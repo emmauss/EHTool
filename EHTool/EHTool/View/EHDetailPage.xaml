@@ -151,7 +151,7 @@
                             <ListView ItemContainerStyle="{StaticResource ListViewItemStyle1}" Grid.Row="2" IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{x:Bind DetailVM.DetailItem.Header.Tags,Mode=OneWay}" ItemTemplate="{StaticResource TagListTemple}"/>
                             <StackPanel Grid.Row="3" Orientation="Horizontal">
                                 <Button Margin="4,0" Content="Read" Click="{x:Bind ReadButtonClick}"/>
-                                <Button Margin="4,0" Content="Download"/>
+                                <Button Margin="4,0" Content="Download" Click="{x:Bind DownloadClick}"/>
                                 <Button Margin="4,0" Click="{x:Bind DownloadTorrentClick}">
                                     <Button.Content>
                                         <TextBlock>

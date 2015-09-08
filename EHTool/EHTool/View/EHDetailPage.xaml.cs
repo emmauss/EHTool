@@ -151,5 +151,11 @@ namespace EHTool.EHTool.View
         {
             await DetailVM.FavorHandler();
         }
+
+        public async void DownloadClick()
+        {
+            var dialog = new AddDownloadDialog(DetailVM.ListItem);
+            await dialog.ShowAsync();
+        }
     }
 }

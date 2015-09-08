@@ -67,7 +67,7 @@ namespace EHTool.EHTool.View
             {
                 filename.Replace(charitem,' ');
             }
-            var file = await DownloadsFolder.CreateFileAsync($"{filename}.torrent", CreationCollisionOption.ReplaceExisting);
+            var file = await DownloadsFolder.CreateFileAsync($"{filename}.torrent", CreationCollisionOption.GenerateUniqueName);
             using (var client = new HttpClient())
             {
                 var bytes = await client.GetByteArrayAsync(item.TorrentLink);

@@ -88,7 +88,7 @@ namespace EHTool.EHTool.ViewModel
             }
             else
             {
-                await AddFavor(_item);
+                await AddFavor(ListItem);
             }
             IsFavor = await IsFavor(Id);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFavor)));

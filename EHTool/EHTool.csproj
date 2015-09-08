@@ -164,6 +164,9 @@
     <Compile Include="EHTool\ViewModel\DetailViewModel.cs" />
     <Compile Include="EHTool\ViewModel\MainViewModel.cs" />
     <Compile Include="EHTool\ViewModel\ReadingViewModel.cs" />
+    <Compile Include="EHTool\View\AddDownloadDialog.xaml.cs">
+      <DependentUpon>AddDownloadDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EHTool\View\EHDetailPage.xaml.cs">
       <DependentUpon>EHDetailPage.xaml</DependentUpon>
     </Compile>
@@ -239,6 +242,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DHPlayer\View\VideoPlayPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EHTool\View\AddDownloadDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
