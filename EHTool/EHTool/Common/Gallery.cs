@@ -70,7 +70,8 @@ namespace EHTool.EHTool.Common
                        ImageLink = (a.GetNodebyClassName("id3").Element("a").Element("img").Attributes["src"].Value),
                        Link = (a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value),
                        FileCount = (a.GetNodebyClassName("id42").InnerText),
-                       LinkMatch = Match(a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value, "/g/([^/]+)/([^-]+)/"),
+                       Token = Match(a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value, "/g/([^/]+)/([^-]+)/").Groups[2].Value,
+                       ID = Match(a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value, "/g/([^/]+)/([^-]+)/").Groups[1].Value,
                        Type = a.GetNodebyClassName("id41").Attributes["title"].Value,
                        ServerType = ServerType,
                    };

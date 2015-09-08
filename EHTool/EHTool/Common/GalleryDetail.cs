@@ -18,6 +18,7 @@ namespace EHTool.EHTool.Common
     {
         public string Id { get; protected set; }
         public string Token { get; protected set; }
+        protected GalleryListModel _item;
         public GalleryDetail()
         {
 
@@ -35,6 +36,7 @@ namespace EHTool.EHTool.Common
             Id = item.ID;
             Token = item.Token;
             ServerType = item.ServerType;
+            _item = item;
         }
 
 

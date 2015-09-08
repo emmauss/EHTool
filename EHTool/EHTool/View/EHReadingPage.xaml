@@ -8,6 +8,8 @@
     xmlns:view="using:EHTool.EHTool.View"
     xmlns:common="using:EHTool.EHTool.Common"
     xmlns:model="using:EHTool.EHTool.Model"
+    xmlns:viewmodel="using:EHTool.EHTool.ViewModel"
+    xmlns:converter="using:Common.Converters"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -25,46 +27,44 @@
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
-
-        <common:ReadingViewSelector CommonView="{StaticResource CommonView}" FlipBookView="{StaticResource FilpView}" x:Key="ReadingViewSelector"/>
-        <DataTemplate x:Key="CommonView">
-            <FlipView SelectedIndex="{Binding SelectedIndex,Mode=TwoWay}" ItemsSource="{Binding ImageList}">
-                <FlipView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Background="White">
-                            <ProgressBar Value="{Binding DownloadedSize}" Maximum="{Binding TotalSize}"/>
-                            <Image Source="{Binding Image,Mode=OneWay}"/>
-                        </Grid>
-                    </DataTemplate>
-                </FlipView.ItemTemplate>
-            </FlipView>
+        <converter:IntToDoubleConverter x:Key="IntToDoubleConverter"/>
+        <DataTemplate x:Key="EmptyTemplate">
+            <Grid Background="White"/>
         </DataTemplate>
-        <DataTemplate x:Name="FilpView">
-            <view:FlipBookControl SelectedIndex="{Binding SelectedIndex,Mode=OneWay}" ItemsSource="{Binding ImageList,Mode=OneWay}">
-                <view:FlipBookControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Background="White">
-                            <ProgressBar Value="{Binding DownloadedSize}" Maximum="{Binding TotalSize}"/>
-                            <Image Source="{Binding Image,Mode=OneWay}"/>
-                        </Grid>
-                    </DataTemplate>
-                </view:FlipBookControl.ItemTemplate>
+        <common:ReadingViewSelector CommonView="{StaticResource CommonView}" FlipBookView="{StaticResource FilpView}" x:Key="ReadingViewSelector"/>
+        <DataTemplate x:Key="ImageItemTemplate" x:DataType="model:ImageModel">
+            <Grid Background="White">
+                <ProgressBar Margin="16,0" Visibility="{x:Bind IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Value="{x:Bind DownloadedSize,Mode=OneWay}" Maximum="{x:Bind TotalSize,Mode=OneWay}"/>
+                <Image Source="{x:Bind Image,Mode=OneWay}"/> 
+                <Button Click="{x:Bind ReloadClick}" Visibility="{x:Bind IsFailed,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Content="Try Again" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="CommonView" x:DataType="viewmodel:ReadingViewModel">
+            <FlipView SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}" ItemsSource="{x:Bind ImageList,Mode=OneWay}" ItemTemplate="{StaticResource ImageItemTemplate}"/>
+        </DataTemplate>
+        <DataTemplate x:Name="FilpView" x:DataType="viewmodel:ReadingViewModel">
+            <view:FlipBookControl SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}" ItemsSource="{x:Bind ImageList,Mode=OneWay}" ItemTemplate="{StaticResource ImageItemTemplate}" EmptyTemplate="{StaticResource EmptyTemplate}" >
             </view:FlipBookControl>
         </DataTemplate>
     </Page.Resources>
 
     <Grid PointerPressed="Grid_PointerPressed" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <!--<ContentPresenter ContentTemplateSelector="{StaticResource ReadingViewSelector}"/>-->
-        <view:FlipBookControl x:Name="flipBookControl" SelectedIndex="{x:Bind ReadingVM.SelectedIndex,Mode=OneWay}" ItemsSource="{x:Bind ReadingVM.ImageList,Mode=OneWay}">
-            <view:FlipBookControl.ItemTemplate>
-                <DataTemplate x:DataType="model:ImageModel">
-                    <Grid Background="White">
-                        <!--<ProgressBar Value="{x:Bind DownloadedSize,Mode=OneWay}" Maximum="{x:Bind TotalSize,Mode=OneWay}"/>-->
-                        <Image Source="{x:Bind Image,Mode=OneWay}"/>
-                    </Grid>
-                </DataTemplate>
-            </view:FlipBookControl.ItemTemplate>
-        </view:FlipBookControl>
+        <SplitView IsPaneOpen="{x:Bind IsPaneOpen,Mode=TwoWay}" PaneBackground="#BF000000" PanePlacement="Right" DisplayMode="Overlay">
+            <SplitView.Pane>
+                <Grid RequestedTheme="Dark">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Height="{x:Bind TitleBarHeight,Mode=OneWay}"/>
+                    <StackPanel Margin="8" Grid.Row="1" Orientation="Vertical">
+                        <ToggleSwitch IsOn="{x:Bind ReadingVM.IsAutoPlay,Mode=TwoWay}" Header="AutoPlay"/>
+                        <TextBox Visibility="{x:Bind ReadingVM.IsAutoPlay,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" Header="AutoPlay Interval(From Seconds)" Text="{x:Bind ReadingVM.TimerInterval,Mode=TwoWay}" InputScope="NumberFullWidth"/>
+                    </StackPanel>
+                </Grid>
+            </SplitView.Pane>
+            <ContentPresenter Content="{x:Bind ReadingVM,Mode=OneWay}" ContentTemplateSelector="{StaticResource ReadingViewSelector}"/>
+        </SplitView>
         <Grid x:Name="ControlPanel">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -80,16 +80,25 @@
                 </Grid.ColumnDefinitions>
                 <Rectangle Grid.ColumnSpan="4" x:Name="TitleBarRect"  Fill="#BF000000" />
                 <Button Grid.Column="3" Margin="{x:Bind TitleBarPadding,Mode=OneWay}" Content="{x:Bind FullScreenButtonContent,Mode=OneWay}" FontFamily="Segoe MDL2 Assets" Height="{x:Bind TitleBarHeight,Mode=OneWay}" Click="{x:Bind FullScreenClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                <ProgressBar Background="Transparent" Foreground="White" Grid.Column="2" VerticalAlignment="Stretch"/>
                 <Button Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="0" Content="&#xE112;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind BackClick}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </Grid>
             <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited" RequestedTheme="Dark" Grid.Row="2" Background="#BF000000">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Slider Value="{Binding SelectedIndex, ElementName=flipBookControl, Mode=TwoWay}" Maximum="{Binding ItemsSource.Count, ElementName=flipBookControl, Mode=OneWay}"/>
+                <Button/>
+                <Button Content="&#xE117;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind RefreshClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
+                <Slider Grid.Column="1" Value="{x:Bind ReadingVM.SelectedIndex, Mode=TwoWay,Converter={StaticResource IntToDoubleConverter}}" Maximum="{x:Bind ReadingVM.MaxPageCount, Mode=OneWay,Converter={StaticResource IntToDoubleConverter}}"/>
+                <Button Grid.Column="2" HorizontalAlignment="Center" Click="{x:Bind SettingButtonClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
             </Grid>
+        </Grid>
+        <Grid Background="White" Visibility="{x:Bind ReadingVM.IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Grid.Row="0" Text="Loading Image List"/>
+                <ProgressBar Grid.Row="1" IsIndeterminate="{x:Bind ReadingVM.IsLoading,Mode=OneWay}"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

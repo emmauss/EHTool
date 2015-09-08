@@ -354,7 +354,7 @@
                                         <ToggleSwitch Grid.Row="8" Grid.Column="1" Header="Search Downvoted Tags" Visibility="{x:Bind MainVM.SearchOption.AdvSearch,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" IsOn="{x:Bind MainVM.SearchOption.SearchDownvotedTags,Mode=TwoWay}"/>
                                         <ToggleSwitch Grid.Row="9" Grid.Column="0" Header="Show Expunged" Visibility="{x:Bind MainVM.SearchOption.AdvSearch,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" IsOn="{x:Bind MainVM.SearchOption.ShowExpunged,Mode=TwoWay}"/>
                                         <ToggleSwitch Grid.Row="9" Grid.Column="1" Header="Set Minimum Rating" Visibility="{x:Bind MainVM.SearchOption.AdvSearch,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" IsOn="{x:Bind MainVM.SearchOption.MinimumRating,Mode=TwoWay}"/>
-                                        <TextBox Text="{x:Bind MainVM.SearchOption.MinimumRatingValue,Mode=TwoWay}" Grid.Row="10" Grid.ColumnSpan="2" Header="Minimum Rating Value(0 - 5)" Visibility="{x:Bind MainVM.SearchOption.MinimumRating,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                        <TextBox InputScope="Number" Text="{x:Bind MainVM.SearchOption.MinimumRatingValue,Mode=TwoWay}" Grid.Row="10" Grid.ColumnSpan="2" Header="Minimum Rating Value(0 - 5)" Visibility="{x:Bind MainVM.SearchOption.MinimumRating,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}"/>
                                     </Grid>
                                 </Grid>
                             </StackPanel>
@@ -370,11 +370,17 @@
             <PivotItem Header="Favor">
                 <SplitView IsPaneOpen="{x:Bind IsFavorPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
-                        <Grid>
-
-                        </Grid>
+                        <StackPanel Margin="8,0" RequestedTheme="Dark">
+                            <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
+                            <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>
+                            <ToggleSwitch IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                        </StackPanel>
                     </SplitView.Pane>
+                    <GridView IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.FavorList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" ></GridView>
                 </SplitView>
+            </PivotItem>
+            <PivotItem Header="Download">
+                
             </PivotItem>
         </Pivot>
 

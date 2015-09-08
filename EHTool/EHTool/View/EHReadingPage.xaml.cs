@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Common.Helpers;
 using EHTool.EHTool.Model;
 using EHTool.EHTool.ViewModel;
 using Windows.ApplicationModel.Core;
@@ -81,6 +82,7 @@ namespace EHTool.EHTool.View
         #endregion
         public ReadingViewModel ReadingVM { get; private set; }
         public event PropertyChangedEventHandler PropertyChanged;
+        public bool IsPaneOpen { get; set; }
 
         public EHReadingPage()
         {
@@ -88,15 +90,17 @@ namespace EHTool.EHTool.View
         }
 
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             Window.Current.SetTitleBar(TitleBarRect);
             ReadingVM = e.Parameter as ReadingViewModel;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReadingVM)));
+            await ReadingVM.LoadList();
             base.OnNavigatedTo(e);
         }
-        public void BackClick()
+        public async void BackClick()
         {
+            await ReadingVM.CancelTask();
             Frame.GoBack();
         }
 
@@ -123,5 +127,15 @@ namespace EHTool.EHTool.View
             HideControlPanel.Begin();
         }
 
+        public void SettingButtonClick()
+        {
+            IsPaneOpen = !IsPaneOpen;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPaneOpen)));
+        }
+
+        public void RefreshClick()
+        {
+
+        }
     }
 }

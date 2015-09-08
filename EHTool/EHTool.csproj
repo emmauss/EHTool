@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="Common\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Common\Converters\Converter.cs" />
+    <Compile Include="Common\Converters\DoubleToIntConverter.cs" />
     <Compile Include="Common\Converters\TimeSpanToDoubleConverter.cs" />
     <Compile Include="Common\Extension\HtmlNodeExtension.cs" />
     <Compile Include="Common\Extension\JsonValueExtension.cs" />
@@ -137,6 +138,9 @@
     <Compile Include="EHTool\Common\GalleryDetail.cs" />
     <Compile Include="EHTool\Common\GalleryImages.cs" />
     <Compile Include="EHTool\Common\Helpers\CookieHelper.cs" />
+    <Compile Include="EHTool\Common\Helpers\DatabaseHelper.cs" />
+    <Compile Include="EHTool\Common\Helpers\DownloadHelper.cs" />
+    <Compile Include="EHTool\Common\Helpers\FavorHelper.cs" />
     <Compile Include="EHTool\Common\Login.cs" />
     <Compile Include="EHTool\Common\ReadingViewSelector.cs" />
     <Compile Include="EHTool\Entities\CurrentState.cs" />

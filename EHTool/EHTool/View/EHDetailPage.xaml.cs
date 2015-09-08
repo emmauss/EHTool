@@ -106,6 +106,12 @@ namespace EHTool.EHTool.View
             SizeChanged += EHDetailPage_SizeChanged;
         }
 
+        public void SelectedPageChanged(object sender,object e)
+        {
+            var combobox = sender as ComboBox;
+            DetailVM.SelectedPage = combobox.SelectedIndex;
+        }
+
         private void EHDetailPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             ImageWidth = Window.Current.Bounds.Width / 4d - 10d;
@@ -137,10 +143,13 @@ namespace EHTool.EHTool.View
             var torrentDialog = new TorrentDialog(DetailVM.GetTorrentList());
             await torrentDialog.ShowAsync();
         }
-
         public void ReadButtonClick()
         {
             Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.GetImagePageListTask(),DetailVM.Id));
+        }
+        public async void FavorClick()
+        {
+            await DetailVM.FavorHandler();
         }
     }
 }

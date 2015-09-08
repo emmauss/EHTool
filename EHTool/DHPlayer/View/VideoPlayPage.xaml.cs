@@ -93,6 +93,8 @@ namespace EHTool.DHPlayer
         }
         #endregion
         #endregion
+        
+
 
         public bool IsForceDecodeAudio
         {
@@ -355,5 +357,6 @@ namespace EHTool.DHPlayer
         {
             FullScreenClick();
         }
+        
     }
 }

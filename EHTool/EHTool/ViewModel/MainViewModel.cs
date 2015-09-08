@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using EHTool.EHTool.Common;
+using EHTool.EHTool.Common.Helpers;
 using EHTool.EHTool.Entities;
 using EHTool.EHTool.Model;
 using EHTool.EHTool.View;
@@ -58,6 +59,7 @@ namespace EHTool.EHTool.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
             try
             {
+                await LoadFavorList();
                 MainList = new ObservableCollection<GalleryListModel>(await GetGalleryList());
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainList)));
             }
@@ -80,6 +82,14 @@ namespace EHTool.EHTool.ViewModel
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
+
+        public async Task LoadFavorList()
+        {
+            FavorList = new ObservableCollection<GalleryListModel>(await FavorHelper.GetFavorList());
+            var a = FavorList[0].Width;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FavorList)));
+        }
+
         public async Task Search(string keyword)
         {
             _currentState = CurrentState.Search;

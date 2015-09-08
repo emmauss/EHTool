@@ -17,7 +17,7 @@ namespace Common.Helpers
                 return Encoding.UTF8.GetString(jsonArray, 0, jsonArray.Length);
             }
         }
-        
+
         public static T FromJson<T>(string json)
         {
             var deserializer = new DataContractJsonSerializer(typeof(T));

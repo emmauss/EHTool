@@ -159,7 +159,7 @@
                                         </TextBlock>
                                     </Button.Content>
                                 </Button>
-                                <Button Margin="4,0" Content="Add Favor"/>
+                                <Button Margin="4,0" Content="{x:Bind DetailVM.FavorButtonContent,Mode=OneWay}" Click="{x:Bind FavorClick}"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -174,8 +174,15 @@
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Padding="8,0" Text="Image:" Style="{ThemeResource SubtitleTextBlockStyle}"/>
-                            <GridView SelectionMode="None" ItemsSource="{x:Bind DetailVM.DetailItem.ImageList,Mode=OneWay}" Grid.Row="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Padding="8,0" Text="Image:" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+                                <ComboBox Grid.Column="1" SelectionChanged="{x:Bind SelectedPageChanged}" ItemsSource="{x:Bind DetailVM.Pages,Mode=OneWay}"/>
+                            </Grid>
+                            <GridView SelectionMode="None" ItemsSource="{x:Bind DetailVM.DetailItem.ImageList,Mode=OneWay}" Grid.Row="2">
                                 <GridView.ItemTemplate>
                                     <DataTemplate x:DataType="model:ImageListModel">
                                         <Image Source="{x:Bind Image,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}" Height="{x:Bind Height,Mode=OneWay}"/>

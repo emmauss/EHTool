@@ -13,6 +13,9 @@ using HtmlAgilityPack;
 using System.IO;
 using System.Diagnostics;
 using Windows.Storage;
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using System.Threading;
 
 namespace EHTool.EHTool.Model
 {
@@ -24,12 +27,14 @@ namespace EHTool.EHTool.Model
             ServerType = item.ServerType;
             _pageIndex = pageIndex;
             _id = id;
+            _cancelTokenSource = new CancellationTokenSource();
         }
 
         public bool IsLoading { get; private set; }
         public bool IsFailed { get; private set; }
-        public ulong TotalSize { get; private set; }
-        public ulong DownloadedSize { get; private set; }
+        public double TotalSize { get; private set; }
+        public double DownloadedSize { get; private set; }
+        private CancellationTokenSource _cancelTokenSource;
 
 
         public string ImagePage { get; private set; }
@@ -47,23 +52,42 @@ namespace EHTool.EHTool.Model
             {
                 if (_image == null)
                 {
-                    GetImageLink();
-                    return null;
+                    GetImage();
                 }
                 return _image;
             }
         }
 
-        public async void Reload()
+        public async Task Cancel()
         {
+            if (IsLoading)
+            {
+                _cancelTokenSource.Cancel(false);
+                var cachefolder = await(await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(ServerType.ToString(), CreationCollisionOption.OpenIfExists);
+                cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
+                var file = await cachefolder.CreateFileAsync($"{_pageIndex}", CreationCollisionOption.OpenIfExists);
+                await file.DeleteAsync();
+            }
+        }
+
+        public async void ReloadClick()
+        {
+            Debug.WriteLine($"page {_pageIndex} clicked");
+            await Reload();
+        }
+
+        public async Task Reload()
+        {
+            IsFailed = false;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
             var cachefolder = await(await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(ServerType.ToString(), CreationCollisionOption.OpenIfExists);
             cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
             var file = await cachefolder.CreateFileAsync($"{_pageIndex}", CreationCollisionOption.OpenIfExists);
             await file.DeleteAsync();
-            GetImageLink();
+            await GetImage();
         }
 
-        private async void GetImageLink()
+        private async Task GetImage()
         {
             if (IsLoading)
             {
@@ -71,79 +95,63 @@ namespace EHTool.EHTool.Model
             }
             IsLoading = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
-            try
+            var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(ServerType.ToString(), CreationCollisionOption.OpenIfExists);
+            cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
+            var file = await cachefolder.CreateFileAsync($"{_pageIndex}", CreationCollisionOption.OpenIfExists);
+            //if current file is now downloading,it will throw UnauthorizedAccessException
+            var fbuf = await FileIO.ReadBufferAsync(file);
+            if (fbuf.Length != 0)
             {
-                var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(ServerType.ToString(), CreationCollisionOption.OpenIfExists);
-                cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
-                var file = await cachefolder.CreateFileAsync($"{_pageIndex}", CreationCollisionOption.OpenIfExists);
-                var fbuf = await FileIO.ReadBufferAsync(file);
-                if (fbuf.Length != 0)
+                _image = new BitmapImage(new Uri(file.Path));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Image)));
+            }
+            else
+            {
+                using (var client = new System.Net.Http.HttpClient())
                 {
-                    _image = new BitmapImage(new Uri(file.Path));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Image)));
-                }
-                else
-                {
-                    string htmlStr;
-                    var webRequest = System.Net.WebRequest.CreateHttp(ImagePage);
-                    webRequest.Headers["Cookie"] = (ServerType == ServerTypes.ExHentai ? Cookie : null) + Unconfig;
-                    using (var webResponse = await webRequest.GetResponseAsync() as System.Net.HttpWebResponse)
-                    {
-                        using (var getContent = new StreamReader(webResponse.GetResponseStream(), Encoding.UTF8))
-                        {
-                            htmlStr = await getContent.ReadToEndAsync();
-                        }
-                    }
+                    client.DefaultRequestHeaders.Add("Cookie", (ServerType == ServerTypes.ExHentai ? Cookie : null) + Unconfig);
+                    var htmlStr = await client.GetStringAsync(ImagePage);
                     HtmlDocument doc = new HtmlDocument();
                     doc.LoadHtml(htmlStr);
                     var imageLink = doc.GetElementbyId("img").Attributes["src"].Value;
-                    using (var client = new Windows.Web.Http.HttpClient())
+                    using (var res = await client.GetAsync(imageLink, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, _cancelTokenSource.Token))
                     {
-                        using (var res = await client.GetAsync(new Uri(imageLink), Windows.Web.Http.HttpCompletionOption.ResponseHeadersRead))
+                        if (res.Content.Headers.ContentDisposition?.FileName == "403.gif")
                         {
-                            
-                            if (res.Headers.Contains(new KeyValuePair<string, string>("filename", "403.gif")))
+                            throw new System.Net.WebException();
+                        }
+                        else
+                        {
+                            TotalSize = res.Content.Headers.ContentLength.GetValueOrDefault();
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalSize)));
+                            using (var fstream = await file.OpenStreamForWriteAsync())
                             {
-                                IsFailed = true;
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
-                                IsLoading = false;
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
-                                return;
-                            }
-                            else
-                            {
-                                TotalSize = res.Content.Headers.ContentLength.GetValueOrDefault();
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalSize)));
-                                using (var fstream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                                using (var stream = await res.Content.ReadAsStreamAsync())
                                 {
-                                    using (var inputstream = await res.Content.ReadAsInputStreamAsync())
+                                    int bytesRead = 0;
+                                    byte[] myBuffer = new byte[1024 * 1024];
+                                    while ((bytesRead = await stream.ReadAsync(myBuffer, 0, myBuffer.Length)) > 0)
                                     {
-                                        while (true)
+                                        if (_cancelTokenSource.IsCancellationRequested)
                                         {
-                                            var buf = new Windows.Storage.Streams.Buffer(1024);
-                                            buf = (Windows.Storage.Streams.Buffer)(await inputstream.ReadAsync(buf, buf.Capacity, Windows.Storage.Streams.InputStreamOptions.None));
-                                            if (buf.Length == 0)
-                                            {
-                                                break;
-                                            }
-                                            await fstream.WriteAsync(buf);
-                                            DownloadedSize = fstream.Size;
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            await fstream.WriteAsync(myBuffer, 0, bytesRead);
+                                            DownloadedSize += bytesRead;
                                             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadedSize)));
                                         }
                                     }
                                 }
-                                _image = new BitmapImage(new Uri(file.Path));
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Image)));
                             }
+                            Debug.WriteLine($"page {_pageIndex} complete");
+                            _image = new BitmapImage(new Uri(file.Path));
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Image)));
                         }
                     }
-
                 }
-            }
-            catch (Exception)
-            {
-                IsFailed = true;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+
             }
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));

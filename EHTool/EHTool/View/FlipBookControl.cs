@@ -62,6 +62,7 @@ namespace EHTool.EHTool.View
         #region Member Variables
 
         private AutoResetEvent ControlLoaded;
+        private bool CanChangeItemContentTemplate;
         /// <summary>
         /// 0 初始 翻页状态1 翻页状态2
         /// </summary>
@@ -305,7 +306,7 @@ namespace EHTool.EHTool.View
 
         #endregion
 
-
+        public DataTemplate EmptyTemplate { get; set; }
 
         public int SelectedIndex
         {
@@ -481,7 +482,7 @@ namespace EHTool.EHTool.View
             var delte = prop.MouseWheelDelta;
             if (delte < 0)
             {
-                if (Items.Count > SelectedIndex + 2)
+                if (SelectedIndex < Items.Count - 2)
                 {
                     SelectedIndex += 2;
                 }
@@ -545,6 +546,7 @@ namespace EHTool.EHTool.View
                 await Task.Delay(DelayLoad);
                 List<object> needLoadItems = new List<object>();
                 //第一次加载 载入4页
+                CanChangeItemContentTemplate = true;
                 CPresenter.DataContext = this.Items[PageIndex];
                 needLoadItems.Add(Items[PageIndex]);
                 if (this.Items.Count > PageIndex + 1)
@@ -552,18 +554,32 @@ namespace EHTool.EHTool.View
                     DPresenter.DataContext = this.Items[PageIndex + 1];
                     needLoadItems.Add(Items[PageIndex + 1]);
                 }
+                else
+                {
+                    DPresenter.DataContext = null;
+                }
                 if (this.Items.Count > PageIndex + 2)
                 {
                     EPresenter.DataContext = this.Items[PageIndex + 2];
                     needLoadItems.Add(Items[PageIndex + 2]);
+                }
+                else
+                {
+                    EPresenter.DataContext = null;
                 }
                 if (this.Items.Count > PageIndex + 3)
                 {
                     FPresenter.DataContext = this.Items[PageIndex + 3];
                     needLoadItems.Add(Items[PageIndex + 3]);
                 }
+                else
+                {
+                    FPresenter.DataContext = null;
+                }
                 if (null != NeedLoadingItem)
                     NeedLoadingItem(this, new FlipLoadArgs(needLoadItems, false));
+
+                CanChangeItemContentTemplate = false;
                 isInit = true;
             }
             else
@@ -626,7 +642,39 @@ namespace EHTool.EHTool.View
             stShadowSplitOuterRight = GetTemplateChild(ST_SHADOW_SPLIT_OUTER_RIGHT_PARTNAME) as StackPanel;
             stShadowMarginLeft = GetTemplateChild(ST_SHADOW_MARGIN_LEFT_PARTNAME) as StackPanel;
             stShadowMarginRight = GetTemplateChild(ST_SHADOW_MARGIN_RIGHT_PARTNAME) as StackPanel;
+            APresenter.DataContextChanged += ContentPresenter_DataContextChanged;
+            BPresenter.DataContextChanged += ContentPresenter_DataContextChanged;
+            CPresenter.DataContextChanged += ContentPresenter_DataContextChanged;
+            DPresenter.DataContextChanged += ContentPresenter_DataContextChanged;
+            EPresenter.DataContextChanged += ContentPresenter_DataContextChanged;
+            FPresenter.DataContextChanged += ContentPresenter_DataContextChanged;
+            //the DataContext is not the child's
+            //in order to use x:Bind
+            //must set to null first
+            A.DataContext = null;
+            B.DataContext = null;
+            C.DataContext = null;
+            D.DataContext = null;
+            E.DataContext = null;
+            F.DataContext = null;
             base.OnApplyTemplate();
+        }
+
+        private void ContentPresenter_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            if (isLoaded && !CanChangeItemContentTemplate)
+            {
+                return;
+            }
+            var presenter = sender as ContentPresenter;
+            if (presenter.DataContext != null)
+            {
+                presenter.ContentTemplate = ItemTemplate;
+            }
+            else
+            {
+                presenter.ContentTemplate = EmptyTemplate;
+            }
         }
         #endregion
 
@@ -742,26 +790,16 @@ namespace EHTool.EHTool.View
                 });
             }
             isFlip = true;
-            //CanScale = false;
         }
         #endregion
 
         #region FlipManipulationDelta
         private void FlipManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-            //var scale = e.Delta.Scale;
             var translateX = e.Delta.Translation.X;
             var translateY = e.Delta.Translation.Y;
             var nTtranX = nextTrans.TranslateX;
             var nTtranY = nextTrans.TranslateY;
-            //var ctranlateX = e.Cumulative.Translation.X;
-            //var ctranlateY = e.Cumulative.Translation.Y;
-            //CanScale = Task.Run(() =>
-            //{
-            //    if (scale != 1.0 || (Math.Abs(ctranlateX * 1.15) < Math.Abs(ctranlateY))) return true;
-            //    else return false;
-            //}).Result;
-            //if (isManipulating && !CanScale)
             if (isManipulating)
             {
                 if (isNext)
@@ -856,17 +894,6 @@ namespace EHTool.EHTool.View
                     #endregion
                 }
             }
-            //if (CanScale)
-            //{
-            //    _previousTransform.Matrix = _transformGroup.Value;
-            //    Point center = _previousTransform.TransformPoint(new Point(e.Position.X, e.Position.Y));
-            //    _compositeTransform.CenterX = center.X;
-            //    _compositeTransform.CenterY = center.Y;
-            //    _compositeTransform.ScaleX = e.Delta.Scale;
-            //    _compositeTransform.ScaleY = e.Delta.Scale;
-            //    _compositeTransform.TranslateX = e.Delta.Translation.X;
-            //    _compositeTransform.TranslateY = e.Delta.Translation.Y;
-            //}
         }
         #endregion
         #endregion
@@ -1008,7 +1035,7 @@ namespace EHTool.EHTool.View
 
         private void JumpToPage()
         {
-            if (PageIndex == SelectedIndex)
+            if (PageIndex == SelectedIndex || !isLoaded)
             {
                 return;
             }
@@ -1017,68 +1044,31 @@ namespace EHTool.EHTool.View
             isLoaded = false;
             PageIndex = SelectedIndex;
             CPresenter.DataContext = this.Items[PageIndex];
-            if (this.Items.Count > PageIndex + 1)
-            {
-                DPresenter.DataContext = this.Items[PageIndex + 1];
-            }
-            if (this.Items.Count > PageIndex + 2)
-            {
-                EPresenter.DataContext = this.Items[PageIndex + 2];
-            }
-            if (this.Items.Count > PageIndex + 3)
-            {
-                FPresenter.DataContext = this.Items[PageIndex + 3];
-            }
-            if (PageIndex - 1 >= 0 && Items.Count > PageIndex - 1)
-            {
-                BPresenter.DataContext = this.Items[PageIndex - 1];
-            }
-            if (PageIndex - 2 >= 0 && Items.Count > PageIndex - 2)
-            {
-                APresenter.DataContext = this.Items[PageIndex - 2];
-            }
-
+            DPresenter.DataContext = Items.Count > PageIndex + 1 ? Items[PageIndex + 1] : null;
+            EPresenter.DataContext = Items.Count > PageIndex + 2 ? Items[PageIndex + 2] : null;
+            FPresenter.DataContext = Items.Count > PageIndex + 3 ? Items[PageIndex + 3] : null;
+            BPresenter.DataContext = PageIndex - 1 >= 0 && Items.Count > PageIndex - 1 ? Items[PageIndex - 1] : null;
+            APresenter.DataContext = PageIndex - 2 >= 0 && Items.Count > PageIndex - 2 ? Items[PageIndex - 2] : null;
             isLoaded = true;
         }
 
         #region LoadPageContentByPageIndex
         private void LoadPageContentByPageIndex(int PageIndex, bool isNextOrPrev, ContentPresenter firstPresenter, ContentPresenter secondPresenter)
         {
+            CanChangeItemContentTemplate = true;
             List<object> needLoadItems = new List<object>();
             if (isNextOrPrev)
             {
-                //加载下一页模板
-
-
                 if (PageIndex + 2 < this.Items.Count)
                 {
-
-                    //EPresenter.DataContext = this.Items[PageIndex + 2];
-                    //needLoadItems.Add(Items[PageIndex + 2]);
-                    firstPresenter.Content = null;
-                    firstPresenter.DataContext = null;
-                    object item = null;
-                    if (this.Items.Count > PageIndex + 2)
-                    {
-                        item = this.Items[PageIndex + 2];
-                        needLoadItems.Add(item);
-                        firstPresenter.DataContext = item;
-                    }
+                    needLoadItems.Add(Items[PageIndex + 2]);
+                    firstPresenter.DataContext = Items[PageIndex + 2];
                 }
                 else firstPresenter.DataContext = null;
                 if (PageIndex + 3 < this.Items.Count)
                 {
-                    //FPresenter.DataContext = this.Items[PageIndex + 3];
-                    //needLoadItems.Add(Items[PageIndex + 3]);
-                    object item = null;
-                    secondPresenter.Content = null;
-                    secondPresenter.DataContext = null;
-                    if (this.Items.Count > PageIndex + 3)
-                    {
-                        item = this.Items[PageIndex + 3];
-                        needLoadItems.Add(item);
-                        secondPresenter.DataContext = item;
-                    }
+                    needLoadItems.Add(Items[PageIndex + 3]);
+                    secondPresenter.DataContext = Items[PageIndex + 3];
                 }
                 else secondPresenter.DataContext = null;
                 if (null != NeedLoadingItem)
@@ -1090,14 +1080,10 @@ namespace EHTool.EHTool.View
                 if (PageIndex - 2 >= 0 && Items.Count > PageIndex - 2)
                 {
                     needLoadItems.Add(this.Items[PageIndex - 2]);
-                    secondPresenter.Content = null;
-                    secondPresenter.DataContext = null;
                     secondPresenter.DataContext = this.Items[PageIndex - 2];
                 }
                 if (PageIndex - 1 >= 0 && Items.Count > PageIndex - 1)
                 {
-                    firstPresenter.Content = null;
-                    firstPresenter.DataContext = null;
                     firstPresenter.DataContext = this.Items[PageIndex - 1];
                     needLoadItems.Add(this.Items[PageIndex - 1]);
                 }
@@ -1106,6 +1092,7 @@ namespace EHTool.EHTool.View
                     NeedLoadingItem(this, new FlipLoadArgs(needLoadItems, false));
                 RecycleData(false, needLoadItems);
             }
+            CanChangeItemContentTemplate = false;
         }
         #endregion
 
@@ -1175,9 +1162,9 @@ namespace EHTool.EHTool.View
         /// 刷新数据 
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnItemsChanged(object e)
+        protected async override void OnItemsChanged(object e)
         {
-            var result = this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 while (!isLoaded)
                 {
@@ -1521,4 +1508,5 @@ namespace EHTool.EHTool.View
             this.isNext = _isNext;
         }
     }
+    
 }

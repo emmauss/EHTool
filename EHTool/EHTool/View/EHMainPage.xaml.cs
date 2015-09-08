@@ -111,9 +111,13 @@ namespace EHTool.EHTool.View
         }
 
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             Window.Current.SetTitleBar(TitleBarRect);
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                await MainVM.LoadFavorList();
+            }
             base.OnNavigatedTo(e);
         }
 

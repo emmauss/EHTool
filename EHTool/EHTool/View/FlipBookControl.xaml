@@ -39,7 +39,7 @@
                             <Border.RenderTransform>
                                 <CompositeTransform x:Name="transC"></CompositeTransform>
                             </Border.RenderTransform>
-                            <ContentPresenter x:Name="CPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                            <ContentPresenter Content="{Binding}" x:Name="CPresenter" Style="{TemplateBinding ItemContainerStyle}"
                                               ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1" BorderThickness="0"
@@ -51,7 +51,7 @@
                             <Border.RenderTransform>
                                 <CompositeTransform x:Name="transD"></CompositeTransform>
                             </Border.RenderTransform>
-                            <ContentPresenter x:Name="DPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                            <ContentPresenter Content="{Binding}" x:Name="DPresenter" Style="{TemplateBinding ItemContainerStyle}"
                                               ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1" BorderThickness="0"
@@ -63,7 +63,7 @@
                             <Border.RenderTransform>
                                 <CompositeTransform x:Name="transE"/>
                             </Border.RenderTransform>
-                            <ContentPresenter x:Name="EPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                            <ContentPresenter Content="{Binding}" x:Name="EPresenter" Style="{TemplateBinding ItemContainerStyle}"
                                               ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1" BorderThickness="0"
@@ -75,7 +75,7 @@
                             <Border.RenderTransform>
                                 <CompositeTransform x:Name="transF"></CompositeTransform>
                             </Border.RenderTransform>
-                            <ContentPresenter x:Name="FPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                            <ContentPresenter Content="{Binding}" x:Name="FPresenter" Style="{TemplateBinding ItemContainerStyle}"
                                               ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1" BorderThickness="0"
@@ -87,7 +87,7 @@
                             <Border.RenderTransform>
                                 <CompositeTransform x:Name="transA"></CompositeTransform>
                             </Border.RenderTransform>
-                            <ContentPresenter x:Name="APresenter" Style="{TemplateBinding ItemContainerStyle}"
+                            <ContentPresenter Content="{Binding}" x:Name="APresenter" Style="{TemplateBinding ItemContainerStyle}"
                                               ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1"  BorderThickness="0"
@@ -99,7 +99,7 @@
                             <Border.RenderTransform>
                                 <CompositeTransform x:Name="transB"/>
                             </Border.RenderTransform>
-                            <ContentPresenter x:Name="BPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                            <ContentPresenter Content="{Binding}" x:Name="BPresenter" Style="{TemplateBinding ItemContainerStyle}"
                                               ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
                         </Border>
                         <StackPanel  Canvas.ZIndex="3"

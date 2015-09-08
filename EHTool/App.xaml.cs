@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 namespace EHTool
@@ -83,8 +84,10 @@ namespace EHTool
                 // 当导航堆栈尚未还原时，导航到第一页，
                 // 并通过将所需信息作为导航参数传入来配置
                 // 参数
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                //rootFrame.Navigate(typeof(EHMainPage), e.Arguments);
+                rootFrame.ContentTransitions = null;
+                rootFrame.Navigated += this.RootFrame_FirstNavigated;
+                //rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                rootFrame.Navigate(typeof(EHMainPage), e.Arguments);
             }
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
@@ -105,6 +108,13 @@ namespace EHTool
             }
         }
 
+        private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
+        {
+            var transition = new AddDeleteThemeTransition();
+            var rootFrame = sender as Frame;
+            rootFrame.ContentTransitions = new TransitionCollection() { transition };
+            rootFrame.Navigated -= this.RootFrame_FirstNavigated;
+        }
         private Frame CreateRootFrame()
         {
             Frame rootFrame = Window.Current.Content as Frame;

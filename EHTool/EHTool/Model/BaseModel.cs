@@ -10,12 +10,16 @@ using static Common.Helpers.HttpHelper;
 using static Common.Converters.Converter;
 using EHTool.EHTool.Entities;
 using Windows.UI.Xaml;
+using System.Runtime.Serialization;
 
 namespace EHTool.EHTool.Model
 {
+    [DataContract]
     public abstract class BaseModel : HostLinkModel, INotifyPropertyChanged
     {
+        [IgnoreDataMember]
         private bool _isbusy;
+        [IgnoreDataMember]
         private BitmapImage _image;
         #region PropertyChangedMember
         public event PropertyChangedEventHandler PropertyChanged;
@@ -29,7 +33,9 @@ namespace EHTool.EHTool.Model
             Height = Width * 4d / 3d;
             Window.Current.SizeChanged += Current_SizeChanged;
         }
+        [IgnoreDataMember]
         public double Width { get; private set; }
+        [IgnoreDataMember]
         public double Height { get; private set; }
 
 
@@ -41,6 +47,7 @@ namespace EHTool.EHTool.Model
             OnPropertyChanged(nameof(Width));
             OnPropertyChanged(nameof(Height));
         }
+        [IgnoreDataMember]
         public BitmapImage Image
         {
             get
@@ -58,7 +65,7 @@ namespace EHTool.EHTool.Model
             }
         }
 
-
+        
         private async void GetImage(string link)
         {
             if (_isbusy)
@@ -87,7 +94,7 @@ namespace EHTool.EHTool.Model
             }
             _isbusy = false;
         }
-
+        [DataMember]
         public string ImageLink { get; internal set; }
 
     }
