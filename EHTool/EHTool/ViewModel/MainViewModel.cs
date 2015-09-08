@@ -86,7 +86,6 @@ namespace EHTool.EHTool.ViewModel
         public async Task LoadFavorList()
         {
             FavorList = new ObservableCollection<GalleryListModel>(await FavorHelper.GetFavorList());
-            var a = FavorList[0].Width;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FavorList)));
         }
 

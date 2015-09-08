@@ -20,7 +20,7 @@
     <PackageCertificateKeyFile>EHTool_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>FC5D2D4208D3B6A5B7B7918B3391EDE5C6494BCE</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>F246A1612E1D088B2903694A5FA6AE3B8017AC1E</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -269,12 +269,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
-      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
-    </SDKReference>
-    <SDKReference Include="SQLite.UAP.2015, Version=3.8.11.1">
-      <Name>SQLite for Universal App Platform</Name>
-    </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
