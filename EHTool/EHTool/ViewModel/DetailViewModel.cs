@@ -150,8 +150,8 @@ namespace EHTool.EHTool.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
 
-        internal Task<IEnumerable<ImageListModel>> GetImagePageListTask()
-            => GetImagePageList(DetailItem.ImageList, DetailItem.DetailPageCount);
+        //internal Task<IEnumerable<ImageListModel>> GetImagePageListTask()
+        //    => GetImagePageList(DetailItem.ImageList, DetailItem.DetailPageCount);
 
     }
 }

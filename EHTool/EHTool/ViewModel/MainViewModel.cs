@@ -96,6 +96,40 @@ namespace EHTool.EHTool.ViewModel
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
+
+        internal async Task Refresh()
+        {
+            _currentState = CurrentState.MainList;
+            _currentPage = 0;
+            IsLoading = true;
+            IsFailed = false;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+            try
+            {
+                MainList = new ObservableCollection<GalleryListModel>(await GetGalleryList());
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainList)));
+            }
+            catch (ExHentaiAccessException)
+            {
+                IsLoading = false;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+                LoginDialog dialog = new LoginDialog();
+                await dialog.ShowAsync();
+                if (dialog.IsSuccess)
+                {
+                    Initialize();
+                }
+            }
+            catch (System.Net.WebException)
+            {
+                IsFailed = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+                MessageDialog dialog = new MessageDialog($"Can not connect to {ServerType}", "Web Error");
+                await dialog.ShowAsync();
+            }
+            IsLoading = false;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        }
         internal async Task LoadLocalFolderList()
         {
             LocalFolderList = new ObservableCollection<LocalFolderModel>(await LocalFolderHelper.GetList());
@@ -201,14 +235,17 @@ namespace EHTool.EHTool.ViewModel
             IEnumerable<GalleryListModel> list = null;
             try
             {
-                switch (_currentState)
+                if (MaxPageCount > _currentPage +1)
                 {
-                    case CurrentState.MainList:
-                        list = await GetGalleryList(++_currentPage);
-                        break;
-                    case CurrentState.Search:
-                        list = await GetGalleryList(SearchOption, ++_currentPage);
-                        break;
+                    switch (_currentState)
+                    {
+                        case CurrentState.MainList:
+                            list = await GetGalleryList(++_currentPage);
+                            break;
+                        case CurrentState.Search:
+                            list = await GetGalleryList(SearchOption, ++_currentPage);
+                            break;
+                    }
                 }
             }
             catch (System.Net.WebException)

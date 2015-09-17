@@ -153,7 +153,7 @@ namespace EHTool.EHTool.View
             }
             else
             {
-                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.GetImagePageListTask(), DetailVM.Id));
+                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.ListItem));
             }
         }
         public async void FavorClick()
@@ -175,6 +175,20 @@ namespace EHTool.EHTool.View
                 {
                     await DetailVM.Download(dialog.Token);
                 }
+            }
+        }
+
+        public async void ImageListItemClick(object sender, ItemClickEventArgs e)
+        {
+            var clickitem = e.ClickedItem as ImageListModel;
+            if (DetailVM.IsDownloaded)
+            {
+                var item = await DownloadHelper.GetItem(DetailVM.Id);
+                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item, clickitem));
+            }
+            else
+            {
+                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.ListItem, clickitem));
             }
         }
     }

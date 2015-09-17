@@ -91,6 +91,8 @@ namespace EHTool.EHTool.View
         #endregion
         public bool IsMainPaneOpen { get; set; }
         public bool IsFavorPaneOpen { get; set; }
+        public bool IsDownloadPaneOpen { get; set; }
+        public bool IsLocalFolderPaneOpen { get; set; }
         public bool IsSearchOptionShow { get; set; } = true;
         public bool HasLogin => CookieHelper.CheckCookie();
         public bool IsReadingDoublePage
@@ -128,7 +130,7 @@ namespace EHTool.EHTool.View
 
         private void RefreshClick(object sender, RoutedEventArgs e)
         {
-            MainVM.Initialize();
+            MainVM.Refresh();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -142,6 +144,14 @@ namespace EHTool.EHTool.View
                 case 1:
                     IsFavorPaneOpen = !IsFavorPaneOpen;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFavorPaneOpen)));
+                    break;
+                case 2:
+                    IsDownloadPaneOpen = !IsDownloadPaneOpen;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDownloadPaneOpen)));
+                    break;
+                case 3:
+                    IsLocalFolderPaneOpen = !IsLocalFolderPaneOpen;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLocalFolderPaneOpen)));
                     break;
                 default:
                     break;

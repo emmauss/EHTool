@@ -582,17 +582,17 @@ namespace EHTool.EHTool.View
             }
             else
             {
-                Status = 0;
-                this.PageIndex = 0;
-                if (null != APresenter)
-                {
-                    APresenter.DataContext = null;
-                    BPresenter.DataContext = null;
-                    CPresenter.DataContext = null;
-                    DPresenter.DataContext = null;
-                    EPresenter.DataContext = null;
-                    FPresenter.DataContext = null;
-                }
+                //Status = 0;
+                //this.PageIndex = 0;
+                //if (null != APresenter)
+                //{
+                //    APresenter.DataContext = null;
+                //    BPresenter.DataContext = null;
+                //    CPresenter.DataContext = null;
+                //    DPresenter.DataContext = null;
+                //    EPresenter.DataContext = null;
+                //    FPresenter.DataContext = null;
+                //}
             }
             InitPosition();
         }
