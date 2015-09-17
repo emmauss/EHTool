@@ -106,7 +106,18 @@ namespace EHTool.EHTool.View
                 SettingHelpers.SetSetting("IsReadingDoublePage", value);
             }
         }
-       
+        public bool IsAutoDownload
+        {
+            get
+            {
+                return SettingHelpers.GetSetting<bool>("IsAutoDownload");
+            }
+            set
+            {
+                SettingHelpers.SetSetting("IsAutoDownload", value);
+            }
+        }
+
 
         public EHMainPage()
         {

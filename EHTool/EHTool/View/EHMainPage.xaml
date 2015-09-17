@@ -395,6 +395,7 @@
                             <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
                             <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>
                             <ToggleSwitch IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                            <ToggleSwitch IsOn="{x:Bind IsAutoDownload,Mode=TwoWay}" Header="Auto Download" />
                         </StackPanel>
                     </SplitView.Pane>
                     <GridView RightTapped="{x:Bind DownloadRightTapped}" ItemClick="{x:Bind DownloadItemClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.DownloadList,Mode=OneWay}" >

@@ -15,6 +15,7 @@ using Windows.UI.Xaml;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using System.IO;
+using Common.Helpers;
 
 namespace EHTool.EHTool.ViewModel
 {
@@ -182,7 +183,8 @@ namespace EHTool.EHTool.ViewModel
                 }
                 else
                 {
-                    if (DownloadList[i].DownloadedCount < DownloadList[i].MaxImageCount || DownloadList[i].Items == null)
+                    if (GetSetting<bool>("IsAutoDownload") &&
+                        (DownloadList[i].DownloadedCount < DownloadList[i].MaxImageCount || DownloadList[i].Items == null))
                     {
                         await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                         {

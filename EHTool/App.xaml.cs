@@ -87,8 +87,8 @@ namespace EHTool
                 // 参数
                 rootFrame.ContentTransitions = null;
                 rootFrame.Navigated += this.RootFrame_FirstNavigated;
-                //rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                rootFrame.Navigate(typeof(EHMainPage), e.Arguments);
+                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                //rootFrame.Navigate(typeof(EHMainPage), e.Arguments);
             }
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
