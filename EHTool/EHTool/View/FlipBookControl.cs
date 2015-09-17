@@ -60,8 +60,7 @@ namespace EHTool.EHTool.View
     public sealed class FlipBookControl : ItemsControl
     {
         #region Member Variables
-
-        private AutoResetEvent ControlLoaded;
+        
         private bool CanChangeItemContentTemplate;
         /// <summary>
         /// 0 初始 翻页状态1 翻页状态2
@@ -409,7 +408,6 @@ namespace EHTool.EHTool.View
         public FlipBookControl()
         {
             this.DefaultStyleKey = typeof(FlipBookControl);
-            ControlLoaded = new AutoResetEvent(false);
             this.Loaded += FlipBookControlLoaded;
             this.Unloaded += FlipBookControlUnLoaded;
             CompositionTarget.Rendering += RenderAnimation;
@@ -447,7 +445,6 @@ namespace EHTool.EHTool.View
             RefreshPageByStatus();
             InitPages();
             isLoaded = true;
-            ControlLoaded.Set();
         }
         protected override void OnKeyDown(KeyRoutedEventArgs e)
         {
@@ -475,7 +472,6 @@ namespace EHTool.EHTool.View
             {
                 return;
             }
-            e.Handled = true;
             SelectedIndex = PageIndex;
             var point = e.GetCurrentPoint(this);
             var prop = point.Properties;
@@ -485,6 +481,7 @@ namespace EHTool.EHTool.View
                 if (SelectedIndex < Items.Count - 2)
                 {
                     SelectedIndex += 2;
+                    e.Handled = true;
                 }
             }
             else
@@ -492,6 +489,7 @@ namespace EHTool.EHTool.View
                 if (SelectedIndex - 2 > -1)
                 {
                     SelectedIndex -= 2;
+                    e.Handled = true;
                 }
             }
             base.OnPointerWheelChanged(e);
@@ -1166,10 +1164,7 @@ namespace EHTool.EHTool.View
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                while (!isLoaded)
-                {
-
-                }
+                while (!isLoaded) ;
                 isInit = false;
                 InitPages();
                 base.OnItemsChanged(e);

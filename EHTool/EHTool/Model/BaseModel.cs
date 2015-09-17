@@ -23,7 +23,7 @@ namespace EHTool.EHTool.Model
         private BitmapImage _image;
         #region PropertyChangedMember
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName]string propName = "") =>
+        public void OnPropertyChanged([CallerMemberName]string propName = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         #endregion
         public BaseModel()

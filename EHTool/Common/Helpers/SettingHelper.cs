@@ -21,10 +21,10 @@ namespace Common.Helpers
             settings.Values.Add(settingName, setValue);
         }
 
-        public static T GetSetting<T>(string settingName, bool isThrowException = false)
+        public static T GetSetting<T>(string settingName,T defaultValue = default(T), bool isThrowException = false)
         {
             var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            T chackValue = default(T);
+            T chackValue = defaultValue;
             if (settings.Values.ContainsKey(settingName))
             {
                 chackValue = (T)settings.Values[settingName];

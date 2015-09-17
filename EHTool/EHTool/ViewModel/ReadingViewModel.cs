@@ -10,6 +10,9 @@ using Common.Helpers;
 using EHTool.EHTool.Model;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using EHTool.EHTool.Common;
+using EHTool.EHTool.Common.Helpers;
+using Windows.Storage.AccessCache;
 
 namespace EHTool.EHTool.ViewModel
 {
@@ -54,12 +57,82 @@ namespace EHTool.EHTool.ViewModel
         private string _id;
         private Task<IEnumerable<ImageListModel>> _task;
 
-        public ReadingViewModel(Task<IEnumerable<ImageListModel>> task, string id)
+        internal ReadingViewModel(LocalFolderModel item)
+        {
+            LoadList(item);
+        }
+
+        private async void LoadList(LocalFolderModel item)
+        {
+            var folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.FolderToken);
+            var list = await folder.GetFilesAsync();
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].ContentType.ToLower().Contains("image"))
+                {
+                    ImageList.Add(new LocalImageModel(list[i]));
+                }
+            }
+            if (ImageList.Count == 0)
+            {
+                MessageDialog dialog = new MessageDialog("Can not find any image in this folder", "Error");
+                await dialog.ShowAsync();
+            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
+        }
+
+        internal ReadingViewModel(DownloadItemModel item)
+        {
+            _timer = new DispatcherTimer();
+            _timer.Tick += TimerTick;
+            _id = item.ID;
+            if (item.Items == null)
+            {
+                LoadList(item);
+            }
+            else
+            {
+                for (int i = 0; i < item.Items.Count; i++)
+                {
+                    ImageList.Add(new DownloadedImageModel(item, item.Items[i].Link, i));
+                }
+            }
+        }
+
+        private async void LoadList(DownloadItemModel item)
+        {
+            IsLoading = true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+            try
+            {
+                GalleryDetail detail = new GalleryDetail(item.ID, item.Token, item.ServerType);
+                var list = (await detail.GetImagePageList()).ToList();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    ImageList.Add(new DownloadedImageModel(item, list[i].ImagePage, i));
+                }
+                SelectedIndex = 0;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedIndex)));
+            }
+            catch (System.Net.WebException)
+            {
+                IsFailed = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+                MessageDialog dialog = new MessageDialog("Can not connect to server", "Web Error");
+                await dialog.ShowAsync();
+            }
+            IsLoading = false;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        }
+
+        internal ReadingViewModel(Task<IEnumerable<ImageListModel>> task, string id)
         {
             _id = id;
             _task = task;
             _timer = new DispatcherTimer();
             _timer.Tick += TimerTick;
+            LoadList();
         }
 
         private void TimerTick(object sender, object e)
@@ -93,7 +166,23 @@ namespace EHTool.EHTool.ViewModel
             }
         }
 
-        public async Task CancelTask()
+        internal async Task Refresh()
+        {
+            if (SettingHelpers.GetSetting<bool>("IsReadingDoublePage"))
+            {
+                await ImageList[SelectedIndex].Refresh();
+                if (SelectedIndex + 1 < MaxPageCount)
+                {
+                    await ImageList[SelectedIndex + 1].Refresh();
+                }
+            }
+            else
+            {
+                await ImageList[SelectedIndex].Refresh();
+            }
+        }
+
+        internal async Task CancelTask()
         {
             foreach (var item in ImageList)
             {
@@ -101,21 +190,21 @@ namespace EHTool.EHTool.ViewModel
             }
         }
 
-        public async Task LoadList()
+        private async Task LoadList()
         {
             IsLoading = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
             try
             {
-
+                var isdownloaded = await DownloadHelper.IsDownload(_id);
                 var list = (await _task).ToList();
                 for (int i = 0; i < list.Count; i++)
                 {
-                    ImageList.Add(new ImageModel(list[i], i, _id));
+                    ImageList.Add(new CommonImageModel(list[i],_id,i));
                 }
                 SelectedIndex = 0;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedIndex)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedIndex)));
             }
             catch (System.Net.WebException)
             {

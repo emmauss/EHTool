@@ -9,6 +9,8 @@ using EHTool.EHTool.Entities;
 using EHTool.EHTool.Model;
 using Windows.UI.Popups;
 using static EHTool.EHTool.Common.Helpers.FavorHelper;
+using EHTool.EHTool.Common.Helpers;
+using Windows.UI.Xaml;
 
 namespace EHTool.EHTool.ViewModel
 {
@@ -28,6 +30,8 @@ namespace EHTool.EHTool.ViewModel
         }
         private int _selectedPage = -1;
 
+        internal bool IsDownloaded;
+
         public int SelectedPage
         {
             get { return _selectedPage; }
@@ -45,9 +49,39 @@ namespace EHTool.EHTool.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DetailViewModel(GalleryListModel item) : base(item)
+        internal DetailViewModel(GalleryListModel item) : base(item)
         {
             Initialize();
+        }
+
+        internal async Task Download()
+        {
+            if (IsDownloaded)
+            {
+                return;
+            }
+            var downloaditem = new DownloadItemModel(ListItem);
+            await DownloadHelper.AddDownload(downloaditem);
+            MainViewModel.Current.DownloadList.Insert(0,downloaditem);
+            await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            {
+                await downloaditem.Start();
+            });
+        }
+
+        internal async Task Download(string token)
+        {
+            if (IsDownloaded)
+            {
+                return;
+            }
+            var downloaditem = new DownloadItemModel(ListItem, token);
+            await DownloadHelper.AddDownload(downloaditem);
+            MainViewModel.Current.DownloadList.Insert(0,downloaditem);
+            await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            {
+                await downloaditem.Start();
+            });
         }
 
         private async void Initialize()
@@ -57,6 +91,7 @@ namespace EHTool.EHTool.ViewModel
             IsFavor = await IsFavor(Id);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFavor)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FavorButtonContent)));
+            IsDownloaded = await DownloadHelper.IsDownload(Id);
             try
             {
                 DetailItem = await GetDetail();
@@ -80,7 +115,7 @@ namespace EHTool.EHTool.ViewModel
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
-        public async Task FavorHandler()
+        internal async Task FavorHandler()
         {
             if (IsFavor)
             {
@@ -94,7 +129,7 @@ namespace EHTool.EHTool.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFavor)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FavorButtonContent)));
         }
-        public async void LoadPageImage(int page)
+        internal async void LoadPageImage(int page)
         {
             IsLoading = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
@@ -115,7 +150,8 @@ namespace EHTool.EHTool.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
 
-        public Task<IEnumerable<ImageListModel>> GetImagePageListTask()
+        internal Task<IEnumerable<ImageListModel>> GetImagePageListTask()
             => GetImagePageList(DetailItem.ImageList, DetailItem.DetailPageCount);
+
     }
 }

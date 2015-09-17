@@ -90,12 +90,11 @@ namespace EHTool.EHTool.View
         }
 
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Window.Current.SetTitleBar(TitleBarRect);
             ReadingVM = e.Parameter as ReadingViewModel;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReadingVM)));
-            await ReadingVM.LoadList();
             base.OnNavigatedTo(e);
         }
         public async void BackClick()
@@ -133,9 +132,9 @@ namespace EHTool.EHTool.View
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPaneOpen)));
         }
 
-        public void RefreshClick()
+        public async void RefreshClick()
         {
-
+            await ReadingVM.Refresh();
         }
     }
 }

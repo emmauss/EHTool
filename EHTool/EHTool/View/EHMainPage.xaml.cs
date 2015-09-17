@@ -22,6 +22,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Diagnostics;
+using EHTool.EHTool.Common.Helpers;
+using Windows.Storage;
+using Windows.Storage.AccessCache;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -117,6 +121,7 @@ namespace EHTool.EHTool.View
             if (e.NavigationMode == NavigationMode.Back)
             {
                 await MainVM.LoadFavorList();
+                //await MainVM.LoadDownloadList();
             }
             base.OnNavigatedTo(e);
         }
@@ -181,6 +186,112 @@ namespace EHTool.EHTool.View
         public void MainItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(EHDetailPage), new DetailViewModel(e.ClickedItem as GalleryListModel));
+        }
+        public void DownloadItemClick(object sender,ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as DownloadItemModel;
+            item.Pause();
+            Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item));
+        }
+
+        #region DownloadRightTapped
+        private DownloadItemModel _clickedItem;
+        public void DownloadRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            _clickedItem = (e.OriginalSource as FrameworkElement).DataContext as DownloadItemModel;
+            if (_clickedItem != null)
+            {
+                Debug.WriteLine($"{_clickedItem?.Title} right clicked");
+                var menu = Resources["DownloadMenu"] as MenuFlyout;
+                menu.ShowAt(null, e.GetPosition(null));
+                e.Handled = true;
+            }
+        }
+        public async void StartClicked()
+        {
+            await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            {
+                await _clickedItem.Start();
+            });
+        }
+        public void PauseClicked()
+        {
+            _clickedItem.Pause();
+        }
+        public async void DeleteClicked()
+        {
+            MessageDialog dialog = new MessageDialog("Delete From Your Computer?", "Delete");
+            dialog.Commands.Add(new UICommand("Delete", async (IUICommand command) =>
+            {
+                _clickedItem.Pause();
+                MainVM.DownloadList.Remove(_clickedItem);
+                await DownloadHelper.RemoveDownload(_clickedItem);
+            }));
+            dialog.Commands.Add(new UICommand("No"));
+            await dialog.ShowAsync();
+        }
+        public async void RemoveClicked()
+        {
+            MessageDialog dialog = new MessageDialog("Remove From The List?", "Remove");
+            dialog.Commands.Add(new UICommand("Remove", async (IUICommand command) =>
+            {
+                _clickedItem.Pause();
+                MainVM.DownloadList.Remove(_clickedItem);
+                await DownloadHelper.RemoveDownload(_clickedItem, false);
+            }));
+            dialog.Commands.Add(new UICommand("No"));
+            await dialog.ShowAsync();
+        }
+
+        #endregion
+
+        private async void PivotItem_DragOver(object sender, DragEventArgs e)
+        {
+            var def = e.GetDeferral();
+            e.Handled = true;
+            var folder = (await e.DataView.GetStorageItemsAsync())[0] as StorageFolder;
+            e.AcceptedOperation = folder != null ? Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy : Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
+            def.Complete();
+        }
+
+        private async void PivotItem_Drop(object sender, DragEventArgs e)
+        {
+            var def = e.GetDeferral();
+            e.Handled = true;
+            var items = await e.DataView.GetStorageItemsAsync();
+            foreach (var item in items)
+            {
+                if (item.IsOfType(StorageItemTypes.Folder))
+                {
+                    var folder = item as StorageFolder;
+                    var token = StorageApplicationPermissions.FutureAccessList.Add(folder);
+                    await LocalFolderHelper.Add(token, folder.DisplayName);
+                    await MainVM.LoadLocalFolderList();
+                }
+            }
+            def.Complete();
+        }
+        LocalFolderModel _clickedFolder;
+        public void LocalFolderClick(object sender,ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as LocalFolderModel;
+            Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item));
+        }
+        public void LocalFolderRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            _clickedFolder = (e.OriginalSource as FrameworkElement).DataContext as LocalFolderModel;
+            if (_clickedFolder != null)
+            {
+                Debug.WriteLine($"{_clickedFolder?.FolderName} right clicked");
+                var menu = Resources["LocalFolderMenu"] as MenuFlyout;
+                menu.ShowAt(null, e.GetPosition(null));
+                e.Handled = true;
+            }
+        }
+        public async void LocalFolderRemoveClicked()
+        {
+            await LocalFolderHelper.Remove(_clickedFolder);
+            MainVM.LocalFolderList.Remove(_clickedFolder);
         }
     }
 }

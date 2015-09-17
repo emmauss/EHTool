@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.Storage.AccessCache;
 
 // “内容对话框”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上进行了说明
 
@@ -26,9 +27,10 @@ namespace EHTool.EHTool.View
         public event PropertyChangedEventHandler PropertyChanged;
         private GalleryListModel _item;
         private StorageFolder _folder;
-
+        public bool IsDownloadInApp { get; set; }
         public string FolderLocation { get; set; } = "Click To Pick";
         public string FolderName { get; set; }
+        public string Token { get; set; }
 
 
         public AddDownloadDialog(GalleryListModel item)
@@ -38,16 +40,26 @@ namespace EHTool.EHTool.View
             FolderName = _item.Title;
             foreach (var charitem in Path.GetInvalidFileNameChars())
             {
-                FolderName.Replace(charitem, ' ');
+                FolderName = FolderName.Replace($"{charitem}", "");
             }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FolderName)));
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (_folder == null)
+            if (_folder == null && !IsDownloadInApp)
             {
                 args.Cancel = true;
+            }
+            else
+            {
+                var def = args.GetDeferral();
+                if (!IsDownloadInApp)
+                {
+                    var folder = await _folder.CreateFolderAsync(FolderName, CreationCollisionOption.GenerateUniqueName);
+                    Token = StorageApplicationPermissions.FutureAccessList.Add(folder);
+                }
+                def.Complete();
             }
         }
 

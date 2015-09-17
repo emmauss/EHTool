@@ -87,7 +87,7 @@ namespace EHTool
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsForceDecodeAudio");
+                return SettingHelpers.GetSetting("IsForceDecodeAudio",true);
             }
             set
             {
@@ -98,7 +98,7 @@ namespace EHTool
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsForceDecodeVideo");
+                return SettingHelpers.GetSetting("IsForceDecodeVideo",true);
             }
             set
             {
@@ -113,6 +113,7 @@ namespace EHTool
             CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += TitleBar_LayoutMetricsChanged;
             VideoList = new ObservableCollection<VideoListModel>();
             GetItems(KnownFolders.VideosLibrary);
+            var a = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

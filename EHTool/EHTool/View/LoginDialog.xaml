@@ -9,8 +9,7 @@
     Title="Login"
     PrimaryButtonText="Login"
     SecondaryButtonText="Cancel"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
     
     <StackPanel>
         <TextBox Name="userNameTextBox" Header="User name"/>

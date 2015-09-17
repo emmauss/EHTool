@@ -19,10 +19,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock TextWrapping="WrapWholeWords">
-            EHTool suggest that your should download torrent instead of downloading in this way
+            EHTool suggest that your should download torrent which is more reliable and faster than this way
         </TextBlock>
-        <CheckBox Grid.Row="1" x:Name="checkBox" Content="Download to application's folder"/>
-        <Grid Grid.Row="2" Visibility="{Binding IsChecked, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}, ElementName=checkBox}">
+        <ToggleSwitch x:Name="toggleSwitch" Header="Download to application's folder" Grid.Row="1" IsOn="{x:Bind IsDownloadInApp,Mode=TwoWay}"/>
+        <Grid Grid.Row="2" Visibility="{Binding IsOn, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}, ElementName=toggleSwitch}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>

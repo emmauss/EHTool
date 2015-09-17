@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using EHTool.EHTool.Common.Helpers;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -143,9 +144,17 @@ namespace EHTool.EHTool.View
             var torrentDialog = new TorrentDialog(DetailVM.GetTorrentList());
             await torrentDialog.ShowAsync();
         }
-        public void ReadButtonClick()
+        public async void ReadButtonClick()
         {
-            Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.GetImagePageListTask(),DetailVM.Id));
+            if (DetailVM.IsDownloaded)
+            {
+                var item = await DownloadHelper.GetItem(DetailVM.Id);
+                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item));
+            }
+            else
+            {
+                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.GetImagePageListTask(), DetailVM.Id));
+            }
         }
         public async void FavorClick()
         {
@@ -156,6 +165,17 @@ namespace EHTool.EHTool.View
         {
             var dialog = new AddDownloadDialog(DetailVM.ListItem);
             await dialog.ShowAsync();
+            if (dialog.IsDownloadInApp)
+            {
+                await DetailVM.Download();
+            }
+            else
+            {
+                if (dialog.Token != null)
+                {
+                    await DetailVM.Download(dialog.Token);
+                }
+            }
         }
     }
 }

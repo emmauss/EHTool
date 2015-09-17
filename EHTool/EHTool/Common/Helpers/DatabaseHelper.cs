@@ -93,7 +93,7 @@ namespace EHTool.EHTool.Common.Helpers
             => from item in JsonArray.Parse(json)
                select new GalleryListModel
                {
-                   ServerType = item.GetNamedNumber("ServerType") == 1 ? Entities.ServerTypes.ExHentai : Entities.ServerTypes.EHentai,
+                   ServerType = (Entities.ServerTypes)item.GetNamedNumber("ServerType"),
                    ImageLink = item.GetNamedString("ImageLink"),
                    FileCount = item.GetNamedString("FileCount"),
                    ID = item.GetNamedString("ID"),

@@ -11,6 +11,10 @@ using EHTool.EHTool.View;
 using Windows.UI.Popups;
 
 using static Common.Helpers.SettingHelpers;
+using Windows.UI.Xaml;
+using Windows.Storage;
+using Windows.Storage.AccessCache;
+using System.IO;
 
 namespace EHTool.EHTool.ViewModel
 {
@@ -19,9 +23,13 @@ namespace EHTool.EHTool.ViewModel
         public bool IsLoading { get; private set; }
         public bool IsFailed { get; private set; }
 
+        public static MainViewModel Current;
+
         public ObservableCollection<GalleryListModel> MainList { get; private set; } = new ObservableCollection<GalleryListModel>();
         public ObservableCollection<GalleryListModel> FavorList { get; private set; } = new ObservableCollection<GalleryListModel>();
+        public ObservableCollection<LocalFolderModel> LocalFolderList { get; private set; } = new ObservableCollection<LocalFolderModel>();
         public GallerySearchOption SearchOption { get; set; } = new GallerySearchOption();
+        public ObservableCollection<DownloadItemModel> DownloadList { get; set; } = new ObservableCollection<DownloadItemModel>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -42,15 +50,16 @@ namespace EHTool.EHTool.ViewModel
         }
 
 
-        public MainViewModel() : this(GetSetting<bool>("IsExhentaiMode") ? ServerTypes.ExHentai : ServerTypes.EHentai) { }
+        internal MainViewModel() : this(GetSetting<bool>("IsExhentaiMode") ? ServerTypes.ExHentai : ServerTypes.EHentai) { }
 
-        public MainViewModel(ServerTypes type)
+        internal MainViewModel(ServerTypes type)
         {
             ServerType = type;
+            Current = this;
             Initialize();
         }
 
-        public async void Initialize()
+        internal async void Initialize()
         {
             _currentState = CurrentState.MainList;
             _currentPage = 0;
@@ -60,6 +69,9 @@ namespace EHTool.EHTool.ViewModel
             try
             {
                 await LoadFavorList();
+                await LoadDownloadList();
+                await CheckForDownloadList();
+                await LoadLocalFolderList();
                 MainList = new ObservableCollection<GalleryListModel>(await GetGalleryList());
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainList)));
             }
@@ -84,14 +96,70 @@ namespace EHTool.EHTool.ViewModel
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
+        internal async Task LoadLocalFolderList()
+        {
+            LocalFolderList = new ObservableCollection<LocalFolderModel>(await LocalFolderHelper.GetList());
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalFolderList)));
+        }
+        internal async Task LoadDownloadList()
+        {
+            DownloadList = new ObservableCollection<DownloadItemModel>(await DownloadHelper.GetDownloadList());
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadList)));
+        }
 
-        public async Task LoadFavorList()
+        internal async Task LoadFavorList()
         {
             FavorList = new ObservableCollection<GalleryListModel>(await FavorHelper.GetFavorList());
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FavorList)));
         }
 
-        public async Task Search(string keyword)
+        private async Task CheckForDownloadList()
+        {
+            if (DownloadList.Count == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < DownloadList.Count; i++)
+            {
+                StorageFolder folder;
+                if (DownloadList[i].IsInsideApp)
+                {
+                    folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(DownloadList[i].ID, CreationCollisionOption.OpenIfExists);
+                }
+                else if (StorageApplicationPermissions.FutureAccessList.ContainsItem(DownloadList[i].FolderToken))
+                {
+                    try
+                    {
+                        folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(DownloadList[i].FolderToken);
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        folder = null;
+                    }
+                }
+                else
+                {
+                    folder = null;
+                }
+                if (folder == null)
+                {
+                    await DownloadHelper.RemoveDownload(DownloadList[i], false);
+                    DownloadList.Remove(DownloadList[i]);
+                }
+                else
+                {
+                    if (DownloadList[i].DownloadedCount < DownloadList[i].MaxImageCount || DownloadList[i].Items == null)
+                    {
+                        await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                        {
+                            await DownloadList[i].Start();
+                        });
+                    }
+                }
+            }
+        }
+
+        internal async Task Search(string keyword)
         {
             _currentState = CurrentState.Search;
             _currentPage = 0;
@@ -121,7 +189,8 @@ namespace EHTool.EHTool.ViewModel
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
-        public async Task LoadMore()
+
+        internal async Task LoadMore()
         {
             if (IsFailed)
             {

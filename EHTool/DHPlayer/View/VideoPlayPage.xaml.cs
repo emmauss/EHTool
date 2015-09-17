@@ -100,7 +100,7 @@ namespace EHTool.DHPlayer
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsForceDecodeAudio");
+                return SettingHelpers.GetSetting("IsForceDecodeAudio",true);
             }
             set
             {
@@ -112,7 +112,7 @@ namespace EHTool.DHPlayer
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsForceDecodeVideo");
+                return SettingHelpers.GetSetting("IsForceDecodeVideo",true);
             }
             set
             {
@@ -199,7 +199,7 @@ namespace EHTool.DHPlayer
             }
             else
             {
-                _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, SettingHelpers.GetSetting<bool>("IsForceDecodeAudio"), SettingHelpers.GetSetting<bool>("IsForceDecodeVideo"));
+                _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, IsForceDecodeAudio, IsForceDecodeVideo);
                 MediaStreamSource mss = _ffmpegMSS.GetMediaStreamSource();
                 if (mss != null)
                 {
@@ -224,7 +224,7 @@ namespace EHTool.DHPlayer
             else
             {
                 IsSystemPlay = false;
-                _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, SettingHelpers.GetSetting<bool>("IsForceDecodeAudio"), SettingHelpers.GetSetting<bool>("IsForceDecodeVideo"));
+                _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, IsForceDecodeAudio, IsForceDecodeVideo);
                 MediaStreamSource mss = _ffmpegMSS.GetMediaStreamSource();
                 if (mss != null)
                 {
@@ -332,7 +332,7 @@ namespace EHTool.DHPlayer
         {
             if (_isSystemPlay)
             {
-                _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, SettingHelpers.GetSetting<bool>("IsForceDecodeAudio"), SettingHelpers.GetSetting<bool>("IsForceDecodeVideo"));
+                _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, IsForceDecodeAudio, IsForceDecodeVideo);
                 MediaStreamSource mss = _ffmpegMSS.GetMediaStreamSource();
                 if (mss != null)
                 {

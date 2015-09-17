@@ -10,6 +10,15 @@
     >
 
     <Page.Resources>
+        <MenuFlyout x:Key="DownloadMenu">
+            <MenuFlyoutItem Text="Start" Click="{x:Bind StartClicked}"/>
+            <MenuFlyoutItem Text="Pause" Click="{x:Bind PauseClicked}"/>
+            <MenuFlyoutItem Text="Remove From List" Click="{x:Bind RemoveClicked}"/>
+            <MenuFlyoutItem Text="Delete(Contain Folder)" Click="{x:Bind DeleteClicked}"/>
+        </MenuFlyout>
+        <MenuFlyout x:Key="LocalFolderMenu">
+            <MenuFlyoutItem Text="Remove From List" Click="{x:Bind LocalFolderRemoveClicked}"/>
+        </MenuFlyout>
         <DataTemplate x:Key="MainListTemplate" x:DataType="model:GalleryListModel">
             <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
                 <!--<Image Source="{x:Bind Image,Mode=OneWay}" Stretch="Uniform"/>-->
@@ -380,7 +389,47 @@
                 </SplitView>
             </PivotItem>
             <PivotItem Header="Download">
-                
+                <GridView RightTapped="{x:Bind DownloadRightTapped}" ItemClick="{x:Bind DownloadItemClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.DownloadList,Mode=OneWay}" >
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="model:DownloadItemModel">
+                            <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
+                                <!--<Image Source="{x:Bind Image,Mode=OneWay}" Stretch="Uniform"/>-->
+                                <Border RequestedTheme="Dark">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{x:Bind Image,Mode=OneWay}" Stretch="Uniform"/>
+                                    </Border.Background>
+                                    <Grid VerticalAlignment="Bottom" Background="#BF000000">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="{x:Bind Title}" Style="{ThemeResource BaseTextBlockStyle}" MaxLines="2" TextTrimming="CharacterEllipsis" />
+                                        <ProgressBar Grid.Row="1" IsIndeterminate="{x:Bind IsDownloading,Mode=TwoWay}"/>
+                                        <!--<Rectangle Fill="Gray" Grid.Row="2" Height="2"/>-->
+                                        <Grid Grid.Row="3">
+                                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}">
+                                                <Run Text="{x:Bind DownloadedCount,Mode=OneWay}"/>
+                                                /
+                                                <Run Text="{x:Bind MaxImageCount,Mode=OneWay}"/>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </PivotItem>
+            <PivotItem AllowDrop="True" DragOver="PivotItem_DragOver" Drop="PivotItem_Drop" Header="Local Folder">
+                <ListView RightTapped="{x:Bind LocalFolderRightTapped}" ItemClick="{x:Bind LocalFolderClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.LocalFolderList,Mode=OneWay}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:LocalFolderModel">
+                            <TextBlock Text="{x:Bind FolderName}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </PivotItem>
         </Pivot>
 

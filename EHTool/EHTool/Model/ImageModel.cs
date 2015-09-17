@@ -1,50 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using EHTool.EHTool.Entities;
 using Windows.UI.Xaml.Media.Imaging;
-
-using static EHTool.Common.Helpers.CookieHelper;
-using static Common.Helpers.HttpHelper;
 using HtmlAgilityPack;
 using System.IO;
 using System.Diagnostics;
 using Windows.Storage;
-using Windows.Foundation;
-using Windows.UI.Xaml;
 using System.Threading;
+using System.Text.RegularExpressions;
+using Common.Extension;
+using Windows.Storage.AccessCache;
+using EHTool.EHTool.Common.Helpers;
+
+using static EHTool.Common.Helpers.CookieHelper;
+using System.Runtime.CompilerServices;
 
 namespace EHTool.EHTool.Model
 {
-    public class ImageModel : INotifyPropertyChanged
+    public abstract class ImageModel : INotifyPropertyChanged
     {
-        public ImageModel(ImageListModel item, int pageIndex, string id)
-        {
-            ImagePage = item.ImagePage;
-            ServerType = item.ServerType;
-            _pageIndex = pageIndex;
-            _id = id;
-            _cancelTokenSource = new CancellationTokenSource();
-        }
-
-        public bool IsLoading { get; private set; }
-        public bool IsFailed { get; private set; }
-        public double TotalSize { get; private set; }
-        public double DownloadedSize { get; private set; }
-        private CancellationTokenSource _cancelTokenSource;
-
-
-        public string ImagePage { get; private set; }
-        public ServerTypes ServerType { get; private set; }
-        private BitmapImage _image;
-        private int _pageIndex;
-        private string _id;
-
-
+        #region PropertyChangedMember
         public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string propName = "") =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        #endregion
+
+        //internal ImageModel(string imagePage,ServerTypes type,string id,int pageindex,bool isinsidapp,string foldertoken,bool isdownloaded)
+        //{
+        //    ImagePage = imagePage;
+        //    _serverType = type;
+        //    _id = id;
+        //    _pageIndex = pageindex;
+        //    _isInsideApp = isinsidapp;
+        //    _folderToken = foldertoken;
+        //    _isDownload = isdownloaded;
+        //    _cancelTokenSource = new CancellationTokenSource();
+        //}
+
+        public bool IsLoading { get; protected set; }
+        public bool IsFailed { get; protected set; }
+        public double TotalSize { get; protected set; } = 1;
+        public double DownloadedSize { get; protected set; }
+        public string ImagePage { get; protected set; }
+
+        protected CancellationTokenSource _cancelTokenSource;
+        protected BitmapImage _image;
+        protected int _pageIndex;
+        protected string _id;
+        protected ServerTypes _serverType;
+
 
         public BitmapImage Image
         {
@@ -57,13 +62,30 @@ namespace EHTool.EHTool.Model
                 return _image;
             }
         }
+        ~ImageModel()
+        {
+            _cancelTokenSource?.Dispose();
+        }
+
+        public async Task Refresh()
+        {
+            if (IsLoading)
+            {
+                _cancelTokenSource.Cancel(true);
+            }
+            await RefreshOverrideAsync();
+            _image = null;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Image)));
+        }
+
+        protected abstract Task RefreshOverrideAsync();
 
         public async Task Cancel()
         {
             if (IsLoading)
             {
-                _cancelTokenSource.Cancel(false);
-                var cachefolder = await(await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(ServerType.ToString(), CreationCollisionOption.OpenIfExists);
+                _cancelTokenSource.Cancel(true);
+                var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(_serverType.ToString(), CreationCollisionOption.OpenIfExists);
                 cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
                 var file = await cachefolder.CreateFileAsync($"{_pageIndex}", CreationCollisionOption.OpenIfExists);
                 await file.DeleteAsync();
@@ -80,11 +102,7 @@ namespace EHTool.EHTool.Model
         {
             IsFailed = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
-            var cachefolder = await(await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(ServerType.ToString(), CreationCollisionOption.OpenIfExists);
-            cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
-            var file = await cachefolder.CreateFileAsync($"{_pageIndex}", CreationCollisionOption.OpenIfExists);
-            await file.DeleteAsync();
-            await GetImage();
+            await Refresh();
         }
 
         private async Task GetImage()
@@ -95,48 +113,52 @@ namespace EHTool.EHTool.Model
             }
             IsLoading = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
-            var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(ServerType.ToString(), CreationCollisionOption.OpenIfExists);
-            cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
-            var file = await cachefolder.CreateFileAsync($"{_pageIndex}", CreationCollisionOption.OpenIfExists);
-            //if current file is now downloading,it will throw UnauthorizedAccessException
-            var fbuf = await FileIO.ReadBufferAsync(file);
-            if (fbuf.Length != 0)
+            await GetImageOverrideAsync();
+            IsLoading = false;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        }
+
+        protected abstract Task GetImageOverrideAsync();
+
+
+
+        protected async Task DownloadToFolder(StorageFolder folder)
+        {
+            using (var client = new System.Net.Http.HttpClient())
             {
-                _image = new BitmapImage(new Uri(file.Path));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Image)));
-            }
-            else
-            {
-                using (var client = new System.Net.Http.HttpClient())
+                client.DefaultRequestHeaders.Add("Cookie", (_serverType == ServerTypes.ExHentai ? Cookie : null) + Unconfig);
+                for (int j = 0; j < 5; j++)
                 {
-                    client.DefaultRequestHeaders.Add("Cookie", (ServerType == ServerTypes.ExHentai ? Cookie : null) + Unconfig);
-                    var htmlStr = await client.GetStringAsync(ImagePage);
-                    HtmlDocument doc = new HtmlDocument();
-                    doc.LoadHtml(htmlStr);
-                    var imageLink = doc.GetElementbyId("img").Attributes["src"].Value;
-                    using (var res = await client.GetAsync(imageLink, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, _cancelTokenSource.Token))
+                    if (_cancelTokenSource.IsCancellationRequested)
                     {
-                        if (res.Content.Headers.ContentDisposition?.FileName == "403.gif")
+                        return;
+                    }
+                    try
+                    {
+                        var htmlStr = await client.GetStringAsync(ImagePage);
+                        HtmlDocument doc = new HtmlDocument();
+                        doc.LoadHtml(htmlStr);
+                        var m = Regex.Match(htmlStr, @"return nl\('([^\s]*)'\)");
+                        ImagePage += $"&nl={m.Groups[1].Value}";
+                        var imageLink = doc.GetElementbyId("img").Attributes["src"].Value;
+                        var file = await folder.CreateFileAsync($"{_pageIndex}{Path.GetExtension(imageLink)}", CreationCollisionOption.ReplaceExisting);
+                        using (var res = await client.GetAsync(imageLink, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, _cancelTokenSource.Token))
                         {
-                            throw new System.Net.WebException();
-                        }
-                        else
-                        {
-                            TotalSize = res.Content.Headers.ContentLength.GetValueOrDefault();
-                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalSize)));
-                            using (var fstream = await file.OpenStreamForWriteAsync())
+                            if (res.Content.Headers.ContentDisposition != null && res.Content.Headers.ContentDisposition.FileName.Contains("403.gif"))
                             {
-                                using (var stream = await res.Content.ReadAsStreamAsync())
+                                throw new System.Net.WebException();
+                            }
+                            else
+                            {
+                                TotalSize = res.Content.Headers.ContentLength.GetValueOrDefault();
+                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalSize)));
+                                using (var fstream = await file.OpenStreamForWriteAsync())
                                 {
-                                    int bytesRead = 0;
-                                    byte[] myBuffer = new byte[1024 * 1024];
-                                    while ((bytesRead = await stream.ReadAsync(myBuffer, 0, myBuffer.Length)) > 0)
+                                    using (var stream = await res.Content.ReadAsStreamAsync())
                                     {
-                                        if (_cancelTokenSource.IsCancellationRequested)
-                                        {
-                                            return;
-                                        }
-                                        else
+                                        int bytesRead = 0;
+                                        byte[] myBuffer = new byte[1024 * 1024];
+                                        while ((bytesRead = await stream.ReadAsync(myBuffer, 0, myBuffer.Length, _cancelTokenSource.Token)) > 0)
                                         {
                                             await fstream.WriteAsync(myBuffer, 0, bytesRead);
                                             DownloadedSize += bytesRead;
@@ -144,17 +166,41 @@ namespace EHTool.EHTool.Model
                                         }
                                     }
                                 }
+                                using (var fstream = await file.OpenStreamForReadAsync())
+                                {
+                                    using (var ranstream = fstream.AsRandomAccessStream())
+                                    {
+                                        _image = new BitmapImage();
+                                        await _image.SetSourceAsync(ranstream);
+                                    }
+                                }
+                                OnPropertyChanged(nameof(Image));
+                                Debug.WriteLine($"Page {_pageIndex} complete");
                             }
-                            Debug.WriteLine($"page {_pageIndex} complete");
-                            _image = new BitmapImage(new Uri(file.Path));
-                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Image)));
                         }
+                        break;
+                    }
+                    catch (System.Net.Http.HttpRequestException)
+                    {
+                        Debug.WriteLine($"Page {_pageIndex} error,retry {j}");
+                        continue;
+                    }
+                    catch (System.Net.WebException)
+                    {
+                        Debug.WriteLine($"Page {_pageIndex} error,retry {j}");
+                        continue;
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        return;
                     }
                 }
-
             }
-            IsLoading = false;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+            if (_image == null)
+            {
+                IsFailed = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+            }
         }
     }
 }

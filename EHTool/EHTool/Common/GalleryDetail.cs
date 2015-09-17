@@ -54,6 +54,17 @@ namespace EHTool.EHTool.Common
             }
         }
 
+        public async Task<IEnumerable<ImageListModel>> GetImagePageList()
+        {
+            var detail = await GetDetail();
+            IEnumerable<ImageListModel> list = detail.ImageList;
+            for (int i = 1; i < detail.DetailPageCount; i++)
+            {
+                var temp = await GetDetail(i);
+                list = list.Concat(temp.ImageList);
+            }
+            return list;
+        }
 
         public async Task<IEnumerable<ImageListModel>> GetImagePageList(IEnumerable<ImageListModel> pageList, int pageCount)
         {

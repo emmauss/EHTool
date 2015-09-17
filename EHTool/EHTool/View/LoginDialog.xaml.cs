@@ -45,10 +45,5 @@ namespace EHTool.EHTool.View
             }
             progressBar.IsIndeterminate = false;
         }
-
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            
-        }
     }
 }
