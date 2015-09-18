@@ -580,8 +580,8 @@ namespace EHTool.EHTool.View
                 CanChangeItemContentTemplate = false;
                 isInit = true;
             }
-            else
-            {
+            //else
+            //{
                 //Status = 0;
                 //this.PageIndex = 0;
                 //if (null != APresenter)
@@ -593,7 +593,7 @@ namespace EHTool.EHTool.View
                 //    EPresenter.DataContext = null;
                 //    FPresenter.DataContext = null;
                 //}
-            }
+            //}
             InitPosition();
         }
         #endregion

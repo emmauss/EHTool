@@ -249,7 +249,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Uid="MainPageHeader" Margin="8" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
-            <AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8" Grid.Column="1" Width="200">
+            <AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8" Grid.Column="1">
                 <AutoSuggestBox.QueryIcon>
                     <SymbolIcon Symbol="Find"/>
                 </AutoSuggestBox.QueryIcon>

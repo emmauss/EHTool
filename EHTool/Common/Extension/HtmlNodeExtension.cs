@@ -12,6 +12,27 @@ namespace Common.Extension
         public static HtmlNode[] GetElements(this HtmlNode node, string nodeName) =>
             node.Elements(nodeName).ToArray();
 
+        public static HtmlNode GetNodeByName(this HtmlNode doc,string name)
+        {
+            for (int i = 0; i < doc.ChildNodes.Count; i++)
+            {
+                var item = doc.ChildNodes[i];
+                if (item.Name == name)
+                {
+                    return item;
+                }
+                else
+                {
+                    var node = GetNodeByName(item, name);
+                    if (node != null)
+                    {
+                        return node;
+                    }
+                }
+            }
+            return null;
+        }
+
         public static HtmlNode GetNodebyClassName(this HtmlNode doc, string className)
         {
             for (int i = 0; i < doc.ChildNodes.Count; i++)

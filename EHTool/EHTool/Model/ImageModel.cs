@@ -124,82 +124,90 @@ namespace EHTool.EHTool.Model
 
         protected async Task DownloadToFolder(StorageFolder folder)
         {
-            using (var client = new System.Net.Http.HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.Add("Cookie", (_serverType == ServerTypes.ExHentai ? Cookie : null) + Unconfig);
-                for (int j = 0; j < 5; j++)
+                using (var client = new System.Net.Http.HttpClient())
                 {
-                    if (_cancelTokenSource.IsCancellationRequested)
+                    client.DefaultRequestHeaders.Add("Cookie", (_serverType == ServerTypes.ExHentai ? Cookie : null) + Unconfig);
+                    for (int j = 0; j < 5; j++)
                     {
-                        return;
-                    }
-                    try
-                    {
-                        var htmlStr = await client.GetStringAsync(ImagePage);
-                        HtmlDocument doc = new HtmlDocument();
-                        doc.LoadHtml(htmlStr);
-                        var m = Regex.Match(htmlStr, @"return nl\('([^\s]*)'\)");
-                        ImagePage += $"&nl={m.Groups[1].Value}";
-                        var imageLink = doc.GetElementbyId("img").Attributes["src"].Value;
-                        var file = await folder.CreateFileAsync($"{_pageIndex}{Path.GetExtension(imageLink)}", CreationCollisionOption.ReplaceExisting);
-                        using (var res = await client.GetAsync(imageLink, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, _cancelTokenSource.Token))
+                        if (_cancelTokenSource.IsCancellationRequested)
                         {
-                            if (res.Content.Headers.ContentDisposition != null && res.Content.Headers.ContentDisposition.FileName.Contains("403.gif"))
-                            {
-                                throw new System.Net.WebException();
-                            }
-                            else
-                            {
-                                TotalSize = res.Content.Headers.ContentLength.GetValueOrDefault();
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalSize)));
-                                using (var fstream = await file.OpenStreamForWriteAsync())
-                                {
-                                    using (var stream = await res.Content.ReadAsStreamAsync())
-                                    {
-                                        int bytesRead = 0;
-                                        byte[] myBuffer = new byte[1024 * 1024];
-                                        while ((bytesRead = await stream.ReadAsync(myBuffer, 0, myBuffer.Length, _cancelTokenSource.Token)) > 0)
-                                        {
-                                            await fstream.WriteAsync(myBuffer, 0, bytesRead);
-                                            DownloadedSize += bytesRead;
-                                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadedSize)));
-                                        }
-                                    }
-                                }
-                                using (var fstream = await file.OpenStreamForReadAsync())
-                                {
-                                    using (var ranstream = fstream.AsRandomAccessStream())
-                                    {
-                                        _image = new BitmapImage();
-                                        await _image.SetSourceAsync(ranstream);
-                                    }
-                                }
-                                OnPropertyChanged(nameof(Image));
-                                Debug.WriteLine($"Page {_pageIndex} complete");
-                            }
+                            return;
                         }
-                        break;
-                    }
-                    catch (System.Net.Http.HttpRequestException)
-                    {
-                        Debug.WriteLine($"Page {_pageIndex} error,retry {j}");
-                        continue;
-                    }
-                    catch (System.Net.WebException)
-                    {
-                        Debug.WriteLine($"Page {_pageIndex} error,retry {j}");
-                        continue;
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        return;
+                        try
+                        {
+                            await DownloadToFolder(folder, client);
+                            break;
+                        }
+                        catch (System.Net.Http.HttpRequestException)
+                        {
+                            Debug.WriteLine($"Page {_pageIndex} error,retry {j}");
+                            continue;
+                        }
+                        catch (System.Net.WebException)
+                        {
+                            Debug.WriteLine($"Page {_pageIndex} error,retry {j}");
+                            continue;
+                        }
                     }
                 }
+            }
+            catch (TaskCanceledException)
+            {
+                return;
             }
             if (_image == null)
             {
                 IsFailed = true;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+            }
+        }
+
+        private async Task DownloadToFolder(StorageFolder folder, System.Net.Http.HttpClient client)
+        {
+            var htmlStr = await client.GetStringAsync(ImagePage);
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(htmlStr);
+            var m = Regex.Match(htmlStr, @"return nl\('([^\s]*)'\)");
+            ImagePage += $"&nl={m.Groups[1].Value}";
+            var imageLink = doc.GetElementbyId("img").Attributes["src"].Value;
+            var file = await folder.CreateFileAsync($"{_pageIndex}{Path.GetExtension(imageLink)}", CreationCollisionOption.ReplaceExisting);
+            using (var res = await client.GetAsync(imageLink, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, _cancelTokenSource.Token))
+            {
+                if (res.Content.Headers.ContentDisposition != null && res.Content.Headers.ContentDisposition.FileName.Contains("403.gif"))
+                {
+                    throw new System.Net.WebException();
+                }
+                else
+                {
+                    TotalSize = res.Content.Headers.ContentLength.GetValueOrDefault();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalSize)));
+                    using (var fstream = await file.OpenStreamForWriteAsync())
+                    {
+                        using (var stream = await res.Content.ReadAsStreamAsync())
+                        {
+                            int bytesRead = 0;
+                            byte[] myBuffer = new byte[1024 * 1024];
+                            while ((bytesRead = await stream.ReadAsync(myBuffer, 0, myBuffer.Length, _cancelTokenSource.Token)) > 0)
+                            {
+                                await fstream.WriteAsync(myBuffer, 0, bytesRead);
+                                DownloadedSize += bytesRead;
+                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadedSize)));
+                            }
+                        }
+                    }
+                    using (var fstream = await file.OpenStreamForReadAsync())
+                    {
+                        using (var ranstream = fstream.AsRandomAccessStream())
+                        {
+                            _image = new BitmapImage();
+                            await _image.SetSourceAsync(ranstream);
+                        }
+                    }
+                    OnPropertyChanged(nameof(Image));
+                    Debug.WriteLine($"Page {_pageIndex} complete");
+                }
             }
         }
     }

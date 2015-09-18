@@ -165,9 +165,9 @@ namespace EHTool.EHTool.Common
                              {
                                  ServerType = ServerType,
                                  ImageName = (a.InnerText),
-                                 ImageIndex = a.FirstChild.FirstChild.Attributes["alt"].Value,
-                                 ImageLink = a.FirstChild.FirstChild.Attributes["src"].Value,
-                                 ImagePage = (a.FirstChild.Attributes["href"].Value) + "?",
+                                 ImageIndex = a.GetNodeByName("img").Attributes["alt"].Value,
+                                 ImageLink = a.GetNodeByName("img").Attributes["src"].Value,
+                                 ImagePage = (a.GetNodeByName("a").Attributes["href"].Value) + "?",
                              }).ToList(),
                 CommentList = (from a in doc.GetElementbyId("cdiv").ChildNodes
                                where a.HasChildNodes && a.FirstChild.Name == "div"
