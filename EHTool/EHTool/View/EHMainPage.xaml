@@ -33,8 +33,8 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="{x:Bind Title}" Style="{ThemeResource BaseTextBlockStyle}" MaxLines="2" TextTrimming="CharacterEllipsis" />
-                        <Rectangle Fill="Gray" Grid.Row="1" Height="2"/>
-                        <Grid Grid.Row="2">
+                        <Rectangle Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" Fill="Gray" Grid.Row="1" Height="2"/>
+                        <Grid Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" Grid.Row="2" >
                             <TextBlock Style="{ThemeResource BodyTextBlockStyle}">
                             <Run Text="{x:Bind Type}"/>;
                             <Run Text="{x:Bind FileCount}"/>
@@ -218,21 +218,6 @@
                                                     <RectangleGeometry x:Name="HeaderClipperGeometry"/>
                                                 </ContentControl.Clip>
                                                 <Grid RequestedTheme="Dark" Background="{StaticResource AppTheme}">
-                                                    <Grid Background="{StaticResource AppTheme}" RequestedTheme="Dark" Grid.Row="1">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="auto"/>
-                                                            <ColumnDefinition Width="auto"/>
-                                                            <ColumnDefinition Width="auto"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8" Grid.Column="1" Width="200">
-                                                            <AutoSuggestBox.QueryIcon>
-                                                                <SymbolIcon Symbol="Find"/>
-                                                            </AutoSuggestBox.QueryIcon>
-                                                        </AutoSuggestBox>
-                                                        <Button Content="&#xE117;" FontFamily="Segoe MDL2 Assets" Click="RefreshClick" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="2"/>
-                                                        <Button Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Click="Button_Click" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="3"/>
-                                                    </Grid>
                                                     <PivotHeaderPanel x:Name="StaticHeader" Visibility="Collapsed"/>
                                                     <PivotHeaderPanel x:Name="Header">
                                                         <PivotHeaderPanel.RenderTransform>
@@ -242,6 +227,7 @@
                                                             </TransformGroup>
                                                         </PivotHeaderPanel.RenderTransform>
                                                     </PivotHeaderPanel>
+                                                    <local:SearchBarControl QuerySubmitted="AutoSuggestBox_QuerySubmitted" RefreshClicked="RefreshClick" SettingClicked="Button_Click"/>
                                                 </Grid>
                                             </ContentControl>
                                             <Button x:Name="PreviousButton" Background="Transparent" Grid.Column="1" HorizontalAlignment="Left" Height="36" IsTabStop="False" IsEnabled="False" Margin="{ThemeResource PivotNavButtonMargin}" Opacity="0" Template="{StaticResource PreviousTemplate}" UseSystemFocusVisuals="False" VerticalAlignment="Top" Width="20"/>
@@ -294,7 +280,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid RequestedTheme="Dark" Height="{x:Bind TitleBarHeight,Mode=OneWay}">
+        <Grid Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" RequestedTheme="Dark" Height="{x:Bind TitleBarHeight,Mode=OneWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
@@ -307,7 +293,10 @@
             <ProgressBar Background="Transparent" Foreground="White" Grid.Column="1" Visibility="{x:Bind MainVM.IsLoading,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}" IsIndeterminate="{x:Bind MainVM.IsLoading,Mode=OneWay}" VerticalAlignment="Stretch"/>
         </Grid>
         <Pivot x:Name="pivot" Grid.Row="1" Style="{StaticResource PivotStyle1}" ItemContainerStyle="{StaticResource PivotItemStyle1}">
-            <PivotItem Header="MainPage">
+            <PivotItem>
+                <PivotItem.Header>
+                    <local:PivotItemHeaderControl Icon="Home" Text="MainPage" />
+                </PivotItem.Header>
                 <SplitView IsPaneOpen="{x:Bind IsMainPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <ScrollViewer>
@@ -315,7 +304,7 @@
                                 <Button Click="{x:Bind LoginClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Content="Login" Visibility="{x:Bind HasLogin,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}"/>
                                 <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
                                 <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>
-                                <ToggleSwitch IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                                <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
@@ -369,36 +358,46 @@
                             </StackPanel>
                         </ScrollViewer>
                     </SplitView.Pane>
-                    <GridView IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.MainList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" >
-                        <GridView.Footer>
-                            <Button Visibility="{x:Bind MainVM.IsLoading,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" HorizontalAlignment="Stretch" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Content="Load More" Click="{x:Bind LoadMoreClick}"/>
-                        </GridView.Footer>
-                    </GridView>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ProgressBar Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter}}" Background="Transparent" IsIndeterminate="{x:Bind MainVM.IsLoading,Mode=OneWay}" VerticalAlignment="Stretch"/>
+                        <GridView Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.MainList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" >
+                            <GridView.Footer>
+                                <Button Visibility="{x:Bind MainVM.IsLoading,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" HorizontalAlignment="Stretch" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Content="Load More" Click="{x:Bind LoadMoreClick}"/>
+                            </GridView.Footer>
+                        </GridView>
+                    </Grid>
                 </SplitView>
             </PivotItem>
-            <PivotItem Header="Favor">
+            <PivotItem >
+                <PivotItem.Header>
+                    <local:PivotItemHeaderControl Icon="Favorite" Text="Favor" />
+                </PivotItem.Header>
                 <SplitView IsPaneOpen="{x:Bind IsFavorPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
-                            <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
-                            <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>
-                            <ToggleSwitch IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                            <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                         </StackPanel>
                     </SplitView.Pane>
                     <GridView IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.FavorList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" ></GridView>
                 </SplitView>
             </PivotItem>
-            <PivotItem Header="Download">
+            <PivotItem>
+                <PivotItem.Header>
+                    <local:PivotItemHeaderControl Icon="Download" Text="Download" />
+                </PivotItem.Header>
                 <SplitView IsPaneOpen="{x:Bind IsDownloadPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
                             <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
-                            <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>
-                            <ToggleSwitch IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                            <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                             <ToggleSwitch IsOn="{x:Bind IsAutoDownload,Mode=TwoWay}" Header="Auto Download" />
                         </StackPanel>
                     </SplitView.Pane>
-                    <GridView RightTapped="{x:Bind DownloadRightTapped}" ItemClick="{x:Bind DownloadItemClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.DownloadList,Mode=OneWay}" >
+                    <GridView Holding="{x:Bind DownloadRightHolding}" RightTapped="{x:Bind DownloadRightTapped}" ItemClick="{x:Bind DownloadItemClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.DownloadList,Mode=OneWay}" >
                         <GridView.ItemTemplate>
                             <DataTemplate x:DataType="model:DownloadItemModel">
                                 <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
@@ -432,16 +431,18 @@
                     </GridView>
                 </SplitView>
             </PivotItem>
-            <PivotItem AllowDrop="True" DragOver="PivotItem_DragOver" Drop="PivotItem_Drop" Header="Local Folder">
+            <PivotItem AllowDrop="True" DragOver="PivotItem_DragOver" Drop="PivotItem_Drop">
+                <PivotItem.Header>
+                    <local:PivotItemHeaderControl Icon="Folder" Text="Local Folder" />
+                </PivotItem.Header>
                 <SplitView IsPaneOpen="{x:Bind IsLocalFolderPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
-                            <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
-                            <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>
-                            <ToggleSwitch IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                            <Button Content="Add Folder" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind AddFolderClick}"/>
+                            <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                         </StackPanel>
                     </SplitView.Pane>
-                    <ListView RightTapped="{x:Bind LocalFolderRightTapped}" ItemClick="{x:Bind LocalFolderClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.LocalFolderList,Mode=OneWay}" >
+                    <ListView Holding="{x:Bind LocalFolderRightHolding}" RightTapped="{x:Bind LocalFolderRightTapped}" ItemClick="{x:Bind LocalFolderClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.LocalFolderList,Mode=OneWay}" >
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="model:LocalFolderModel">
                                 <TextBlock Text="{x:Bind FolderName}"/>
@@ -452,7 +453,5 @@
 
             </PivotItem>
         </Pivot>
-
-
     </Grid>
 </Page>

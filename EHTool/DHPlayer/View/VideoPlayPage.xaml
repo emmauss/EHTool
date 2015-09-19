@@ -246,9 +246,25 @@
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
+        <Flyout x:Key="VolFlyout" Placement="Top">
+            <Slider Template="{StaticResource SliderControlTemplate1}" Width="200" Maximum="1" StepFrequency="0.01" Minimum="0" Value="{Binding Volume, ElementName=mediaElement,Mode=TwoWay}"/>
+        </Flyout>
     </Page.Resources>
 
     <Grid DoubleTapped="Grid_DoubleTapped" PointerPressed="Grid_PointerPressed" AllowDrop="True" DragOver="Grid_DragOver" Drop="Grid_Drop" Background="Black">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualState400min">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="401"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="button.(Control.IsEnabled)" Value="False"/>
+                        <Setter Target="slider.(UIElement.Visibility)" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <SplitView IsPaneOpen="{x:Bind IsPaneOpen,Mode=TwoWay}" PaneBackground="#BF000000" PanePlacement="Right" DisplayMode="Overlay">
             <SplitView.Pane>
                 <Grid>
@@ -293,15 +309,17 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" HorizontalAlignment="Center" x:Name="PlayButton" Click="{x:Bind PlayClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Content="&#xE102;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
-                <Slider Margin="8,0" Grid.Column="1" VerticalAlignment="Center" Maximum="{Binding NaturalDuration.TimeSpan.TotalSeconds, ElementName=mediaElement, Mode=OneWay}" Minimum="0" Value="{Binding Position, Converter={StaticResource TimeSpanToDoubleConverter}, ElementName=mediaElement, Mode=TwoWay}" Template="{StaticResource SliderControlTemplate1}"/>
+                <Slider Template="{StaticResource SliderControlTemplate1}" Margin="8,0" Grid.Column="1" VerticalAlignment="Center" Maximum="{Binding NaturalDuration.TimeSpan.TotalSeconds, ElementName=mediaElement, Mode=OneWay}" Minimum="0" Value="{Binding Position, Converter={StaticResource TimeSpanToDoubleConverter}, ElementName=mediaElement, Mode=TwoWay}" />
                 <Grid Padding="0,8" Grid.Column="2">
                     <Grid HorizontalAlignment="Right">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock FontSize="{ThemeResource HubHeaderThemeFontSize}" Text="&#xE994;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-                        <Slider Grid.Column="1" Width="200" Template="{StaticResource SliderControlTemplate1}" Maximum="1" StepFrequency="0.01" Minimum="0" Value="{Binding Volume, ElementName=mediaElement,Mode=TwoWay}"/>
+                        <Button Click="{x:Bind VolButtonClick}" x:Name="button" IsEnabled="True" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}">
+                            <TextBlock FontSize="{ThemeResource HubHeaderThemeFontSize}" Text="&#xE994;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                        </Button>
+                        <Slider Template="{StaticResource SliderControlTemplate1}" x:Name="slider" Visibility="Collapsed" Grid.Column="1" Width="200" Maximum="1" StepFrequency="0.01" Minimum="0" Value="{Binding Volume, ElementName=mediaElement,Mode=TwoWay}"/>
                     </Grid>
                 </Grid>
                 <Button Grid.Column="3" HorizontalAlignment="Center" Click="{x:Bind SettingButtonClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>

@@ -1,0 +1,29 @@
+﻿<UserControl
+    x:Class="EHTool.EHTool.View.PivotItemHeaderControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EHTool.EHTool.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualState400min">
+                    <VisualState.Setters>
+                        <Setter Target="HeaderText.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="HeaderIcon.(UIElement.Visibility)" Value="Collapsed"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="401"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <TextBlock x:Name="HeaderText" Text="{x:Bind Text}" Visibility="Collapsed"/>
+        <SymbolIcon x:Name="HeaderIcon" Symbol="{x:Bind Icon}"/>
+    </Grid>
+</UserControl>

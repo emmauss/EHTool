@@ -28,15 +28,25 @@ namespace EHTool.EHTool.Model
         #endregion
         public BaseModel()
         {
-            int b = (int)Window.Current.Bounds.Width / 200;
-            Width = Window.Current.Bounds.Width / b - 10d;
-            Height = Width * 4d / 3d;
-            Window.Current.SizeChanged += Current_SizeChanged;
+            if (IsPhone)
+            {
+                Width = Window.Current.Bounds.Width / 3 - 10d;
+                Height = Width * 4d / 3d;
+            }
+            else
+            {
+                int b = (int)Window.Current.Bounds.Width / 200;
+                Width = Window.Current.Bounds.Width / b - 10d;
+                Height = Width * 4d / 3d;
+                Window.Current.SizeChanged += Current_SizeChanged;
+            }
         }
         [IgnoreDataMember]
         public double Width { get; private set; }
         [IgnoreDataMember]
         public double Height { get; private set; }
+        [IgnoreDataMember]
+        public bool IsPhone => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
 
 
         private void Current_SizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)

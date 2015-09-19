@@ -18,6 +18,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
 
@@ -82,7 +83,7 @@ namespace EHTool
         public bool IsPaneOpen { get; set; }
         
         public ObservableCollection<VideoListModel> VideoList { get; set; }
-
+        public bool IsMiniAutoSuggestBoxShowed { get; private set; }
         public bool IsForceDecodeAudio
         {
             get
@@ -119,6 +120,12 @@ namespace EHTool
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Window.Current.SetTitleBar(TitleBarRect);
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar.GetForCurrentView().BackgroundColor = ColorHelper.FromArgb(255,90,77,174);
+                StatusBar.GetForCurrentView().BackgroundOpacity = 1d;
+                StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
+            }
             base.OnNavigatedTo(e);
         }
 
@@ -249,6 +256,19 @@ namespace EHTool
             {
                 Frame.Navigate(typeof(SearchResultPage), args.QueryText);
             }
+        }
+
+        private void MiniAutoSuggestBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            IsMiniAutoSuggestBoxShowed = false;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMiniAutoSuggestBoxShowed)));
+        }
+
+        public void MiniSearchClick()
+        {
+            IsMiniAutoSuggestBoxShowed = true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMiniAutoSuggestBoxShowed)));
+            MiniAutoSuggestBox.Focus(FocusState.Programmatic);
         }
     }
 }

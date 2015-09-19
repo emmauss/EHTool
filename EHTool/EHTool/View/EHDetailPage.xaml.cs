@@ -98,6 +98,7 @@ namespace EHTool.EHTool.View
                 SettingHelpers.SetSetting("IsReadingDoublePage", value);
             }
         }
+        public bool IsPhone => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
 
         public EHDetailPage()
         {

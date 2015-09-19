@@ -26,6 +26,7 @@ using System.Diagnostics;
 using EHTool.EHTool.Common.Helpers;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
+using Windows.Storage.Pickers;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -95,6 +96,8 @@ namespace EHTool.EHTool.View
         public bool IsLocalFolderPaneOpen { get; set; }
         public bool IsSearchOptionShow { get; set; } = true;
         public bool HasLogin => CookieHelper.CheckCookie();
+        public bool IsPhone => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
+
         public bool IsReadingDoublePage
         {
             get
@@ -215,6 +218,21 @@ namespace EHTool.EHTool.View
             Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item));
         }
 
+        public async void AddFolderClick()
+        {
+            FolderPicker picker = new FolderPicker();
+            picker.SuggestedStartLocation = PickerLocationId.Downloads;
+            picker.FileTypeFilter.Add(".jpg");
+            picker.ViewMode = PickerViewMode.Thumbnail;
+            var folder = await picker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                var token = StorageApplicationPermissions.FutureAccessList.Add(folder);
+                await LocalFolderHelper.Add(token, folder.DisplayName);
+                await MainVM.LoadLocalFolderList();
+            }
+        }
+
         #region DownloadRightTapped
         private DownloadItemModel _clickedItem;
         public void DownloadRightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -264,8 +282,18 @@ namespace EHTool.EHTool.View
             await dialog.ShowAsync();
         }
 
+        public void DownloadRightHolding(object sender, HoldingRoutedEventArgs e)
+        {
+            _clickedItem = (e.OriginalSource as FrameworkElement).DataContext as DownloadItemModel;
+            if (_clickedItem != null)
+            {
+                Debug.WriteLine($"{_clickedItem?.Title} right clicked");
+                var menu = Resources["DownloadMenu"] as MenuFlyout;
+                menu.ShowAt(null, e.GetPosition(null));
+                e.Handled = true;
+            }
+        }
         #endregion
-
         private async void PivotItem_DragOver(object sender, DragEventArgs e)
         {
             var def = e.GetDeferral();
@@ -309,10 +337,23 @@ namespace EHTool.EHTool.View
                 e.Handled = true;
             }
         }
+        public void LocalFolderRightHolding(object sender, HoldingRoutedEventArgs e)
+        {
+            _clickedFolder = (e.OriginalSource as FrameworkElement).DataContext as LocalFolderModel;
+            if (_clickedFolder != null)
+            {
+                Debug.WriteLine($"{_clickedFolder?.FolderName} right clicked");
+                var menu = Resources["LocalFolderMenu"] as MenuFlyout;
+                menu.ShowAt(null, e.GetPosition(null));
+                e.Handled = true;
+            }
+        }
+
         public async void LocalFolderRemoveClicked()
         {
             await LocalFolderHelper.Remove(_clickedFolder);
             MainVM.LocalFolderList.Remove(_clickedFolder);
         }
+
     }
 }

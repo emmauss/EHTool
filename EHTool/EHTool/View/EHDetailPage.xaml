@@ -61,7 +61,7 @@
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
-                        </Style>                    
+                        </Style>
                     </GridView.ItemContainerStyle>
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="x:String">
@@ -74,12 +74,27 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualState600mini">
+                    <VisualState.Setters>
+                        <Setter Target="TagListView.(RelativePanel.Below)" Value="Rating"/>
+                        <Setter Target="TagListView.(RelativePanel.RightOf)" Value="HeaderImage"/>
+                        <Setter Target="stackPanel.(RelativePanel.RightOf)" Value="HeaderImage"/>
+                        <Setter Target="stackPanel.(StackPanel.Orientation)" Value="Horizontal"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="601"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid RequestedTheme="Dark" Height="{x:Bind TitleBarHeight,Mode=OneWay}">
+        <Grid Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" RequestedTheme="Dark" Height="{x:Bind TitleBarHeight,Mode=OneWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
@@ -97,6 +112,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
+            <ProgressBar Grid.Column="1" Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter}}" Background="Transparent" Foreground="White" IsIndeterminate="{x:Bind DetailVM.IsLoading,Mode=OneWay}" VerticalAlignment="Stretch"/>
             <Button Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="0" Content="&#xE112;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind BackClick}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <TextBlock MaxLines="1" TextTrimming="CharacterEllipsis" Grid.Column="1" Margin="8" Text="{x:Bind DetailVM.DetailItem.Header.TitleEn,Mode=OneWay}" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
             <Button Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind SettingButtonClick}" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="3"/>
@@ -104,7 +120,7 @@
         <SplitView IsPaneOpen="{x:Bind IsPaneOpen,Mode=TwoWay}" Grid.Row="2" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
             <SplitView.Pane>
                 <StackPanel Padding="8,0" RequestedTheme="Dark" Orientation="Vertical">
-                    <ToggleSwitch IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                    <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                 </StackPanel>
             </SplitView.Pane>
             <ScrollViewer Visibility="{x:Bind DetailVM.IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}">
@@ -113,56 +129,40 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Padding="8" Background="LightGray">
-                        <Grid.RowDefinitions>
+                    <RelativePanel Padding="8" Background="LightGray">
+                        <!--<Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image MaxHeight="400" MaxWidth="300" Width="{x:Bind ImageWidth,Mode=OneWay}" Height="{x:Bind ImageHeight,Mode=OneWay}" Source="{x:Bind DetailVM.DetailItem.Header.Image,Mode=OneWay}"/>
-                        <Grid x:Name="grid" Padding="4,0" Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock TextWrapping="WrapWholeWords" Text="{x:Bind DetailVM.DetailItem.Header.TitleJp,Mode=OneWay}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
-                            <!--<Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="textBlock" Grid.Column="0">
-                            Rating:<Run Text="{x:Bind DetailItem.RateValue,Mode=OneWay}"/>
-                            </TextBlock>
-                        </Grid>-->
-                            <rating:RatingControl Padding="0,4" Height="{ThemeResource TextControlThemeMinHeight}" Grid.Row="1" HorizontalAlignment="Left" RoundValueSlice="0" Value="{x:Bind DetailVM.DetailItem.RateValue,Mode=OneWay}" ItemsCount="5" >
-                                <rating:RatingControl.EmptyItemsDefinition>
-                                    <rating:RateItemDefinition OutlineColor="#FFBCBCBC" BackgroundColor="#FFBCBCBC"/>
-                                </rating:RatingControl.EmptyItemsDefinition>
-                                <rating:RatingControl.FullItemsDefinition>
-                                    <rating:RateItemDefinition OutlineColor="DimGray" BackgroundColor="DimGray"/>
-                                </rating:RatingControl.FullItemsDefinition>
-                            </rating:RatingControl>
-                            <ListView ItemContainerStyle="{StaticResource ListViewItemStyle1}" Grid.Row="2" IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{x:Bind DetailVM.DetailItem.Header.Tags,Mode=OneWay}" ItemTemplate="{StaticResource TagListTemple}"/>
-                            <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                <Button Margin="4,0" Content="Read" Click="{x:Bind ReadButtonClick}"/>
-                                <Button Margin="4,0" Content="Download" Click="{x:Bind DownloadClick}"/>
-                                <Button Margin="4,0" Click="{x:Bind DownloadTorrentClick}">
-                                    <Button.Content>
-                                        <TextBlock>
+                        </Grid.ColumnDefinitions>-->
+                        <Image x:Name="HeaderImage" MaxHeight="400" MaxWidth="300" Width="{x:Bind ImageWidth,Mode=OneWay}" Height="{x:Bind ImageHeight,Mode=OneWay}" Source="{x:Bind DetailVM.DetailItem.Header.Image,Mode=OneWay}"/>
+                        <TextBlock x:Name="HeaderJP" RelativePanel.RightOf="HeaderImage" TextWrapping="WrapWholeWords" Text="{x:Bind DetailVM.DetailItem.Header.TitleJp,Mode=OneWay}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+                        <rating:RatingControl x:Name="Rating" RelativePanel.Below="HeaderJP" RelativePanel.RightOf="HeaderImage" Padding="0,4" Height="{ThemeResource TextControlThemeMinHeight}" Grid.Row="1" HorizontalAlignment="Left" RoundValueSlice="0" Value="{x:Bind DetailVM.DetailItem.RateValue,Mode=OneWay}" ItemsCount="5" >
+                            <rating:RatingControl.EmptyItemsDefinition>
+                                <rating:RateItemDefinition OutlineColor="#FFBCBCBC" BackgroundColor="#FFBCBCBC"/>
+                            </rating:RatingControl.EmptyItemsDefinition>
+                            <rating:RatingControl.FullItemsDefinition>
+                                <rating:RateItemDefinition OutlineColor="DimGray" BackgroundColor="DimGray"/>
+                            </rating:RatingControl.FullItemsDefinition>
+                        </rating:RatingControl>
+                        <ListView x:Name="TagListView" RelativePanel.Below="HeaderImage" ItemContainerStyle="{StaticResource ListViewItemStyle1}" Grid.Row="2" IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{x:Bind DetailVM.DetailItem.Header.Tags,Mode=OneWay}" ItemTemplate="{StaticResource TagListTemple}"/>
+                        <StackPanel x:Name="stackPanel" RelativePanel.Below="TagListView" Grid.Row="3" Orientation="Vertical">
+                            <Button HorizontalAlignment="Stretch" Margin="4" Content="Read" Click="{x:Bind ReadButtonClick}"/>
+                            <Button HorizontalAlignment="Stretch" Margin="4" Content="Download" Click="{x:Bind DownloadClick}"/>
+                            <Button HorizontalAlignment="Stretch" Margin="4" Click="{x:Bind DownloadTorrentClick}">
+                                <Button.Content>
+                                    <TextBlock>
                                         Download Torrent(<Run Text="{x:Bind DetailVM.DetailItem.TorrentCount,Mode=OneWay}"/>)
-                                        </TextBlock>
-                                    </Button.Content>
-                                </Button>
-                                <Button Margin="4,0" Content="{x:Bind DetailVM.FavorButtonContent,Mode=OneWay}" Click="{x:Bind FavorClick}"/>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
+                                    </TextBlock>
+                                </Button.Content>
+                            </Button>
+                            <Button HorizontalAlignment="Stretch" Margin="4" Content="{x:Bind DetailVM.FavorButtonContent,Mode=OneWay}" Click="{x:Bind FavorClick}"/>
+                        </StackPanel>
+
+                    </RelativePanel>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>

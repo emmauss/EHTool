@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Common.Helpers;
 using EHTool.Common.Helpers;
 using EHTool.DHPlayer.Model;
 using FFmpegInterop;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -19,8 +14,6 @@ using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -93,8 +86,9 @@ namespace EHTool.DHPlayer
         }
         #endregion
         #endregion
-        
 
+
+        Windows.System.Display.DisplayRequest req = new Windows.System.Display.DisplayRequest();
 
         public bool IsForceDecodeAudio
         {
@@ -141,7 +135,12 @@ namespace EHTool.DHPlayer
             }
         }
 
+        public void VolButtonClick()
+        {
 
+            var menu = Resources["VolFlyout"] as Flyout;
+            menu.ShowAt(button);
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -169,6 +168,7 @@ namespace EHTool.DHPlayer
             {
                 await StatusBar.GetForCurrentView().HideAsync();
             }
+            req.RequestActive();
             base.OnNavigatedTo(e);
         }
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
@@ -183,6 +183,7 @@ namespace EHTool.DHPlayer
             {
                 await StatusBar.GetForCurrentView().ShowAsync();
             }
+            req.RequestRelease();
             base.OnNavigatedFrom(e);
         }
         private async void LoadVideo(VideoListModel item)

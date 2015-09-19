@@ -1,0 +1,62 @@
+﻿<UserControl
+    x:Class="EHTool.EHTool.View.SearchBarControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EHTool.EHTool.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="50"
+    d:DesignWidth="600">
+
+    <Grid RequestedTheme="Dark">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualState400min">
+                    <VisualState.Setters>
+                        <Setter Target="autoSuggestBox.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="401"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="VisualState600min">
+                    <VisualState.Setters>
+                        <Setter Target="autoSuggestBox.(FrameworkElement.Width)" Value="200"/>
+                        <Setter Target="autoSuggestBox.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="601"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="VisualState800min">
+                    <VisualState.Setters>
+                        <Setter Target="autoSuggestBox.(FrameworkElement.Width)" Value="300"/>
+                        <Setter Target="autoSuggestBox.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="801"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Button Click="button_Click_2" x:Name="button" Grid.Column="1" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}">
+            <SymbolIcon Symbol="Find"/>
+        </Button>
+        <AutoSuggestBox x:Name="autoSuggestBox" Visibility="Collapsed" Grid.Column="1" QueryIcon="Find" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8"/>
+        <Button Content="&#xE117;" FontFamily="Segoe MDL2 Assets" Click="Button_Click" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="2"/>
+        <Button Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Click="Button_Click_1" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="3"/>
+        <Grid Background="{ThemeResource AppTheme}" Grid.ColumnSpan="4" Visibility="{x:Bind IsMiniAutoSuggestBoxShowed,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}">
+            <AutoSuggestBox LostFocus="MiniAutoSuggestBox_LostFocus" x:Name="MiniAutoSuggestBox" QueryIcon="Find" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8"/>
+        </Grid>
+    </Grid>
+</UserControl>
