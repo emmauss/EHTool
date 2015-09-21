@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:EHTool.EHTool.Model"
+    xmlns:triggers="using:Common.Triggers"
     mc:Ignorable="d"
     xmlns:rating="using:Bratched.Tools.RatingControl"
     >
@@ -84,7 +85,7 @@
                         <Setter Target="stackPanel.(StackPanel.Orientation)" Value="Horizontal"/>
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="601"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="601"/>
                     </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>
@@ -130,14 +131,6 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <RelativePanel Padding="8" Background="LightGray">
-                        <!--<Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>-->
                         <Image x:Name="HeaderImage" MaxHeight="400" MaxWidth="300" Width="{x:Bind ImageWidth,Mode=OneWay}" Height="{x:Bind ImageHeight,Mode=OneWay}" Source="{x:Bind DetailVM.DetailItem.Header.Image,Mode=OneWay}"/>
                         <TextBlock x:Name="HeaderJP" RelativePanel.RightOf="HeaderImage" TextWrapping="WrapWholeWords" Text="{x:Bind DetailVM.DetailItem.Header.TitleJp,Mode=OneWay}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                         <rating:RatingControl x:Name="Rating" RelativePanel.Below="HeaderJP" RelativePanel.RightOf="HeaderImage" Padding="0,4" Height="{ThemeResource TextControlThemeMinHeight}" Grid.Row="1" HorizontalAlignment="Left" RoundValueSlice="0" Value="{x:Bind DetailVM.DetailItem.RateValue,Mode=OneWay}" ItemsCount="5" >

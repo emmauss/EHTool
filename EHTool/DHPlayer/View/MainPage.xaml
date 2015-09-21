@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="using:EHTool.DHPlayer.View"
     mc:Ignorable="d"
+    xmlns:triggers="using:Common.Triggers"
     xmlns:model="using:EHTool.DHPlayer.Model">
     <Page.Resources>
         <Style x:Key="PivotStyle1" TargetType="Pivot">
@@ -236,7 +237,7 @@
                         <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="401"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="401" MaxWindowWidth="600"/>
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState x:Name="VisualState600min">
@@ -246,7 +247,7 @@
                         <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="601"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="601" MaxWindowWidth="800"/>
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState x:Name="VisualState800min">
@@ -256,7 +257,7 @@
                         <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="801"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="801"/>
                     </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>

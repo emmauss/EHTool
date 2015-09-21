@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:Common.Converters"
+    xmlns:triggers="using:Common.Triggers"
     mc:Ignorable="d"
     RequestedTheme="Dark"
     
@@ -256,7 +257,7 @@
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="VisualState400min">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="401"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="401"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="button.(Control.IsEnabled)" Value="False"/>

@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:triggers="using:Common.Triggers"
     d:DesignHeight="300"
     d:DesignWidth="400">
 
@@ -18,7 +19,7 @@
                         <Setter Target="HeaderIcon.(UIElement.Visibility)" Value="Collapsed"/>
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="401"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="701"/>
                     </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>

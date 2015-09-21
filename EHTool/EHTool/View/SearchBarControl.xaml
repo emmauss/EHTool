@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:triggers="using:Common.Triggers"
     d:DesignHeight="50"
     d:DesignWidth="600">
 
@@ -18,7 +19,7 @@
                         <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="401"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="401" MaxWindowWidth="600"/>
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState x:Name="VisualState600min">
@@ -28,7 +29,7 @@
                         <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="601"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="601" MaxWindowWidth="800"/>
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState x:Name="VisualState800min">
@@ -38,7 +39,7 @@
                         <Setter Target="button.(UIElement.Visibility)" Value="Collapsed"/>
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="801"/>
+                        <triggers:ControlSizeTrigger MinWindowWidth="801"/>
                     </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>

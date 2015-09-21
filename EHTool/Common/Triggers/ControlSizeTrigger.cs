@@ -4,68 +4,111 @@ namespace Common.Triggers
 {
     public class ControlSizeTrigger : StateTriggerBase
     {
-        private double _minHeight, _minWidth = -1;
-        private FrameworkElement _targetElement;
-        private double _currentHeight, _currentWidth;
-
-        public double MinHeight
+        public double MinWindowWidth
         {
-            get
-            {
-                return _minHeight;
-            }
-            set
-            {
-                _minHeight = value;
-            }
-        }
-        public double MinWidth
-        {
-            get
-            {
-                return _minWidth;
-            }
-            set
-            {
-                _minWidth = value;
-            }
-        }
-        public FrameworkElement TargetElement
-        {
-            get
-            {
-                return _targetElement;
-            }
-            set
-            {
-                _targetElement = value;
-                _targetElement.SizeChanged += _targetElement_SizeChanged;
-            }
+            get { return (double)GetValue(MinWindowWidthProperty); }
+            set { SetValue(MinWindowWidthProperty, value); OnValueChanged(); }
         }
 
-        private void _targetElement_SizeChanged(object sender, SizeChangedEventArgs e)
+        // Using a DependencyProperty as the backing store for MinWindowWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MinWindowWidthProperty =
+            DependencyProperty.Register("MinWindowWidth", typeof(double), typeof(ControlSizeTrigger), new PropertyMetadata(0d));
+
+
+
+        public double MaxWindowWidth
         {
-            _currentHeight = e.NewSize.Height;
-            _currentWidth = e.NewSize.Width;
-            UpdateTrigger();
+            get { return (double)GetValue(MaxWindowWidthProperty); }
+            set { SetValue(MaxWindowWidthProperty, value); OnValueChanged(); }
         }
 
-        private void UpdateTrigger()
-        {
+        // Using a DependencyProperty as the backing store for MaxWindowWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MaxWindowWidthProperty =
+            DependencyProperty.Register("MaxWindowWidth", typeof(double), typeof(ControlSizeTrigger), new PropertyMetadata(0d));
 
-            if (_targetElement != null && (_minWidth > 0 || _minHeight > 0))
+
+
+        public double MinWindowHeight
+        {
+            get { return (double)GetValue(MinWindowHeightProperty); }
+            set { SetValue(MinWindowHeightProperty, value); OnValueChanged(); }
+        }
+
+        // Using a DependencyProperty as the backing store for MinWindowHeight.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MinWindowHeightProperty =
+            DependencyProperty.Register("MinWindowHeight", typeof(double), typeof(ControlSizeTrigger), new PropertyMetadata(0d));
+
+
+
+        public double MaxWindowHeight
+        {
+            get { return (double)GetValue(MaxWindowHeightProperty); }
+            set { SetValue(MaxWindowHeightProperty, value); OnValueChanged(); }
+        }
+
+        // Using a DependencyProperty as the backing store for MaxWindowHeight.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MaxWindowHeightProperty =
+            DependencyProperty.Register("MaxWindowHeight", typeof(double), typeof(ControlSizeTrigger), new PropertyMetadata(0d));
+
+        private void OnValueChanged()
+        {
+            if (!IsPhone)
             {
-                if (_minHeight > 0 && _minWidth > 0)
+                UpdateTrigger(Window.Current.Bounds.Height, Window.Current.Bounds.Width);
+            }
+        }
+
+        private bool IsPhone => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
+
+        public ControlSizeTrigger()
+        {
+            if (IsPhone)
+            {
+                SetActive(false);
+            }
+            else
+            {
+                UpdateTrigger(Window.Current.Bounds.Height, Window.Current.Bounds.Width);
+                Window.Current.SizeChanged += Current_SizeChanged;
+            }
+        }
+
+        private void Current_SizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        {
+            var height = e.Size.Height;
+            var width = e.Size.Width;
+            UpdateTrigger(height, width);
+        }
+
+        private void UpdateTrigger(double height, double width)
+        {
+            if (MinWindowWidth > 0 || MinWindowHeight > 0)
+            {
+                if (MinWindowHeight > 0 && MinWindowWidth > 0 && MaxWindowHeight > 0 && MaxWindowWidth > 0)
                 {
-                    SetActive((_currentHeight >= _minHeight) && (_currentWidth >= _minWidth));
+                    SetActive((height >= MinWindowHeight) && (width >= MinWindowWidth) && (height < MaxWindowHeight) && (width < MaxWindowWidth));
                 }
-                else if (_minHeight > 0)
+                else if (MinWindowHeight > 0)
                 {
-                    SetActive(_currentHeight >= _minHeight);
+                    if (MaxWindowHeight > 0)
+                    {
+                        SetActive(height >= MinWindowHeight && height < MaxWindowHeight);
+                    }
+                    else
+                    {
+                        SetActive(height >= MinWindowHeight);
+                    }
                 }
                 else
                 {
-                    SetActive(_currentWidth >= _minWidth);
+                    if (MaxWindowWidth > 0)
+                    {
+                        SetActive(width >= MinWindowWidth && width < MaxWindowWidth);
+                    }
+                    else
+                    {
+                        SetActive(width >= MinWindowWidth);
+                    }
                 }
             }
             else
