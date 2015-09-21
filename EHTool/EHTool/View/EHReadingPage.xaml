@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page x:Name="page"
     x:Class="EHTool.EHTool.View.EHReadingPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -35,12 +35,24 @@
         <DataTemplate x:Key="ImageItemTemplate" x:DataType="model:ImageModel">
             <Grid Background="White">
                 <ProgressBar Margin="16,0" Visibility="{x:Bind IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Value="{x:Bind DownloadedSize,Mode=OneWay}" Maximum="{x:Bind TotalSize,Mode=OneWay}"/>
-                <Image Source="{x:Bind Image,Mode=OneWay}"/> 
+                <Image Source="{x:Bind Image,Mode=OneWay}"/>
                 <Button Click="{x:Bind ReloadClick}" Visibility="{x:Bind IsFailed,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Content="Try Again" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="CommonView" x:DataType="viewmodel:ReadingViewModel">
-            <FlipView SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}" ItemsSource="{x:Bind ImageList,Mode=OneWay}" ItemTemplate="{StaticResource ImageItemTemplate}"/>
+            <FlipView SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}" ItemsSource="{x:Bind ImageList,Mode=OneWay}" >
+                <FlipView.ItemTemplate>
+                    <DataTemplate x:DataType="model:ImageModel">
+                        <Grid Background="White">
+                            <ProgressBar Margin="16,0" Visibility="{x:Bind IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Value="{x:Bind DownloadedSize,Mode=OneWay}" Maximum="{x:Bind TotalSize,Mode=OneWay}"/>
+                            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" ZoomMode="Enabled">
+                                <Image Width="{Binding ActualWidth, ElementName=page, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=page, Mode=OneWay}" Source="{x:Bind Image,Mode=OneWay}"/>
+                            </ScrollViewer>
+                            <Button Click="{x:Bind ReloadClick}" Visibility="{x:Bind IsFailed,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Content="Try Again" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </FlipView.ItemTemplate>
+            </FlipView>
         </DataTemplate>
         <DataTemplate x:Name="FilpView" x:DataType="viewmodel:ReadingViewModel">
             <view:FlipBookControl SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}" ItemsSource="{x:Bind ImageList,Mode=OneWay}" ItemTemplate="{StaticResource ImageItemTemplate}" EmptyTemplate="{StaticResource EmptyTemplate}" >
