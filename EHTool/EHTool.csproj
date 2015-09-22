@@ -115,6 +115,7 @@
     <Compile Include="Common\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Common\Converters\Converter.cs" />
     <Compile Include="Common\Converters\DoubleToIntConverter.cs" />
+    <Compile Include="Common\Converters\NullableBooleanToBooleanConverter.cs" />
     <Compile Include="Common\Converters\TimeSpanToDoubleConverter.cs" />
     <Compile Include="Common\Extension\HtmlNodeExtension.cs" />
     <Compile Include="Common\Extension\JsonValueExtension.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="EHTool\Model\HostLinkModel.cs" />
     <Compile Include="EHTool\Model\ImageListModel.cs" />
     <Compile Include="EHTool\Model\ImageModel.cs" />
+    <Compile Include="EHTool\Model\LanguageModel.cs" />
     <Compile Include="EHTool\Model\LocalFolderModel.cs" />
     <Compile Include="EHTool\Model\LocalImageModel.cs" />
     <Compile Include="EHTool\Model\TagModel.cs" />
@@ -187,6 +189,9 @@
       <DependentUpon>EHReadingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="EHTool\View\FlipBookControl.cs" />
+    <Compile Include="EHTool\View\LanguageFilterDialog.xaml.cs">
+      <DependentUpon>LanguageFilterDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EHTool\View\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
     </Compile>
@@ -281,6 +286,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="EHTool\View\LanguageFilterDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EHTool\View\LoginDialog.xaml">
       <SubType>Designer</SubType>

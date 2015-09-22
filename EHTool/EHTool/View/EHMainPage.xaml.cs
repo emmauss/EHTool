@@ -355,5 +355,11 @@ namespace EHTool.EHTool.View
             MainVM.LocalFolderList.Remove(_clickedFolder);
         }
 
+        public async void SetExcludedLanguageClick()
+        {
+            LanguageFilterDialog dialog = new LanguageFilterDialog();
+            await dialog.ShowAsync();
+        }
+
     }
 }
