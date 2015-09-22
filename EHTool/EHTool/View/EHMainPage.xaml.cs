@@ -87,6 +87,18 @@ namespace EHTool.EHTool.View
         public bool HasLogin => CookieHelper.CheckCookie();
         public bool IsPhone => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
 
+        public bool IsReadingRTL
+        {
+            get
+            {
+                return SettingHelpers.GetSetting<bool>("IsReadingRTL");
+            }
+            set
+            {
+                SettingHelpers.SetSetting("IsReadingRTL", value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReadingRTL)));
+            }
+        }
         public bool IsReadingDoublePage
         {
             get
@@ -96,6 +108,7 @@ namespace EHTool.EHTool.View
             set
             {
                 SettingHelpers.SetSetting("IsReadingDoublePage", value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReadingDoublePage)));
             }
         }
         public bool IsAutoDownload

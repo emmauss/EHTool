@@ -543,36 +543,21 @@ namespace EHTool.EHTool.View
             {
                 await Task.Delay(DelayLoad);
                 List<object> needLoadItems = new List<object>();
-                //第一次加载 载入4页
                 CanChangeItemContentTemplate = true;
-                CPresenter.DataContext = this.Items[PageIndex];
-                needLoadItems.Add(Items[PageIndex]);
-                if (this.Items.Count > PageIndex + 1)
+                //第一次加载 载入4页
+                if (FlowDirection == FlowDirection.LeftToRight)
                 {
-                    DPresenter.DataContext = this.Items[PageIndex + 1];
-                    needLoadItems.Add(Items[PageIndex + 1]);
+                    CPresenter.DataContext = this.Items[PageIndex];
+                    DPresenter.DataContext = Items.Count > PageIndex + 1 ? Items[PageIndex + 1] : null;
+                    EPresenter.DataContext = Items.Count > PageIndex + 2 ? Items[PageIndex + 2] : null;
+                    FPresenter.DataContext = Items.Count > PageIndex + 3 ? Items[PageIndex + 3] : null;
                 }
-                else
+                else if (FlowDirection == FlowDirection.RightToLeft)
                 {
-                    DPresenter.DataContext = null;
-                }
-                if (this.Items.Count > PageIndex + 2)
-                {
-                    EPresenter.DataContext = this.Items[PageIndex + 2];
-                    needLoadItems.Add(Items[PageIndex + 2]);
-                }
-                else
-                {
-                    EPresenter.DataContext = null;
-                }
-                if (this.Items.Count > PageIndex + 3)
-                {
-                    FPresenter.DataContext = this.Items[PageIndex + 3];
-                    needLoadItems.Add(Items[PageIndex + 3]);
-                }
-                else
-                {
-                    FPresenter.DataContext = null;
+                    DPresenter.DataContext = this.Items[PageIndex];
+                    CPresenter.DataContext = Items.Count > PageIndex + 1 ? Items[PageIndex + 1] : null;
+                    BPresenter.DataContext = Items.Count > PageIndex + 2 ? Items[PageIndex + 2] : null;
+                    APresenter.DataContext = Items.Count > PageIndex + 3 ? Items[PageIndex + 3] : null;
                 }
                 if (null != NeedLoadingItem)
                     NeedLoadingItem(this, new FlipLoadArgs(needLoadItems, false));
@@ -687,9 +672,9 @@ namespace EHTool.EHTool.View
             if (!isManipulating)
             {
                 if (sender.Equals(leftPage))
-                    isNext = false;
+                    isNext = FlowDirection == FlowDirection.LeftToRight ? false : true;
                 else if (sender.Equals(rightPage))
-                    isNext = true;
+                    isNext = FlowDirection == FlowDirection.LeftToRight ? true : false;
                 else
                     RefreshPageByStatus();
                 e.Handled = true;
@@ -712,8 +697,16 @@ namespace EHTool.EHTool.View
         /// <param name="args"></param>
         private async void FlipEnded(object sender, FlipEventArgs args)
         {
-            if (args.isNext) PageIndex += 2;
-            else PageIndex -= 2;
+            if (FlowDirection == FlowDirection.LeftToRight)
+            {
+                if (args.isNext) PageIndex += 2;
+                else PageIndex -= 2;
+            }
+            else
+            {
+                if (args.isNext) PageIndex -= 2;
+                else PageIndex += 2;
+            }
             await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
             RefreshPageByStatus());
         }
@@ -741,6 +734,7 @@ namespace EHTool.EHTool.View
                     isManipulating = false;
                 }
             }
+
         }
         #endregion
 
@@ -761,30 +755,59 @@ namespace EHTool.EHTool.View
                 IsHitVisible(false);
                 var leftTopOffset = leftTopPage.Clip.Rect.X;
                 var rightTopOffset = rightTopPage.Clip.Rect.X;
-                await Task.Run(() =>
+                await Dispatcher.RunAsync( Windows.UI.Core.CoreDispatcherPriority.Normal,() =>
                 {
-                    if (isNext)
+                    if (FlowDirection == FlowDirection.LeftToRight)
                     {
-                        if (lastDeltaOffset < 0)
+                        if (isNext)
                         {
-                            Status = Status < 2 ? Status + 1 : 0;
-                            turnRight = true;
+                            if (lastDeltaOffset < 0)
+                            {
+                                Status = Status < 2 ? Status + 1 : 0;
+                                turnRight = true;
+                            }
+                            else if (rightTopOffset != 0.0)
+                                rightRestore = true;
+                            else IsHitVisible(true);
                         }
-                        else if (rightTopOffset != 0.0)
-                            rightRestore = true;
-                        else IsHitVisible(true);
+                        else
+                        {
+                            if (lastDeltaOffset > 0)
+                            {
+                                Status = Status > 0 ? Status - 1 : 2;
+                                turnLeft = true;
+                            }
+                            else if (leftTopOffset != 0.0)
+                                leftRestore = true;
+                            else IsHitVisible(true);
+                        }
                     }
                     else
                     {
-                        if (lastDeltaOffset > 0)
+                        if (isNext)
                         {
-                            Status = Status > 0 ? Status - 1 : 2;
-                            turnLeft = true;
+                            if (lastDeltaOffset > 0)
+                            {
+                                Status = Status > 0 ? Status - 1 : 2;
+                                turnLeft = true;
+                            }
+                            else if (leftTopOffset != 0.0)
+                                leftRestore = true;
+                            else IsHitVisible(true);
                         }
-                        else if (leftTopOffset != 0.0)
-                            leftRestore = true;
-                        else IsHitVisible(true);
+                        else
+                        {
+                            if (lastDeltaOffset < 0)
+                            {
+                                Status = Status < 2 ? Status + 1 : 0;
+                                turnRight = true;
+                            }
+                            else if (rightTopOffset != 0.0)
+                                rightRestore = true;
+                            else IsHitVisible(true);
+                        }
                     }
+
                 });
             }
             isFlip = true;
@@ -800,97 +823,195 @@ namespace EHTool.EHTool.View
             var nTtranY = nextTrans.TranslateY;
             if (isManipulating)
             {
-                if (isNext)
+                if (FlowDirection == FlowDirection.LeftToRight)
                 {
-
-                    #region 下一页
-                    var rightTopNect = rightTopPage.Clip.Rect;
-                    var nextRect = nextPage.Clip.Rect;
-                    var nextTransOffset = nTtranX + translateX * 2;
-
-                    SetShadowOperacity(Math.Abs(nextTransOffset), offsetWidth, false);
-                    var nextRectXOffset = nextRect.X - e.Delta.Translation.X;
-                    lastDeltaOffset = e.Delta.Translation.X;
-                    if (nextRectXOffset < 0 && nextRectXOffset > -offsetWidth)
+                    if (isNext)
                     {
-                        outerRightTrans.TranslateX += e.Delta.Translation.X;
-                        innerRightTrans.TranslateX += e.Delta.Translation.X;
-                        marginRightTrans.TranslateX += e.Delta.Translation.X * 2;
 
-                        nextTrans.TranslateX = nextTransOffset;
-                        if (nextRectXOffset < 0)
-                            nextRect.X = nextRectXOffset;
-                        rightTopNect.X += e.Delta.Translation.X;
-                        nextPage.Clip.Rect = nextRect;
-                        rightTopPage.Clip.Rect = rightTopNect;
-                    }
-                    else
-                    {
-                        e.Complete();
-                        if (nextTransOffset < 0)
+                        #region 下一页
+                        var rightTopNect = rightTopPage.Clip.Rect;
+                        var nextRect = nextPage.Clip.Rect;
+                        var nextTransOffset = nTtranX + translateX * 2;
+
+                        SetShadowOperacity(Math.Abs(nextTransOffset), offsetWidth, false);
+                        var nextRectXOffset = nextRect.X - e.Delta.Translation.X;
+                        lastDeltaOffset = e.Delta.Translation.X;
+                        if (nextRectXOffset < 0 && nextRectXOffset > -offsetWidth)
                         {
-                            nextTrans.TranslateX = -offsetWidth;
-                            nextRect.X = 0;
-                            rightTopNect.X = 0;
+                            outerRightTrans.TranslateX += e.Delta.Translation.X;
+                            innerRightTrans.TranslateX += e.Delta.Translation.X;
+                            marginRightTrans.TranslateX += e.Delta.Translation.X * 2;
+
+                            nextTrans.TranslateX = nextTransOffset;
+                            if (nextRectXOffset < 0)
+                                nextRect.X = nextRectXOffset;
+                            rightTopNect.X += e.Delta.Translation.X;
                             nextPage.Clip.Rect = nextRect;
                             rightTopPage.Clip.Rect = rightTopNect;
                         }
                         else
                         {
-                            nextTrans.TranslateX = offsetWidth;
-                            nextRect.X = -offsetWidth;
-                            rightTopNect.X = offsetWidth;
-                            nextPage.Clip.Rect = nextRect;
-                            rightTopPage.Clip.Rect = rightTopNect;
+                            e.Complete();
+                            if (nextTransOffset < 0)
+                            {
+                                nextTrans.TranslateX = -offsetWidth;
+                                nextRect.X = 0;
+                                rightTopNect.X = 0;
+                                nextPage.Clip.Rect = nextRect;
+                                rightTopPage.Clip.Rect = rightTopNect;
+                            }
+                            else
+                            {
+                                nextTrans.TranslateX = offsetWidth;
+                                nextRect.X = -offsetWidth;
+                                rightTopNect.X = offsetWidth;
+                                nextPage.Clip.Rect = nextRect;
+                                rightTopPage.Clip.Rect = rightTopNect;
+                            }
                         }
+                        #endregion
                     }
-                    #endregion
+                    else
+                    {
+                        #region 上一页
+                        var leftTopNect = leftTopPage.Clip.Rect;
+                        var prevRect = prevPage.Clip.Rect;
+                        var prevTransOffset = prevTrans.TranslateX + e.Delta.Translation.X * 2;
+                        var prevRectXOffset = prevRect.X - e.Delta.Translation.X;
+                        SetShadowOperacity(Math.Abs(prevTransOffset), offsetWidth, true);
+                        lastDeltaOffset = e.Delta.Translation.X;
+                        if (prevRectXOffset > 0 && prevRectXOffset < offsetWidth)
+                        {
+                            innerLeftTrans.TranslateX += translateX;
+                            outerLeftTrans.TranslateX += translateX;
+                            marginLeftTrans.TranslateX += translateX * 2;
+
+                            prevTrans.TranslateX = prevTransOffset;
+                            if (prevRectXOffset > 0)
+                                prevRect.X = prevRectXOffset;
+                            leftTopNect.X += e.Delta.Translation.X;
+                            prevPage.Clip.Rect = prevRect;
+                            leftTopPage.Clip.Rect = leftTopNect;
+                        }
+                        else
+                        {
+                            e.Complete();
+                            if (prevTransOffset < 0)
+                            {
+                                prevTrans.TranslateX = -offsetWidth;
+                                prevRect.X = offsetWidth;
+                                leftTopNect.X = -offsetWidth;
+                                prevPage.Clip.Rect = prevRect;
+                                leftTopPage.Clip.Rect = leftTopNect;
+
+                            }
+                            else
+                            {
+                                prevTrans.TranslateX = offsetWidth;
+                                prevRect.X = 0;
+                                leftTopNect.X = 0;
+                                prevPage.Clip.Rect = prevRect;
+                                leftTopPage.Clip.Rect = leftTopNect;
+                            }
+                        }
+                        #endregion
+                    }
                 }
                 else
                 {
-                    #region 上一页
-                    var leftTopNect = leftTopPage.Clip.Rect;
-                    var prevRect = prevPage.Clip.Rect;
-                    var prevTransOffset = prevTrans.TranslateX + e.Delta.Translation.X * 2;
-                    var prevRectXOffset = prevRect.X - e.Delta.Translation.X;
-                    SetShadowOperacity(Math.Abs(prevTransOffset), offsetWidth, true);
-                    lastDeltaOffset = e.Delta.Translation.X;
-                    if (prevRectXOffset > 0 && prevRectXOffset < offsetWidth)
+                    if (isNext)
                     {
-                        innerLeftTrans.TranslateX += translateX;
-                        outerLeftTrans.TranslateX += translateX;
-                        marginLeftTrans.TranslateX += translateX * 2;
-
-                        prevTrans.TranslateX = prevTransOffset;
-                        if (prevRectXOffset > 0)
-                            prevRect.X = prevRectXOffset;
-                        leftTopNect.X += e.Delta.Translation.X;
-                        prevPage.Clip.Rect = prevRect;
-                        leftTopPage.Clip.Rect = leftTopNect;
-                    }
-                    else
-                    {
-                        e.Complete();
-                        if (prevTransOffset < 0)
+                        #region 上一页
+                        var leftTopNect = leftTopPage.Clip.Rect;
+                        var prevRect = prevPage.Clip.Rect;
+                        var prevTransOffset = prevTrans.TranslateX + e.Delta.Translation.X * 2;
+                        var prevRectXOffset = prevRect.X - e.Delta.Translation.X;
+                        SetShadowOperacity(Math.Abs(prevTransOffset), offsetWidth, true);
+                        lastDeltaOffset = e.Delta.Translation.X;
+                        if (prevRectXOffset > 0 && prevRectXOffset < offsetWidth)
                         {
-                            prevTrans.TranslateX = -offsetWidth;
-                            prevRect.X = offsetWidth;
-                            leftTopNect.X = -offsetWidth;
+                            innerLeftTrans.TranslateX += translateX;
+                            outerLeftTrans.TranslateX += translateX;
+                            marginLeftTrans.TranslateX += translateX * 2;
+
+                            prevTrans.TranslateX = prevTransOffset;
+                            if (prevRectXOffset > 0)
+                                prevRect.X = prevRectXOffset;
+                            leftTopNect.X += e.Delta.Translation.X;
                             prevPage.Clip.Rect = prevRect;
                             leftTopPage.Clip.Rect = leftTopNect;
-
                         }
                         else
                         {
-                            prevTrans.TranslateX = offsetWidth;
-                            prevRect.X = 0;
-                            leftTopNect.X = 0;
-                            prevPage.Clip.Rect = prevRect;
-                            leftTopPage.Clip.Rect = leftTopNect;
+                            e.Complete();
+                            if (prevTransOffset < 0)
+                            {
+                                prevTrans.TranslateX = -offsetWidth;
+                                prevRect.X = offsetWidth;
+                                leftTopNect.X = -offsetWidth;
+                                prevPage.Clip.Rect = prevRect;
+                                leftTopPage.Clip.Rect = leftTopNect;
+
+                            }
+                            else
+                            {
+                                prevTrans.TranslateX = offsetWidth;
+                                prevRect.X = 0;
+                                leftTopNect.X = 0;
+                                prevPage.Clip.Rect = prevRect;
+                                leftTopPage.Clip.Rect = leftTopNect;
+                            }
                         }
+                        #endregion
                     }
-                    #endregion
+                    else
+                    {
+                        #region 下一页
+                        var rightTopNect = rightTopPage.Clip.Rect;
+                        var nextRect = nextPage.Clip.Rect;
+                        var nextTransOffset = nTtranX + translateX * 2;
+
+                        SetShadowOperacity(Math.Abs(nextTransOffset), offsetWidth, false);
+                        var nextRectXOffset = nextRect.X - e.Delta.Translation.X;
+                        lastDeltaOffset = e.Delta.Translation.X;
+                        if (nextRectXOffset < 0 && nextRectXOffset > -offsetWidth)
+                        {
+                            outerRightTrans.TranslateX += e.Delta.Translation.X;
+                            innerRightTrans.TranslateX += e.Delta.Translation.X;
+                            marginRightTrans.TranslateX += e.Delta.Translation.X * 2;
+
+                            nextTrans.TranslateX = nextTransOffset;
+                            if (nextRectXOffset < 0)
+                                nextRect.X = nextRectXOffset;
+                            rightTopNect.X += e.Delta.Translation.X;
+                            nextPage.Clip.Rect = nextRect;
+                            rightTopPage.Clip.Rect = rightTopNect;
+                        }
+                        else
+                        {
+                            e.Complete();
+                            if (nextTransOffset < 0)
+                            {
+                                nextTrans.TranslateX = -offsetWidth;
+                                nextRect.X = 0;
+                                rightTopNect.X = 0;
+                                nextPage.Clip.Rect = nextRect;
+                                rightTopPage.Clip.Rect = rightTopNect;
+                            }
+                            else
+                            {
+                                nextTrans.TranslateX = offsetWidth;
+                                nextRect.X = -offsetWidth;
+                                rightTopNect.X = offsetWidth;
+                                nextPage.Clip.Rect = nextRect;
+                                rightTopPage.Clip.Rect = rightTopNect;
+                            }
+                        }
+                        #endregion
+
+                    }
                 }
+
             }
         }
         #endregion
@@ -1041,12 +1162,24 @@ namespace EHTool.EHTool.View
             RefreshPageByStatus();
             isLoaded = false;
             PageIndex = SelectedIndex;
-            CPresenter.DataContext = this.Items[PageIndex];
-            DPresenter.DataContext = Items.Count > PageIndex + 1 ? Items[PageIndex + 1] : null;
-            EPresenter.DataContext = Items.Count > PageIndex + 2 ? Items[PageIndex + 2] : null;
-            FPresenter.DataContext = Items.Count > PageIndex + 3 ? Items[PageIndex + 3] : null;
-            BPresenter.DataContext = PageIndex - 1 >= 0 && Items.Count > PageIndex - 1 ? Items[PageIndex - 1] : null;
-            APresenter.DataContext = PageIndex - 2 >= 0 && Items.Count > PageIndex - 2 ? Items[PageIndex - 2] : null;
+            if (FlowDirection == FlowDirection.LeftToRight)
+            {
+                CPresenter.DataContext = this.Items[PageIndex];
+                DPresenter.DataContext = Items.Count > PageIndex + 1 ? Items[PageIndex + 1] : null;
+                EPresenter.DataContext = Items.Count > PageIndex + 2 ? Items[PageIndex + 2] : null;
+                FPresenter.DataContext = Items.Count > PageIndex + 3 ? Items[PageIndex + 3] : null;
+                BPresenter.DataContext = PageIndex - 1 >= 0 && Items.Count > PageIndex - 1 ? Items[PageIndex - 1] : null;
+                APresenter.DataContext = PageIndex - 2 >= 0 && Items.Count > PageIndex - 2 ? Items[PageIndex - 2] : null;
+            }
+            else
+            {
+                DPresenter.DataContext = this.Items[PageIndex];
+                CPresenter.DataContext = Items.Count > PageIndex + 1 ? Items[PageIndex + 1] : null;
+                BPresenter.DataContext = Items.Count > PageIndex + 2 ? Items[PageIndex + 2] : null;
+                APresenter.DataContext = Items.Count > PageIndex + 3 ? Items[PageIndex + 3] : null;
+                EPresenter.DataContext = PageIndex - 1 >= 0 && Items.Count > PageIndex - 1 ? Items[PageIndex - 1] : null;
+                FPresenter.DataContext = PageIndex - 2 >= 0 && Items.Count > PageIndex - 2 ? Items[PageIndex - 2] : null;
+            }
             isLoaded = true;
         }
 
@@ -1178,13 +1311,29 @@ namespace EHTool.EHTool.View
             List<ContentPresenter> presenters = new List<ContentPresenter>();
             if (isNext)
             {
-                presenters.Add(leftTopPage.Child as ContentPresenter);
-                presenters.Add(prevPage.Child as ContentPresenter);
+                if (FlowDirection == FlowDirection.LeftToRight)
+                {
+                    presenters.Add(leftTopPage.Child as ContentPresenter);
+                    presenters.Add(prevPage.Child as ContentPresenter);
+                }
+                else
+                {
+                    presenters.Add(rightTopPage.Child as ContentPresenter);
+                    presenters.Add(nextPage.Child as ContentPresenter);
+                }
             }
             else
             {
-                presenters.Add(rightTopPage.Child as ContentPresenter);
-                presenters.Add(nextPage.Child as ContentPresenter);
+                if (FlowDirection == FlowDirection.LeftToRight)
+                {
+                    presenters.Add(rightTopPage.Child as ContentPresenter);
+                    presenters.Add(nextPage.Child as ContentPresenter);
+                }
+                else
+                {
+                    presenters.Add(leftTopPage.Child as ContentPresenter);
+                    presenters.Add(prevPage.Child as ContentPresenter);
+                }
             }
             return presenters;
         }

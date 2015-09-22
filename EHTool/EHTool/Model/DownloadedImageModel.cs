@@ -40,7 +40,10 @@ namespace EHTool.EHTool.Model
         {
             StorageFolder folder = _isInsideApp ? await ApplicationData.Current.LocalFolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists) : await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(_folderToken);
             var downloadedfile = await folder.GetFileWithoutExtensionAsync($"{_pageIndex}");
-            await downloadedfile?.DeleteAsync();
+            if (downloadedfile != null)
+            {
+                await downloadedfile.DeleteAsync();
+            }
         }
 
         private async Task GetDownloadedImage()

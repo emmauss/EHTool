@@ -8,7 +8,9 @@
                 <ControlTemplate TargetType="local:FlipBookControl">
                     <Grid 
                         x:Name="grdContent" 
-                        Background="{TemplateBinding Background}">
+                        Background="{TemplateBinding Background}"
+                        FlowDirection="LeftToRight"
+                        >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="0"/>
                             <RowDefinition Height="*"/>

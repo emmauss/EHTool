@@ -87,7 +87,17 @@ namespace EHTool.EHTool.View
         public double ImageWidth { get; private set; }
         public double ImageHeight { get; private set; }
         public bool IsPaneOpen { get; set; }
-        
+        public bool IsReadingRTL
+        {
+            get
+            {
+                return SettingHelpers.GetSetting<bool>("IsReadingRTL");
+            }
+            set
+            {
+                SettingHelpers.SetSetting("IsReadingRTL", value);
+            }
+        }
         public bool IsReadingDoublePage
         {
             get

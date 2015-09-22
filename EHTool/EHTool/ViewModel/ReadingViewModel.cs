@@ -34,6 +34,8 @@ namespace EHTool.EHTool.ViewModel
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsAutoPlay)));
             }
         }
+        public FlowDirection ReadingDirection 
+            => SettingHelpers.GetSetting<bool>("IsReadingRTL") ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
         public ObservableCollection<ImageModel> ImageList { get; private set; } = new ObservableCollection<ImageModel>();
         private int _selectedIndex = -1;

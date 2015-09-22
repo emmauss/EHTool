@@ -21,5 +21,6 @@
         </TextBlock>
         <ProgressBar Background="Transparent" x:Name="progressBar"/>
         <TextBlock x:Name="errorTB" Visibility="Collapsed" Foreground="Red" Text="ERROR:YOU HAVE NO ACCESS TO EXHENTAI" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
+        <TextBlock x:Name="errorTB2" Visibility="Collapsed" Foreground="Red" Text="ERROR:CAN NOT CONNECT TO EXHENTAI" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
     </StackPanel>
 </ContentDialog>

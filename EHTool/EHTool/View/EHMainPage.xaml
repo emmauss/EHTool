@@ -307,6 +307,7 @@
                                 <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
                                 <Button Click="{x:Bind SetExcludedLanguageClick}" Content="Set Excluded Languages" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch"/>
                                 <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>
+                                <ToggleSwitch IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}" Header="Layout Direction" OnContent="Right To Left" OffContent="Left To Right"/>
                                 <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -382,6 +383,7 @@
                 <SplitView IsPaneOpen="{x:Bind IsFavorPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
+                            <ToggleSwitch IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}" Header="Layout Direction" OnContent="Right To Left" OffContent="Left To Right"/>
                             <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                         </StackPanel>
                     </SplitView.Pane>
@@ -395,7 +397,7 @@
                 <SplitView IsPaneOpen="{x:Bind IsDownloadPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
-                            <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
+                            <ToggleSwitch IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}" Header="Layout Direction" OnContent="Right To Left" OffContent="Left To Right"/>
                             <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                             <ToggleSwitch IsOn="{x:Bind IsAutoDownload,Mode=TwoWay}" Header="Auto Download" />
                         </StackPanel>
@@ -442,6 +444,7 @@
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
                             <Button Content="Add Folder" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind AddFolderClick}"/>
+                            <ToggleSwitch IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}" Header="Layout Direction" OnContent="Right To Left" OffContent="Left To Right"/>
                             <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
                         </StackPanel>
                     </SplitView.Pane>

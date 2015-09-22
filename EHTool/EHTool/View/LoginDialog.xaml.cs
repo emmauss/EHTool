@@ -39,6 +39,10 @@ namespace EHTool.EHTool.View
                 IsSuccess = true;
                 def.Complete();
             }
+            catch (System.Net.WebException)
+            {
+                errorTB2.Visibility = Visibility.Visible;
+            }
             catch (ExHentaiAccessException)
             {
                 errorTB.Visibility = Visibility.Visible;

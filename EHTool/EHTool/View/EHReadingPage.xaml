@@ -75,7 +75,7 @@
                     </StackPanel>
                 </Grid>
             </SplitView.Pane>
-            <ContentPresenter Content="{x:Bind ReadingVM,Mode=OneWay}" ContentTemplateSelector="{StaticResource ReadingViewSelector}"/>
+            <ContentPresenter FlowDirection="{x:Bind ReadingVM.ReadingDirection}" Content="{x:Bind ReadingVM,Mode=OneWay}" ContentTemplateSelector="{StaticResource ReadingViewSelector}"/>
         </SplitView>
         <Grid x:Name="ControlPanel">
             <Grid.RowDefinitions>
@@ -102,7 +102,7 @@
                 </Grid.ColumnDefinitions>
                 <Button/>
                 <Button Content="&#xE117;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind RefreshClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
-                <Slider Grid.Column="1" Value="{x:Bind ReadingVM.SelectedIndex, Mode=TwoWay,Converter={StaticResource IntToDoubleConverter}}" Maximum="{x:Bind ReadingVM.MaxPageCount, Mode=OneWay,Converter={StaticResource IntToDoubleConverter}}"/>
+                <Slider FlowDirection="{x:Bind ReadingVM.ReadingDirection}" Grid.Column="1" Value="{x:Bind ReadingVM.SelectedIndex, Mode=TwoWay,Converter={StaticResource IntToDoubleConverter}}" Maximum="{x:Bind ReadingVM.MaxPageCount, Mode=OneWay,Converter={StaticResource IntToDoubleConverter}}"/>
                 <Button Grid.Column="2" HorizontalAlignment="Center" Click="{x:Bind SettingButtonClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
             </Grid>
         </Grid>
