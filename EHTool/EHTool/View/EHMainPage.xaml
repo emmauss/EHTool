@@ -17,9 +17,6 @@
             <MenuFlyoutItem Text="Remove From List" Click="{x:Bind RemoveClicked}"/>
             <MenuFlyoutItem Text="Delete(Contain Folder)" Click="{x:Bind DeleteClicked}"/>
         </MenuFlyout>
-        <MenuFlyout x:Key="LocalFolderMenu">
-            <MenuFlyoutItem Text="Remove From List" Click="{x:Bind LocalFolderRemoveClicked}"/>
-        </MenuFlyout>
         <DataTemplate x:Key="MainListTemplate" x:DataType="model:GalleryListModel">
             <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
                 <!--<Image Source="{x:Bind Image,Mode=OneWay}" Stretch="Uniform"/>-->
@@ -45,6 +42,10 @@
                 </Border>
             </Grid>
         </DataTemplate>
+
+        <MenuFlyout x:Key="LocalFolderMenu">
+            <MenuFlyoutItem Text="Remove From List" Click="{x:Bind LocalFolderRemoveClicked}"/>
+        </MenuFlyout>
         <Style x:Key="PivotStyle1" TargetType="Pivot">
             <Setter Property="Margin" Value="0"/>
             <Setter Property="Padding" Value="0"/>

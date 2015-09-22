@@ -1,57 +1,44 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EHTool.EHTool.Entities;
+﻿using Common.Extension;
 using EHTool.EHTool.Model;
 using HtmlAgilityPack;
-using Common.Extension;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using static Common.Helpers.CacheHelper;
 using static System.Text.RegularExpressions.Regex;
 using static HtmlAgilityPack.HtmlEntity;
 using static Common.Helpers.HttpHelper;
 using static EHTool.Common.Helpers.CookieHelper;
+using EHTool.EHTool.Entities;
 
 namespace EHTool.EHTool.Common
 {
-
-    public class Gallery : HostLinkModel
+    public class TagGallery : HostLinkModel
     {
-        public Gallery() : this(ServerTypes.EHentai) { }
         protected int MaxPageCount;
-        public Gallery(ServerTypes type)
+        protected string _tagValue;
+        public TagGallery():this(null, ServerTypes.EHentai)
         {
+
+        }
+        public TagGallery(string tagValue,ServerTypes type)
+        {
+            _tagValue = tagValue;
             ServerType = type;
         }
+        public async Task<IEnumerable<GalleryListModel>> GetGalleryList() => await GetGalleryList(0);
 
-        public async Task<IEnumerable<GalleryListModel>> GetGalleryList()
+        public async Task<IEnumerable<GalleryListModel>> GetGalleryList(int page)
         {
-            if (ServerType == ServerTypes.ExHentai && !CheckCookie())
-            {
-                throw new ExHentaiAccessException();
-            }
+            var link = $"{HostLink}tag/{_tagValue}/{page}";
             string folderName = ServerType.ToString();
             string htmlStr = "";
             if (NetworkAvailable)
             {
-                htmlStr = await GetStringWithCookie($"{HostLink}?page=0", (ServerType == ServerTypes.ExHentai ? Cookie : null) + Unconfig);
-                await SaveTextCache(folderName, "Main", htmlStr);
+                htmlStr = await GetStringWithCookie(link, (ServerType == ServerTypes.ExHentai ? Cookie : null) + Unconfig);
             }
-            else
-            {
-                htmlStr = await GetTextCache(folderName, "Main");
-            }
-            return htmlStr != "" ? GetGalleryListFromString(htmlStr) : new List<GalleryListModel>();
-            
-        }
-
-
-        public async Task<IEnumerable<GalleryListModel>> GetGalleryList(int page) =>
-            await GetGalleryList(null, page);
-
-        public async Task<IEnumerable<GalleryListModel>> GetGalleryList(GallerySearchOption option, int page = 0)
-        {
-            var htmlStr = NetworkAvailable ? await GetStringWithCookie($"{HostLink}?page={page}{option?.GetLinkExtension()}", (ServerType == ServerTypes.ExHentai ? Cookie : null) + Unconfig) : "";
             return htmlStr != "" ? GetGalleryListFromString(htmlStr) : new List<GalleryListModel>();
         }
 

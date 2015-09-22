@@ -43,13 +43,13 @@
             <FlipView SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}" ItemsSource="{x:Bind ImageList,Mode=OneWay}" >
                 <FlipView.ItemTemplate>
                     <DataTemplate x:DataType="model:ImageModel">
-                        <Grid Background="White">
-                            <ProgressBar Margin="16,0" Visibility="{x:Bind IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Value="{x:Bind DownloadedSize,Mode=OneWay}" Maximum="{x:Bind TotalSize,Mode=OneWay}"/>
-                            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" ZoomMode="Enabled">
+                        <ScrollViewer Background="White" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" ZoomMode="Enabled">
+                            <Grid>
+                                <ProgressBar Margin="16,0" Visibility="{x:Bind IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Value="{x:Bind DownloadedSize,Mode=OneWay}" Maximum="{x:Bind TotalSize,Mode=OneWay}"/>
+                                <Button Click="{x:Bind ReloadClick}" Visibility="{x:Bind IsFailed,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Content="Try Again" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Image Width="{Binding ActualWidth, ElementName=page, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=page, Mode=OneWay}" Source="{x:Bind Image,Mode=OneWay}"/>
-                            </ScrollViewer>
-                            <Button Click="{x:Bind ReloadClick}" Visibility="{x:Bind IsFailed,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Content="Try Again" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
+                            </Grid>
+                        </ScrollViewer>
                     </DataTemplate>
                 </FlipView.ItemTemplate>
             </FlipView>
@@ -60,7 +60,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid PointerPressed="Grid_PointerPressed" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Tapped="Grid_PointerPressed" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <SplitView IsPaneOpen="{x:Bind IsPaneOpen,Mode=TwoWay}" PaneBackground="#BF000000" PanePlacement="Right" DisplayMode="Overlay">
             <SplitView.Pane>
                 <Grid RequestedTheme="Dark">

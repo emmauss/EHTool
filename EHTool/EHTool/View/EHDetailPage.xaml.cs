@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using EHTool.EHTool.Common.Helpers;
+using System.Diagnostics;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -191,6 +192,26 @@ namespace EHTool.EHTool.View
             {
                 Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.ListItem, clickitem));
             }
+        }
+
+        private void TagListView_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var item = (e.OriginalSource as FrameworkElement).DataContext as TagValueModel;
+            if (item != null)
+            {
+                Debug.WriteLine($"{item?.FullValue} right clicked");
+                var menu = Resources["TagItemMenu"] as MenuFlyout;
+                menu.Items[0].DataContext = item;
+                menu.Items[1].DataContext = item;
+                menu.ShowAt(null, e.GetPosition(null));
+                e.Handled = true;
+            }
+        }
+
+        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            var item = (sender as MenuFlyoutItem).DataContext as TagValueModel;
+            Frame.Navigate(typeof(TagSearchPage), new TagSearchViewModel(item.FullValue, DetailVM.ServerType));
         }
     }
 }

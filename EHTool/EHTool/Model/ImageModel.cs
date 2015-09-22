@@ -107,7 +107,7 @@ namespace EHTool.EHTool.Model
 
         private async Task GetImage()
         {
-            if (IsLoading)
+            if (IsLoading || IsFailed)
             {
                 return;
             }

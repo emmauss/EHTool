@@ -1,14 +1,11 @@
-﻿using System;
+﻿using EHTool.EHTool.Model;
+using EHTool.EHTool.ViewModel;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Common.Helpers;
-using EHTool.EHTool.Model;
-using EHTool.EHTool.ViewModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -28,8 +25,12 @@ namespace EHTool.EHTool.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class EHReadingPage : Page ,INotifyPropertyChanged
+    public sealed partial class TagSearchPage : Page , INotifyPropertyChanged
     {
+        public TagSearchViewModel TagSearchVM { get; set; }
+        public bool IsPhone => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
+
+        public event PropertyChangedEventHandler PropertyChanged;
         #region TitleBarMember
         private void TitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
@@ -80,75 +81,31 @@ namespace EHTool.EHTool.View
         }
         #endregion
         #endregion
-        public ReadingViewModel ReadingVM { get; private set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public bool IsPaneOpen { get; set; }
-        
-        Windows.System.Display.DisplayRequest req = new Windows.System.Display.DisplayRequest();
-        public EHReadingPage()
+
+
+        public TagSearchPage()
         {
             this.InitializeComponent();
         }
 
-        protected async override void OnNavigatedFrom(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                await StatusBar.GetForCurrentView().ShowAsync();
-            }
-            req.RequestRelease();
-            base.OnNavigatedFrom(e);
-        }
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            Window.Current.SetTitleBar(TitleBarRect);
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                await StatusBar.GetForCurrentView().HideAsync();
-            }
-            req.RequestActive();
-            ReadingVM = e.Parameter as ReadingViewModel;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReadingVM)));
+            TagSearchVM = e.Parameter as TagSearchViewModel;
             base.OnNavigatedTo(e);
         }
-        public async void BackClick()
+        public async void LoadMoreClick()
         {
-            await ReadingVM.CancelTask();
-            Frame.GoBack();
+            await TagSearchVM.LoadMore();
         }
-
-
-        private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
+        public void MainItemClick(object sender, ItemClickEventArgs e)
         {
-            ShowControlPanel.Begin();
+            Frame.Navigate(typeof(EHDetailPage), new DetailViewModel(e.ClickedItem as GalleryListModel));
         }
-
-        private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
+        public void BackClick()
         {
-            HideControlPanel.Begin();
-        }
-
-        public void SettingButtonClick()
-        {
-            IsPaneOpen = !IsPaneOpen;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPaneOpen)));
-        }
-
-        public async void RefreshClick()
-        {
-            await ReadingVM.Refresh();
-        }
-
-        private void Grid_PointerPressed(object sender, TappedRoutedEventArgs e)
-        {
-            e.Handled = true;
-            if (ControlPanel.Opacity == 0d)
+            if (Frame.CanGoBack)
             {
-                ShowControlPanel.Begin();
-            }
-            else
-            {
-                HideControlPanel.Begin();
+                Frame.GoBack();
             }
         }
     }

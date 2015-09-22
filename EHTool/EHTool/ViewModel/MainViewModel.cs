@@ -228,7 +228,7 @@ namespace EHTool.EHTool.ViewModel
 
         internal async Task LoadMore()
         {
-            if (IsFailed)
+            if (IsLoading || IsFailed)
             {
                 return;
             }
@@ -248,6 +248,10 @@ namespace EHTool.EHTool.ViewModel
                             list = await GetGalleryList(SearchOption, ++_currentPage);
                             break;
                     }
+                    foreach (var item in list)
+                    {
+                        MainList.Add(item);
+                    }
                 }
             }
             catch (System.Net.WebException)
@@ -255,13 +259,6 @@ namespace EHTool.EHTool.ViewModel
                 _currentPage--;
                 MessageDialog dialog = new MessageDialog($"Can not connect to {ServerType}", "Web Error");
                 await dialog.ShowAsync();
-            }
-            if (list != null)
-            {
-                foreach (var item in list)
-                {
-                    MainList.Add(item);
-                }
             }
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));

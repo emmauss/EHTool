@@ -150,7 +150,11 @@ namespace EHTool.EHTool.Common
                             {
                                 Name = DeEntitize(a.FirstChild.InnerText),
                                 Value = (from b in a.LastChild.ChildNodes
-                                         select DeEntitize(b.InnerText)).ToArray(),
+                                         select new TagValueModel()
+                                         {
+                                             Value = DeEntitize(b.InnerText),
+                                             FullValue = DeEntitize(a.FirstChild.InnerText) + DeEntitize(b.InnerText),
+                                         }).ToList(),
                             }).ToList(),
                 },
                 TorrentCount = int.Parse(Match(doc.GetElementbyId("gd5").InnerHtml, "Torrent Download \\( ([0-9]+) \\)").Groups[1].Value),

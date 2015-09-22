@@ -33,6 +33,10 @@
             </Setter>
         </Style>
 
+        <MenuFlyout x:Key="TagItemMenu">
+            <MenuFlyoutItem Text="{Binding FullValue}"/>
+            <MenuFlyoutItem Text="Search" Click="MenuFlyoutItem_Click"/>
+        </MenuFlyout>
 
         <DataTemplate x:Key="TagListTemple" x:DataType="model:TagModel">
             <Grid>
@@ -44,29 +48,12 @@
                 <GridView Margin="4,0" ItemsSource="{x:Bind Value,Mode=OneWay}" SelectionMode="None" IsSwipeEnabled="False" Grid.Column="1" Padding="0">
                     <GridView.ItemContainerStyle>
                         <Style TargetType="GridViewItem">
-                            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-                            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
-                            <Setter Property="TabNavigation" Value="Local"/>
-                            <Setter Property="IsHoldingEnabled" Value="True"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                            <Setter Property="VerticalContentAlignment" Value="Top"/>
-                            <Setter Property="Margin" Value="0,0,4,4"/>
-                            <Setter Property="MinWidth" Value="{ThemeResource GridViewItemMinWidth}"/>
                             <Setter Property="MinHeight" Value="0"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="GridViewItem">
-                                        <ListViewItemPresenter CheckBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" ContentMargin="{TemplateBinding Padding}" CheckMode="Overlay" ContentTransitions="{TemplateBinding ContentTransitions}" CheckBoxBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}" DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" DragBackground="{ThemeResource ListViewItemDragBackgroundThemeBrush}" DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}" FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" PointerOverForeground="{ThemeResource SystemControlForegroundBaseHighBrush}" PressedBackground="{ThemeResource SystemControlHighlightListMediumBrush}" PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}" PointerOverBackground="{ThemeResource SystemControlHighlightListLowBrush}" ReorderHintOffset="{ThemeResource GridViewItemReorderHintThemeOffset}" SelectedPressedBackground="{ThemeResource SystemControlHighlightListAccentHighBrush}" SelectionCheckMarkVisualEnabled="True" SelectedForeground="{ThemeResource SystemControlForegroundBaseHighBrush}" SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListAccentMediumBrush}" SelectedBackground="{ThemeResource SystemControlHighlightAccentBrush}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
                         </Style>
                     </GridView.ItemContainerStyle>
                     <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="x:String">
-                            <TextBlock Text="{x:Bind Mode=OneWay}" TextWrapping="WrapWholeWords"/>
+                        <DataTemplate x:DataType="model:TagValueModel">
+                            <TextBlock Text="{x:Bind Value,Mode=OneWay}" TextWrapping="WrapWholeWords"/>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
@@ -141,7 +128,7 @@
                                 <rating:RateItemDefinition OutlineColor="DimGray" BackgroundColor="DimGray"/>
                             </rating:RatingControl.FullItemsDefinition>
                         </rating:RatingControl>
-                        <ListView x:Name="TagListView" RelativePanel.Below="HeaderImage" ItemContainerStyle="{StaticResource ListViewItemStyle1}" Grid.Row="2" IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{x:Bind DetailVM.DetailItem.Header.Tags,Mode=OneWay}" ItemTemplate="{StaticResource TagListTemple}"/>
+                        <ListView Tapped="TagListView_Tapped" x:Name="TagListView" RelativePanel.Below="HeaderImage" ItemContainerStyle="{StaticResource ListViewItemStyle1}" Grid.Row="2" IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{x:Bind DetailVM.DetailItem.Header.Tags,Mode=OneWay}" ItemTemplate="{StaticResource TagListTemple}"/>
                         <StackPanel x:Name="stackPanel" RelativePanel.Below="TagListView" Grid.Row="3" Orientation="Vertical">
                             <Button HorizontalAlignment="Stretch" Margin="4" Content="Read" Click="{x:Bind ReadButtonClick}"/>
                             <Button HorizontalAlignment="Stretch" Margin="4" Content="Download" Click="{x:Bind DownloadClick}"/>

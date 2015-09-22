@@ -145,6 +145,7 @@
     <Compile Include="EHTool\Common\Helpers\DownloadHelper.cs" />
     <Compile Include="EHTool\Common\Helpers\FavorHelper.cs" />
     <Compile Include="EHTool\Common\Helpers\LocalFolderHelper.cs" />
+    <Compile Include="EHTool\Common\TagGallery.cs" />
     <Compile Include="EHTool\Common\Login.cs" />
     <Compile Include="EHTool\Common\ReadingViewSelector.cs" />
     <Compile Include="EHTool\Entities\CurrentState.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="EHTool\Model\LocalFolderModel.cs" />
     <Compile Include="EHTool\Model\LocalImageModel.cs" />
     <Compile Include="EHTool\Model\TagModel.cs" />
+    <Compile Include="EHTool\Model\TagValueModel.cs" />
     <Compile Include="EHTool\Model\TorrentModel.cs" />
     <Compile Include="EHTool\Model\TorrentSearchOption.cs" />
     <Compile Include="DHPlayer\View\MainPage.xaml.cs">
@@ -176,6 +178,7 @@
     <Compile Include="EHTool\ViewModel\DetailViewModel.cs" />
     <Compile Include="EHTool\ViewModel\MainViewModel.cs" />
     <Compile Include="EHTool\ViewModel\ReadingViewModel.cs" />
+    <Compile Include="EHTool\ViewModel\TagSearchViewModel.cs" />
     <Compile Include="EHTool\View\AddDownloadDialog.xaml.cs">
       <DependentUpon>AddDownloadDialog.xaml</DependentUpon>
     </Compile>
@@ -200,6 +203,9 @@
     </Compile>
     <Compile Include="EHTool\View\SearchBarControl.xaml.cs">
       <DependentUpon>SearchBarControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EHTool\View\TagSearchPage.xaml.cs">
+      <DependentUpon>TagSearchPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="EHTool\View\TorrentDialog.xaml.cs">
       <DependentUpon>TorrentDialog.xaml</DependentUpon>
@@ -300,6 +306,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EHTool\View\SearchBarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EHTool\View\TagSearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

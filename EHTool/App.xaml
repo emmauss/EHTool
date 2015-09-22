@@ -12,6 +12,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <SolidColorBrush x:Key="AppTheme" Color="SlateBlue"/>
+
         </ResourceDictionary>
     </Application.Resources>
 
