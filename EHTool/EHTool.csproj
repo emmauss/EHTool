@@ -175,7 +175,10 @@
     <Compile Include="DHPlayer\View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EHTool\ViewModel\CommonReadingViewModel.cs" />
     <Compile Include="EHTool\ViewModel\DetailViewModel.cs" />
+    <Compile Include="EHTool\ViewModel\DownloadedReadingViewModel.cs" />
+    <Compile Include="EHTool\ViewModel\LocalReadingViewModel.cs" />
     <Compile Include="EHTool\ViewModel\MainViewModel.cs" />
     <Compile Include="EHTool\ViewModel\ReadingViewModel.cs" />
     <Compile Include="EHTool\ViewModel\TagSearchViewModel.cs" />

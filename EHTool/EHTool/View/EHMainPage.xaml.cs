@@ -16,6 +16,7 @@ using EHTool.EHTool.Common.Helpers;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
+using System.Collections.Generic;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -217,7 +218,7 @@ namespace EHTool.EHTool.View
         {
             var item = e.ClickedItem as DownloadItemModel;
             item.Pause();
-            Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item));
+            Frame.Navigate(typeof(EHReadingPage), new DownloadedReadingViewModel(item));
         }
 
         public async void AddFolderClick()
@@ -326,7 +327,7 @@ namespace EHTool.EHTool.View
         public void LocalFolderClick(object sender,ItemClickEventArgs e)
         {
             var item = e.ClickedItem as LocalFolderModel;
-            Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item));
+            Frame.Navigate(typeof(EHReadingPage), new LocalReadingViewModel(item));
         }
         public void LocalFolderRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
@@ -362,6 +363,5 @@ namespace EHTool.EHTool.View
             LanguageFilterDialog dialog = new LanguageFilterDialog();
             await dialog.ShowAsync();
         }
-
     }
 }

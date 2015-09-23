@@ -87,8 +87,11 @@ namespace EHTool.EHTool.Model
                 _cancelTokenSource.Cancel(true);
                 var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(_serverType.ToString(), CreationCollisionOption.OpenIfExists);
                 cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
-                var file = await cachefolder.CreateFileAsync($"{_pageIndex}", CreationCollisionOption.OpenIfExists);
-                await file.DeleteAsync();
+                var file = await cachefolder.GetFileWithoutExtensionAsync($"{_pageIndex}");
+                if (file != null)
+                {
+                    await file.DeleteAsync();
+                }
             }
         }
 

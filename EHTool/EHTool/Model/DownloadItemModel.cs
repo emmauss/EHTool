@@ -207,9 +207,9 @@ namespace EHTool.EHTool.Model
                         }
                     }
                 }
+                Items[i].State = DownloadState.Complete;
                 DownloadedCount = Items.Count((a) => { return a.State == DownloadState.Complete; });
                 OnPropertyChanged(nameof(DownloadedCount));
-                Items[i].State = DownloadState.Complete;
                 await DownloadHelper.AlterDownload(this);
                 Debug.WriteLine($"Page {i} complete");
             }

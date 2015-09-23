@@ -17,10 +17,10 @@ using EHTool.EHTool.Entities;
 
 namespace EHTool.EHTool.ViewModel
 {
-    public class ReadingViewModel : INotifyPropertyChanged
+    public abstract class ReadingViewModel : INotifyPropertyChanged
     {
-        public bool IsLoading { get; set; }
-        public bool IsFailed { get; set; }
+        public bool IsLoading { get; protected set; }
+        public bool IsFailed { get; protected set; }
         private DispatcherTimer _timer;
         public int TimerInterval { get; set; } = 10;
         private bool _isAutoPlay;
@@ -36,9 +36,9 @@ namespace EHTool.EHTool.ViewModel
         }
         public FlowDirection ReadingDirection 
             => SettingHelpers.GetSetting<bool>("IsReadingRTL") ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
-
-        public ObservableCollection<ImageModel> ImageList { get; private set; } = new ObservableCollection<ImageModel>();
-        private int _selectedIndex = -1;
+        protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        public ObservableCollection<ImageModel> ImageList { get; protected set; } = new ObservableCollection<ImageModel>();
+        protected int _selectedIndex = -1;
 
         public int SelectedIndex
         {
@@ -58,121 +58,150 @@ namespace EHTool.EHTool.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        /// Local Folder Reading VM
-        /// </summary>
-        /// <param name="item"></param>
-        internal ReadingViewModel(LocalFolderModel item)
-        {
-            LoadList(item);
-        }
-        
-        /// <summary>
-        /// Load List From Local Folder
-        /// </summary>
-        /// <param name="item"></param>
-        private async void LoadList(LocalFolderModel item)
-        {
-            var folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.FolderToken);
-            var list = await folder.GetFilesAsync();
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (list[i].ContentType.ToLower().Contains("image"))
-                {
-                    ImageList.Add(new LocalImageModel(list[i]));
-                }
-            }
-            if (ImageList.Count == 0)
-            {
-                MessageDialog dialog = new MessageDialog("Can not find any image in this folder", "Error");
-                await dialog.ShowAsync();
-            }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
-        }
-
-        /// <summary>
-        /// Downloaded item reading vm
-        /// </summary>
-        /// <param name="item"></param>
-        internal ReadingViewModel(DownloadItemModel item)
+        internal ReadingViewModel()
         {
             _timer = new DispatcherTimer();
             _timer.Tick += TimerTick;
-            if (item.Items == null)
-            {
-                LoadList(item);
-            }
-            else
-            {
-                for (int i = 0; i < item.Items.Count; i++)
-                {
-                    ImageList.Add(new DownloadedImageModel(item, item.Items[i].Link, i));
-                }
-            }
+            //LoadList();
         }
 
-        /// <summary>
-        /// downloaded item reading vm with index
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="indexitem"></param>
-        internal ReadingViewModel(DownloadItemModel item, ImageListModel indexitem):this(item)
-        {
-            SelectedIndex = ImageList.ToList().FindIndex((a) => { return a.ImagePage == indexitem.ImagePage; });
-        }
-
-        /// <summary>
-        /// load list from downloaded
-        /// </summary>
-        /// <param name="item"></param>
-        private async void LoadList(DownloadItemModel item)
+        internal async void LoadList()
         {
             IsLoading = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
-            try
+            await LoadListOverride();
+            if (ImageList != null && ImageList.Count != 0)
             {
-                GalleryDetail detail = new GalleryDetail(item.ID, item.Token, item.ServerType);
-                var list = (await detail.GetImagePageList()).ToList();
-                for (int i = 0; i < list.Count; i++)
-                {
-                    ImageList.Add(new DownloadedImageModel(item, list[i].ImagePage, i));
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImageList)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedIndex)));
             }
-            catch (System.Net.WebException)
+            else
             {
                 IsFailed = true;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
-                MessageDialog dialog = new MessageDialog("Can not connect to server", "Web Error");
-                await dialog.ShowAsync();
             }
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
 
-        /// <summary>
-        /// common reading vm
-        /// </summary>
-        /// <param name="task"></param>
-        /// <param name="id"></param>
-        internal ReadingViewModel(GalleryListModel item)
-        {
-            _timer = new DispatcherTimer();
-            _timer.Tick += TimerTick;
-            LoadList(item);
-        }
-        /// <summary>
-        /// common reading vm with index
-        /// </summary>
-        /// <param name="task"></param>
-        /// <param name="id"></param>
-        /// <param name="indexitem"></param>
-        internal ReadingViewModel(GalleryListModel item, ImageListModel indexitem)
-        {
-            _timer = new DispatcherTimer();
-            _timer.Tick += TimerTick;
-            LoadList(item,indexitem);
-        }
+        protected abstract Task LoadListOverride();
+
+        ///// <summary>
+        ///// Local Folder Reading VM
+        ///// </summary>
+        ///// <param name="item"></param>
+        //internal ReadingViewModel(LocalFolderModel item)
+        //{
+        //    LoadList(item);
+        //}
+        
+        ///// <summary>
+        ///// Load List From Local Folder
+        ///// </summary>
+        ///// <param name="item"></param>
+        //private async void LoadList(LocalFolderModel item)
+        //{
+        //    var folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.FolderToken);
+        //    var list = await folder.GetFilesAsync();
+        //    for (int i = 0; i < list.Count; i++)
+        //    {
+        //        if (list[i].ContentType.ToLower().Contains("image"))
+        //        {
+        //            ImageList.Add(new LocalImageModel(list[i]));
+        //        }
+        //    }
+        //    if (ImageList.Count == 0)
+        //    {
+        //        MessageDialog dialog = new MessageDialog("Can not find any image in this folder", "Error");
+        //        await dialog.ShowAsync();
+        //    }
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
+        //}
+
+        ///// <summary>
+        ///// Downloaded item reading vm
+        ///// </summary>
+        ///// <param name="item"></param>
+        //internal ReadingViewModel(DownloadItemModel item)
+        //{
+        //    _timer = new DispatcherTimer();
+        //    _timer.Tick += TimerTick;
+        //    if (item.Items == null)
+        //    {
+        //        LoadList(item);
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < item.Items.Count; i++)
+        //        {
+        //            ImageList.Add(new DownloadedImageModel(item, item.Items[i].Link, i));
+        //        }
+        //    }
+        //}
+
+        ///// <summary>
+        ///// downloaded item reading vm with index
+        ///// </summary>
+        ///// <param name="item"></param>
+        ///// <param name="indexitem"></param>
+        //internal ReadingViewModel(DownloadItemModel item, ImageListModel indexitem):this(item)
+        //{
+        //    SelectedIndex = ImageList.ToList().FindIndex((a) => { return a.ImagePage == indexitem.ImagePage; });
+        //}
+
+        ///// <summary>
+        ///// load list from downloaded
+        ///// </summary>
+        ///// <param name="item"></param>
+        //private async void LoadList(DownloadItemModel item)
+        //{
+        //    IsLoading = true;
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        //    try
+        //    {
+        //        GalleryDetail detail = new GalleryDetail(item.ID, item.Token, item.ServerType);
+        //        var list = (await detail.GetImagePageList()).ToList();
+        //        for (int i = 0; i < list.Count; i++)
+        //        {
+        //            ImageList.Add(new DownloadedImageModel(item, list[i].ImagePage, i));
+        //        }
+        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
+        //    }
+        //    catch (System.Net.WebException)
+        //    {
+        //        IsFailed = true;
+        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+        //        MessageDialog dialog = new MessageDialog("Can not connect to server", "Web Error");
+        //        await dialog.ShowAsync();
+        //    }
+        //    IsLoading = false;
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        //}
+
+        ///// <summary>
+        ///// common reading vm
+        ///// </summary>
+        ///// <param name="task"></param>
+        ///// <param name="id"></param>
+        //internal ReadingViewModel(GalleryListModel item)
+        //{
+        //    _timer = new DispatcherTimer();
+        //    _timer.Tick += TimerTick;
+        //    LoadList(item);
+        //}
+        ///// <summary>
+        ///// common reading vm with index
+        ///// </summary>
+        ///// <param name="task"></param>
+        ///// <param name="id"></param>
+        ///// <param name="indexitem"></param>
+        //internal ReadingViewModel(GalleryListModel item, ImageListModel indexitem)
+        //{
+        //    _timer = new DispatcherTimer();
+        //    _timer.Tick += TimerTick;
+        //    LoadList(item,indexitem);
+        //}
 
         private void TimerTick(object sender, object e)
         {
@@ -228,38 +257,38 @@ namespace EHTool.EHTool.ViewModel
                 await item.Cancel();
             }
         }
-        private async Task LoadList(GalleryListModel item)
-        {
-            IsLoading = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
-            try
-            {
-                var isdownloaded = await DownloadHelper.IsDownload(item.ID);
-                GalleryDetail detail = new GalleryDetail(item.ID, item.Token, item.ServerType);
-                var list = (await detail.GetImagePageList()).ToList();
-                for (int i = 0; i < list.Count; i++)
-                {
-                    ImageList.Add(new CommonImageModel(list[i], item.ID, i));
-                }
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
-            }
-            catch (System.Net.WebException)
-            {
-                IsFailed = true;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
-                MessageDialog dialog = new MessageDialog("Can not connect to server", "Web Error");
-                await dialog.ShowAsync();
-            }
-            IsLoading = false;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
-        }
+        //private async Task LoadList(GalleryListModel item)
+        //{
+        //    IsLoading = true;
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        //    try
+        //    {
+        //        var isdownloaded = await DownloadHelper.IsDownload(item.ID);
+        //        GalleryDetail detail = new GalleryDetail(item.ID, item.Token, item.ServerType);
+        //        var list = (await detail.GetImagePageList()).ToList();
+        //        for (int i = 0; i < list.Count; i++)
+        //        {
+        //            ImageList.Add(new CommonImageModel(list[i], item.ID, i));
+        //        }
+        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPageCount)));
+        //    }
+        //    catch (System.Net.WebException)
+        //    {
+        //        IsFailed = true;
+        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+        //        MessageDialog dialog = new MessageDialog("Can not connect to server", "Web Error");
+        //        await dialog.ShowAsync();
+        //    }
+        //    IsLoading = false;
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        //}
 
 
-        private async Task LoadList(GalleryListModel item,ImageListModel indexitem)
-        {
-            await LoadList(item);
-            SelectedIndex = ImageList.ToList().FindIndex((a) => { return a.ImagePage == indexitem.ImagePage; });
-        }
+        //private async Task LoadList(GalleryListModel item,ImageListModel indexitem)
+        //{
+        //    await LoadList(item);
+        //    SelectedIndex = ImageList.ToList().FindIndex((a) => { return a.ImagePage == indexitem.ImagePage; });
+        //}
 
 
     }

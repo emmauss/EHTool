@@ -161,11 +161,11 @@ namespace EHTool.EHTool.View
             if (DetailVM.IsDownloaded)
             {
                 var item = await DownloadHelper.GetItem(DetailVM.Id);
-                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item));
+                Frame.Navigate(typeof(EHReadingPage), new DownloadedReadingViewModel(item));
             }
             else
             {
-                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.ListItem));
+                Frame.Navigate(typeof(EHReadingPage), new CommonReadingViewModel(DetailVM.ListItem));
             }
         }
         public async void FavorClick()
@@ -196,11 +196,11 @@ namespace EHTool.EHTool.View
             if (DetailVM.IsDownloaded)
             {
                 var item = await DownloadHelper.GetItem(DetailVM.Id);
-                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(item, clickitem));
+                Frame.Navigate(typeof(EHReadingPage), new DownloadedReadingViewModel(item, clickitem));
             }
             else
             {
-                Frame.Navigate(typeof(EHReadingPage), new ReadingViewModel(DetailVM.ListItem, clickitem));
+                Frame.Navigate(typeof(EHReadingPage), new CommonReadingViewModel(DetailVM.ListItem, clickitem));
             }
         }
 
