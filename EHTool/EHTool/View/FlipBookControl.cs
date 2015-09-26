@@ -446,26 +446,6 @@ namespace EHTool.EHTool.View
             InitPages();
             isLoaded = true;
         }
-        protected override void OnKeyDown(KeyRoutedEventArgs e)
-        {
-            e.Handled = true;
-            if (!isLoaded)
-            {
-                return;
-            }
-            if (e.Key == Windows.System.VirtualKey.Left && PageIndex > 1)
-            {
-                SelectedIndex -= 2;
-                return;
-            }
-            if (e.Key == Windows.System.VirtualKey.Right && Items.Count > this.PageIndex - 3)
-            {
-                SelectedIndex += 2;
-                return;
-            }
-
-            base.OnKeyDown(e);
-        }
         protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)
         {
             if (!isLoaded)

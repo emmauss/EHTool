@@ -111,6 +111,38 @@ namespace EHTool.EHTool.View
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReadingVM)));
             base.OnNavigatedTo(e);
         }
+
+        protected override void OnKeyDown(KeyRoutedEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Windows.System.VirtualKey.Right:
+                    if (ReadingVM.ReadingDirection == FlowDirection.LeftToRight)
+                    {
+                        ReadingVM.ToNext();
+                    }
+                    else
+                    {
+                        ReadingVM.ToPrev();
+                    }
+                    e.Handled = true;
+                    break;
+                case Windows.System.VirtualKey.Left:
+                    if (ReadingVM.ReadingDirection == FlowDirection.LeftToRight)
+                    {
+                        ReadingVM.ToPrev();
+                    }
+                    else
+                    {
+                        ReadingVM.ToNext();
+                    }
+                    e.Handled = true;
+                    break;
+                default:
+                    break;
+            }
+            base.OnKeyDown(e);
+        }
         public async void BackClick()
         {
             await ReadingVM.CancelTask();
