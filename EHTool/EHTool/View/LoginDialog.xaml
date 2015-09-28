@@ -10,17 +10,29 @@
     PrimaryButtonText="Login"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
-    
-    <StackPanel>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <TextBox Name="userNameTextBox" Header="User name"/>
-        <PasswordBox Name="passwordTextBox" Header="Password" />
-        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">
+        <PasswordBox Grid.Row="1" Name="passwordTextBox" Header="Password" />
+        <TextBlock Grid.Row="2" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">
                 But you MUST login before you enter exhentai mode
                 <LineBreak/>
                 Please login with your E-Hentai Forums account
         </TextBlock>
-        <ProgressBar Background="Transparent" x:Name="progressBar"/>
-        <TextBlock x:Name="errorTB" Visibility="Collapsed" Foreground="Red" Text="ERROR:YOU HAVE NO ACCESS TO EXHENTAI" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
-        <TextBlock x:Name="errorTB2" Visibility="Collapsed" Foreground="Red" Text="ERROR:CAN NOT CONNECT TO EXHENTAI" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
-    </StackPanel>
+        <ProgressBar Grid.Row="3" Background="Transparent" x:Name="progressBar"/>
+        <Button Click="{x:Bind WebLoginClicked}" Grid.Row="4" Content="Web Login" HorizontalAlignment="Stretch"/>
+        <TextBlock Grid.Row="5" x:Name="errorTB" Visibility="Collapsed" Foreground="Red" Text="ERROR:YOU HAVE NO ACCESS TO EXHENTAI" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
+        <TextBlock Grid.Row="5" x:Name="errorTB2" Visibility="Collapsed" Foreground="Red" Text="ERROR:CAN NOT CONNECT TO EXHENTAI" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
+        <TextBlock Grid.Row="5"  x:Name="errorTB3" Visibility="Collapsed" Foreground="Red" Text="ERROR:CAN NOT LOGIN,MAYBE YOU SHOULD USE WEB TO LOGIN" Style="{ThemeResource FlyoutPickerTitleTextBlockStyle}"/>
+        <WebView Visibility="Collapsed" Grid.RowSpan="5" x:Name="webView" NavigationCompleted="WebView_NavigationCompleted"/>
+
+    </Grid>
 </ContentDialog>

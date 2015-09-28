@@ -305,6 +305,7 @@
                         <ScrollViewer>
                             <StackPanel Margin="8,0" RequestedTheme="Dark">
                                 <Button Click="{x:Bind LoginClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Content="Login" Visibility="{x:Bind HasLogin,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}"/>
+                                <Button Click="{x:Bind LogoutClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Content="Logout" Visibility="{x:Bind HasLogin,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=false}"/>
                                 <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
                                 <Button Click="{x:Bind SetExcludedLanguageClick}" Content="Set Excluded Languages" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch"/>
                                 <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>

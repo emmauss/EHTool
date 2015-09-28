@@ -25,6 +25,12 @@ namespace EHTool.EHTool.Common
     {
         private string _userName;
         private string _passWord;
+        private string _cookie;
+
+        public Login(string loginCookie)
+        {
+            _cookie = loginCookie;
+        }
 
         public Login(string userName, string passWord)
         {
@@ -34,11 +40,21 @@ namespace EHTool.EHTool.Common
 
         public async Task<string> GetLoginCookie()
         {
-            string cookie = await GetCookie();
-            string manberid = CheckForMenberID(cookie);
-            string passhash = CheckForPassHash(cookie);
-            string igneous = await CheckCookieForAccess(manberid, passhash);
-            return manberid + ";" + passhash + ";" + igneous;
+            if (_userName != null && _passWord != null)
+            {
+                string cookie = await GetCookie();
+                string manberid = CheckForMenberID(cookie);
+                string passhash = CheckForPassHash(cookie);
+                string igneous = await CheckCookieForAccess(manberid, passhash);
+                return manberid + ";" + passhash + ";" + igneous;
+            }
+            else
+            {
+                string manberid = CheckForMenberID(_cookie);
+                string passhash = CheckForPassHash(_cookie);
+                string igneous = await CheckCookieForAccess(manberid, passhash);
+                return manberid + ";" + passhash + ";" + igneous;
+            }
         }
 
         private async Task<string> CheckCookieForAccess(string manberid, string passhash)
@@ -57,7 +73,7 @@ namespace EHTool.EHTool.Common
             string igneousRegexPattern = @"igneous=([^;]*)";
             var igneousRegex = Match(imgCookie, igneousRegexPattern);
             var igneous = igneousRegex.Value;
-            return igneous;
+            return igneousRegex.Success ? igneous : "igneous=";
         }
 
         private string CheckForMenberID(string cookie)

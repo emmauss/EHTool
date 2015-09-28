@@ -199,6 +199,22 @@ namespace EHTool.EHTool.View
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
             }
         }
+        public async void LogoutClick()
+        {
+            if (!HasLogin)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
+                return;
+            }
+            MessageDialog dialog = new MessageDialog("Sure?", "Logout");
+            dialog.Commands.Add(new UICommand("Logout", (IUICommand command) =>
+             {
+                 CookieHelper.Cookie = null;
+                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
+             }));
+            dialog.Commands.Add(new UICommand("No"));
+            await dialog.ShowAsync();
+        }
         public async void CacheClearClick()
         {
             await CacheHelper.ClearCache();
