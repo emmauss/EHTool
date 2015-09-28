@@ -249,6 +249,11 @@ namespace EHTool.EHTool.View
                 e.Handled = true;
             }
         }
+
+        public void OpenDetailClicked()
+        {
+            Frame.Navigate(typeof(EHDetailPage), new DetailViewModel(_clickedItem));
+        }
         public async void StartClicked()
         {
             await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>

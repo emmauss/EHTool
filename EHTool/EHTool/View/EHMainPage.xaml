@@ -16,6 +16,7 @@
             <MenuFlyoutItem Text="Pause" Click="{x:Bind PauseClicked}"/>
             <MenuFlyoutItem Text="Remove From List" Click="{x:Bind RemoveClicked}"/>
             <MenuFlyoutItem Text="Delete(Contain Folder)" Click="{x:Bind DeleteClicked}"/>
+            <MenuFlyoutItem Text="Open Detail" Click="{x:Bind OpenDetailClicked}"/>
         </MenuFlyout>
         <DataTemplate x:Key="MainListTemplate" x:DataType="model:GalleryListModel">
             <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
