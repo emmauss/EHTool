@@ -10,13 +10,14 @@ using static Common.Helpers.SettingHelpers;
 using static System.Text.RegularExpressions.Regex;
 using static Common.Helpers.JsonHelper;
 using System.Text;
+using EHTool.EHTool;
 
 namespace EHTool.Common.Helpers
 {
     public static class CookieHelper
     {
         private const string DEFAULT_UNCONFIG = ";uconfig=tl_m-uh_y-tr_2-ts_l-dm_t-ar_0-xns_0-rc_0-rx_0-ry_0-cs_a-to_a-pn_0-sc_0-sa_y-oi_n-qb_n-tf_n-hp_-hk_-cats_0-prn_y-ms_n-mt_n-xl_";
-        public static string Unconfig => GetSetting(nameof(Unconfig), DEFAULT_UNCONFIG);
+        public static string Unconfig => GetSetting(SettingNames.Unconfig, DEFAULT_UNCONFIG);
         //public const string Unconfig =
         //    ";uconfig=tl_m-uh_y-tr_2-ts_l-dm_t-ar_0-xns_0-rc_0-rx_0-ry_0-cs_a-to_a-pn_0-sc_0-sa_y-oi_n-qb_n-tf_n-hp_-hk_-cats_0-xl_-prn_y-ms_n-mt_n";
         //uconfig=tl_m-uh_y-tr_2-ts_l-dm_t-ar_0-xns_0-xl_120x1144x2168x130x1154x2178-rc_0-rx_0-ry_0-cs_a-to_a-pn_0-sc_0-sa_y-oi_n-qb_n-tf_n-hp_-hk_-cats_0-prn_y-ms_n-mt_n
@@ -34,7 +35,7 @@ namespace EHTool.Common.Helpers
             {
                 unconfig = unconfig.Remove(unconfig.Length - 2);
             }
-            SetSetting(nameof(Unconfig), unconfig);
+            SetSetting(SettingNames.Unconfig, unconfig);
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync("LanguageSetting.json", CreationCollisionOption.OpenIfExists);
             var jsStr = ToJson(languageList);
             await FileIO.WriteTextAsync(file, jsStr, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
@@ -71,11 +72,11 @@ namespace EHTool.Common.Helpers
         {
             get
             {
-                return GetSetting<string>("cookie");
+                return GetSetting<string>(SettingNames.Cookie);
             }
             set
             {
-                SetSetting("cookie", value);
+                SetSetting(SettingNames.Cookie, value);
             }
         }
 

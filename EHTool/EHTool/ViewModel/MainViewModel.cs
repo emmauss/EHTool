@@ -40,18 +40,18 @@ namespace EHTool.EHTool.ViewModel
         {
             get
             {
-                return GetSetting<bool>("IsExhentaiMode");
+                return GetSetting<bool>(SettingNames.IsExhentaiMode);
             }
             set
             {
-                SetSetting("IsExhentaiMode", value);
+                SetSetting(SettingNames.IsExhentaiMode, value);
                 ServerType = value ? ServerTypes.ExHentai : ServerTypes.EHentai;
                 Initialize();
             }
         }
 
 
-        internal MainViewModel() : this(GetSetting<bool>("IsExhentaiMode") ? ServerTypes.ExHentai : ServerTypes.EHentai) { }
+        internal MainViewModel() : this(GetSetting<bool>(SettingNames.IsExhentaiMode) ? ServerTypes.ExHentai : ServerTypes.EHentai) { }
 
         internal MainViewModel(ServerTypes type)
         {
@@ -183,7 +183,7 @@ namespace EHTool.EHTool.ViewModel
                 }
                 else
                 {
-                    if (GetSetting<bool>("IsAutoDownload") &&
+                    if (GetSetting<bool>(SettingNames.IsAutoDownload) &&
                         (DownloadList[i].DownloadedCount < DownloadList[i].MaxImageCount || DownloadList[i].Items == null))
                     {
                         await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>

@@ -91,22 +91,22 @@ namespace EHTool.EHTool.View
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsReadingRTL");
+                return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingRightToLeft);
             }
             set
             {
-                SettingHelpers.SetSetting("IsReadingRTL", value);
+                SettingHelpers.SetSetting(SettingNames.IsReadingRightToLeft, value);
             }
         }
         public bool IsReadingDoublePage
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsReadingDoublePage");
+                return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage);
             }
             set
             {
-                SettingHelpers.SetSetting("IsReadingDoublePage", value);
+                SettingHelpers.SetSetting(SettingNames.IsReadingDoublePage, value);
             }
         }
         public bool IsPhone => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");

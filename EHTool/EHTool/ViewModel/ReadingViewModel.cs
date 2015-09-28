@@ -22,7 +22,7 @@ namespace EHTool.EHTool.ViewModel
         public bool IsLoading { get; protected set; }
         public bool IsFailed { get; protected set; }
         private DispatcherTimer _timer;
-        public int TimerInterval { get; set; } = SettingHelpers.GetSetting<bool>("IsReadingDoublePage") ? 40 : 20;
+        public int TimerInterval { get; set; } = SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage) ? 40 : 20;
         private bool _isAutoPlay;
         public bool IsAutoPlay
         {
@@ -35,7 +35,7 @@ namespace EHTool.EHTool.ViewModel
             }
         }
         public FlowDirection ReadingDirection 
-            => SettingHelpers.GetSetting<bool>("IsReadingRTL") ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            => SettingHelpers.GetSetting<bool>(SettingNames.IsReadingRightToLeft) ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
         protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         public ObservableCollection<ImageModel> ImageList { get; protected set; } = new ObservableCollection<ImageModel>();
         protected int _selectedIndex = -1;
@@ -91,7 +91,7 @@ namespace EHTool.EHTool.ViewModel
 
         internal void ToNext()
         {
-            if (SettingHelpers.GetSetting<bool>("IsReadingDoublePage"))
+            if (SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage))
             {
                 if (MaxPageCount > SelectedIndex + 2)
                 {
@@ -109,7 +109,7 @@ namespace EHTool.EHTool.ViewModel
 
         internal void ToPrev()
         {
-            if (SettingHelpers.GetSetting<bool>("IsReadingDoublePage"))
+            if (SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage))
             {
                 if (SelectedIndex - 2 > -1)
                 {
@@ -127,7 +127,7 @@ namespace EHTool.EHTool.ViewModel
 
         private void TimerTick(object sender, object e)
         {
-            if (SettingHelpers.GetSetting<bool>("IsReadingDoublePage"))
+            if (SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage))
             {
                 if (MaxPageCount > SelectedIndex + 2)
                 {
@@ -166,7 +166,7 @@ namespace EHTool.EHTool.ViewModel
 
         internal async Task Refresh()
         {
-            if (SettingHelpers.GetSetting<bool>("IsReadingDoublePage"))
+            if (SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage))
             {
                 await ImageList[SelectedIndex].Refresh();
                 if (SelectedIndex + 1 < MaxPageCount)

@@ -17,7 +17,7 @@ namespace EHTool.EHTool.Common
 
         protected override DataTemplate SelectTemplateCore(object item)
         {
-            return SettingHelpers.GetSetting<bool>("IsReadingDoublePage") ? FlipBookView : CommonView;
+            return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage) ? FlipBookView : CommonView;
         }
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {

@@ -92,11 +92,11 @@ namespace EHTool.EHTool.View
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsReadingRTL");
+                return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingRightToLeft);
             }
             set
             {
-                SettingHelpers.SetSetting("IsReadingRTL", value);
+                SettingHelpers.SetSetting(SettingNames.IsReadingRightToLeft, value);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReadingRTL)));
             }
         }
@@ -104,11 +104,11 @@ namespace EHTool.EHTool.View
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsReadingDoublePage");
+                return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage);
             }
             set
             {
-                SettingHelpers.SetSetting("IsReadingDoublePage", value);
+                SettingHelpers.SetSetting(SettingNames.IsReadingDoublePage, value);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReadingDoublePage)));
             }
         }
@@ -116,11 +116,11 @@ namespace EHTool.EHTool.View
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>("IsAutoDownload");
+                return SettingHelpers.GetSetting<bool>(SettingNames.IsAutoDownload);
             }
             set
             {
-                SettingHelpers.SetSetting("IsAutoDownload", value);
+                SettingHelpers.SetSetting(SettingNames.IsAutoDownload, value);
             }
         }
 

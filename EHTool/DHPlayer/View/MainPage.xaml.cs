@@ -19,6 +19,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI;
+using EHTool.EHTool;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
 
@@ -88,22 +89,22 @@ namespace EHTool
         {
             get
             {
-                return SettingHelpers.GetSetting("IsForceDecodeAudio",true);
+                return SettingHelpers.GetSetting(SettingNames.IsForceDecodeAudio,true);
             }
             set
             {
-                SettingHelpers.SetSetting(nameof(IsForceDecodeAudio), value);
+                SettingHelpers.SetSetting(SettingNames.IsForceDecodeAudio, value);
             }
         }
         public bool IsForceDecodeVideo
         {
             get
             {
-                return SettingHelpers.GetSetting("IsForceDecodeVideo",true);
+                return SettingHelpers.GetSetting(SettingNames.IsForceDecodeVideo,true);
             }
             set
             {
-                SettingHelpers.SetSetting(nameof(IsForceDecodeVideo), value);
+                SettingHelpers.SetSetting(SettingNames.IsForceDecodeVideo, value);
             }
         }
 

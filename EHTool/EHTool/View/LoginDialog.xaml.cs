@@ -47,6 +47,10 @@ namespace EHTool.EHTool.View
             {
                 errorTB.Visibility = Visibility.Visible;
             }
+            catch(LoginException)
+            {
+                errorTB.Visibility = Visibility.Visible;
+            }
             progressBar.IsIndeterminate = false;
         }
     }
