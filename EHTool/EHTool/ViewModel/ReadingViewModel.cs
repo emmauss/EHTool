@@ -22,7 +22,7 @@ namespace EHTool.EHTool.ViewModel
         public bool IsLoading { get; protected set; }
         public bool IsFailed { get; protected set; }
         private DispatcherTimer _timer;
-        public int TimerInterval { get; set; } = 10;
+        public int TimerInterval { get; set; } = SettingHelpers.GetSetting<bool>("IsReadingDoublePage") ? 40 : 20;
         private bool _isAutoPlay;
         public bool IsAutoPlay
         {
