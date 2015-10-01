@@ -27,7 +27,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(LOCALFOLDER_DATABASE_NAME, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<LocalFolderModel>>(jsStr) : new List<LocalFolderModel>();
-            var index = items.FindIndex((a) => { return a.FolderToken == token; });
+            var index = items.FindIndex((a) => a.FolderToken == token);
             if (index == -1)
             {
                 items.Insert(0, new LocalFolderModel() { FolderToken = token, FolderName = name, });
@@ -46,7 +46,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(LOCALFOLDER_DATABASE_NAME, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<LocalFolderModel>>(jsStr) : new List<LocalFolderModel>();
-            var index = items.FindIndex((a) => { return a.FolderToken == folderToken; });
+            var index = items.FindIndex((a) => a.FolderToken == folderToken);
             if (index != -1)
             {
                 items.RemoveAt(index);

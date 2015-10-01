@@ -102,15 +102,24 @@ namespace EHTool.EHTool.Model
             if (Items.Count < MaxImageCount || MaxImageCount == 0)
             {
                 Debug.WriteLine("Getting image list...");
-                GalleryDetail detail = new GalleryDetail(ID, Token, ServerType);
-                var list = await detail.GetImagePageList();
-                foreach (var item in list)
+                try
                 {
-                    Items.Add(new DownloadItemPagesModel(item));
+                    GalleryDetail detail = new GalleryDetail(ID, Token, ServerType);
+                    var list = await detail.GetImagePageList();
+                    foreach (var item in list)
+                    {
+                        Items.Add(new DownloadItemPagesModel(item));
+                    }
+                    MaxImageCount = Items.Count;
+                    OnPropertyChanged(nameof(MaxImageCount));
+                    await DownloadHelper.AlterDownload(this);
                 }
-                MaxImageCount = Items.Count;
-                OnPropertyChanged(nameof(MaxImageCount));
-                await DownloadHelper.AlterDownload(this);
+                catch
+                {
+                    IsDownloading = false;
+                    OnPropertyChanged(nameof(IsDownloading));
+                    return;
+                }
             }
             StorageFolder folder;
             if (IsInsideApp)
@@ -208,7 +217,7 @@ namespace EHTool.EHTool.Model
                     }
                 }
                 Items[i].State = DownloadState.Complete;
-                DownloadedCount = Items.Count((a) => { return a.State == DownloadState.Complete; });
+                DownloadedCount = Items.Count((a) => a.State == DownloadState.Complete);
                 OnPropertyChanged(nameof(DownloadedCount));
                 await DownloadHelper.AlterDownload(this);
                 Debug.WriteLine($"Page {i} complete");

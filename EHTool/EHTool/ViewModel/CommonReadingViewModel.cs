@@ -37,7 +37,7 @@ namespace EHTool.EHTool.ViewModel
                 }
                 if (_indexItem != null)
                 {
-                    _selectedIndex = ImageList.ToList().FindIndex((a) => { return a.ImagePage == _indexItem.ImagePage; });
+                    _selectedIndex = ImageList.ToList().FindIndex((a) => a.ImagePage == _indexItem.ImagePage);
                 }
             }
             catch (System.Net.WebException)

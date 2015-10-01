@@ -24,7 +24,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(dbName, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<GalleryListModel>>(jsStr) : new List<GalleryListModel>();
-            var index = items.FindIndex((a) => { return a.ID == item.ID; });
+            var index = items.FindIndex((a) => a.ID == item.ID);
             if (index == -1)
             {
                 items.Add(item);
@@ -37,7 +37,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(dbName, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<GalleryListModel>>(jsStr) : new List<GalleryListModel>();
-            var index = items.FindIndex((a) => { return a.ID == item.ID; });
+            var index = items.FindIndex((a) => a.ID == item.ID);
             if (index != -1)
             {
                 items.RemoveAt(index);
@@ -50,7 +50,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(dbName, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<GalleryListModel>>(jsStr) : new List<GalleryListModel>();
-            var index = items.FindIndex((a) => { return a.ID == id; });
+            var index = items.FindIndex((a) => a.ID == id);
             if (index != -1)
             {
                 items.RemoveAt(index);
@@ -63,30 +63,16 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(dbName, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<GalleryListModel>>(jsStr) : new List<GalleryListModel>();
-            var index = items.FindIndex((a) => { return a.ID == item.ID; });
-            if (index == -1)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            var index = items.FindIndex((a) => a.ID == item.ID);
+            return index != -1;
         }
         public static async Task<bool> IsExists(string id, string dbName)
         {
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(dbName, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<GalleryListModel>>(jsStr) : new List<GalleryListModel>();
-            var index = items.FindIndex((a) => { return a.ID == id; });
-            if (index == -1)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            var index = items.FindIndex((a) => a.ID == id);
+            return index != -1;
         }
 
         private static IEnumerable<GalleryListModel> FromJson(string json)

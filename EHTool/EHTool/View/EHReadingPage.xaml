@@ -108,7 +108,10 @@
         </Grid>
         <Grid Background="White" Visibility="{x:Bind ReadingVM.IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Grid.Row="0" Text="Loading Image List"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="0" Content="&#xE112;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind BackClick}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock Grid.Row="0" Text="Loading Image List"/>
+                </StackPanel>
                 <ProgressBar Grid.Row="1" IsIndeterminate="{x:Bind ReadingVM.IsLoading,Mode=OneWay}"/>
             </StackPanel>
         </Grid>

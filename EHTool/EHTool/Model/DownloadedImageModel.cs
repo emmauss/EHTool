@@ -78,9 +78,9 @@ namespace EHTool.EHTool.Model
                 if (!_cancelTokenSource.Token.IsCancellationRequested)
                 {
                     await DownloadHelper.AlterDownload(_id, _pageIndex, DownloadState.Complete);
-                    var index = MainViewModel.Current.DownloadList.ToList().FindIndex((item) => { return item.ID == _id; });
+                    var index = MainViewModel.Current.DownloadList.ToList().FindIndex((item) => item.ID == _id);
                     MainViewModel.Current.DownloadList[index].Items[_pageIndex].State = DownloadState.Complete;
-                    MainViewModel.Current.DownloadList[index].DownloadedCount = MainViewModel.Current.DownloadList[index].Items.Count((a) => { return a.State == DownloadState.Complete; });
+                    MainViewModel.Current.DownloadList[index].DownloadedCount = MainViewModel.Current.DownloadList[index].Items.Count((a) => a.State == DownloadState.Complete);
                 }
                 else
                 {

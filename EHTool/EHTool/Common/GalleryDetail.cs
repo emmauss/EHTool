@@ -58,10 +58,28 @@ namespace EHTool.EHTool.Common
         {
             var detail = await GetDetail();
             IEnumerable<ImageListModel> list = detail.ImageList;
-            for (int i = 1; i < detail.DetailPageCount; i++)
+            if (detail.DetailPageCount > 1)
             {
-                var temp = await GetDetail(i);
-                list = list.Concat(temp.ImageList);
+                string[] pagelinklist = new string[detail.DetailPageCount - 1];
+                for (int i = 1; i < detail.DetailPageCount; i++)
+                {
+                    pagelinklist[i - 1] = $"{HostLink}g/{Id}/{Token}/?p={i}";
+                }
+                var downloads = pagelinklist.Select(link => GetStringWithCookie(link, Cookie + Unconfig));
+                var task = Task.WhenAll(downloads);
+                var htmls = await task;
+                if (task.Status == TaskStatus.RanToCompletion)
+                {
+                    foreach (var item in htmls)
+                    {
+                        list = list.Concat(GetDetailFromString(item).ImageList);
+                    }
+                    list = list.OrderBy((a) => a.ImageIndex);
+                }
+                else
+                {
+                    throw new System.Net.WebException();
+                }
             }
             return list;
         }
@@ -168,10 +186,10 @@ namespace EHTool.EHTool.Common
                              select new ImageListModel
                              {
                                  ServerType = ServerType,
-                                 ImageName = (a.InnerText),
-                                 ImageIndex = a.GetNodeByName("img").Attributes["alt"].Value,
+                                 ImageName = a.InnerText,
+                                 ImageIndex = int.Parse(a.GetNodeByName("img").Attributes["alt"].Value),
                                  ImageLink = a.GetNodeByName("img").Attributes["src"].Value,
-                                 ImagePage = (a.GetNodeByName("a").Attributes["href"].Value) + "?",
+                                 ImagePage = $"{a.GetNodeByName("a").Attributes["href"].Value}?",
                              }).ToList(),
                 CommentList = (from a in doc.GetElementbyId("cdiv").ChildNodes
                                where a.HasChildNodes && a.FirstChild.Name == "div"

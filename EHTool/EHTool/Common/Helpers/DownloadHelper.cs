@@ -30,7 +30,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(SAVE_DATABASE_NAME, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<DownloadItemModel>>(jsStr) : new List<DownloadItemModel>();
-            var index = items.FindIndex((a) => { return a.ID == item.ID; });
+            var index = items.FindIndex((a) => a.ID == item.ID);
             if (index == -1)
             {
                 items.Insert(0,item);
@@ -43,7 +43,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(SAVE_DATABASE_NAME, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<DownloadItemModel>>(jsStr) : new List<DownloadItemModel>();
-            var index = items.FindIndex((a) => { return a.ID == item.ID; });
+            var index = items.FindIndex((a) => a.ID == item.ID);
             if (index != -1)
             {
                 if (isDeleteFolder)
@@ -70,7 +70,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(SAVE_DATABASE_NAME, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<DownloadItemModel>>(jsStr) : new List<DownloadItemModel>();
-            var index = items.FindIndex((a) => { return a.ID == id; });
+            var index = items.FindIndex((a) => a.ID == id);
             return index != -1 ? items[index] : null;
         }
 
@@ -79,11 +79,11 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(SAVE_DATABASE_NAME, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<DownloadItemModel>>(jsStr) : new List<DownloadItemModel>();
-            var index = items.FindIndex((a) => { return a.ID == id; });
+            var index = items.FindIndex((a) => a.ID == id);
             if (index != -1)
             {
                 items[index].Items[pageIndex].State = state;
-                items[index].DownloadedCount = items[index].Items.Count((a) => { return a.State == DownloadState.Complete; });
+                items[index].DownloadedCount = items[index].Items.Count((a) => a.State == DownloadState.Complete);
                 jsStr = ToJson(items);
                 await FileIO.WriteTextAsync(file, jsStr, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             }
@@ -94,7 +94,7 @@ namespace EHTool.EHTool.Common.Helpers
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(SAVE_DATABASE_NAME, CreationCollisionOption.OpenIfExists);
             var jsStr = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
             var items = jsStr != "" ? FromJson<List<DownloadItemModel>>(jsStr) : new List<DownloadItemModel>();
-            var index = items.FindIndex((a) => { return a.ID == item.ID; });
+            var index = items.FindIndex((a) => a.ID == item.ID);
             if (index != -1)
             {
                 items[index] = item;
