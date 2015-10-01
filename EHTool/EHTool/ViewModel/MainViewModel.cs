@@ -73,6 +73,7 @@ namespace EHTool.EHTool.ViewModel
                 await LoadDownloadList();
                 await CheckForDownloadList();
                 await LoadLocalFolderList();
+                await CheckForLocalFolder();
                 MainList = new ObservableCollection<GalleryListModel>(await GetGalleryList());
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainList)));
             }
@@ -96,6 +97,39 @@ namespace EHTool.EHTool.ViewModel
             }
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+        }
+
+        private async Task CheckForLocalFolder()
+        {
+            if (LocalFolderList.Count == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < LocalFolderList.Count; i++)
+            {
+                StorageFolder folder;
+                if (StorageApplicationPermissions.FutureAccessList.ContainsItem(LocalFolderList[i].FolderToken))
+                {
+                    try
+                    {
+                        folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(LocalFolderList[i].FolderToken);
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        folder = null;
+                    }
+                }
+                else
+                {
+                    folder = null;
+                }
+                if (folder == null)
+                {
+                    await LocalFolderHelper.Remove(LocalFolderList[i]);
+                    LocalFolderList.Remove(LocalFolderList[i]);
+                }
+
+            }
         }
 
         internal async Task Refresh()
