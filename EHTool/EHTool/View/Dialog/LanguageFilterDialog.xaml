@@ -8,9 +8,7 @@
     xmlns:model="using:EHTool.EHTool.Model"
     xmlns:converter="using:Common.Converters"
     mc:Ignorable="d"
-    Title="Excluded Languages"
-    PrimaryButtonText="Apply"
-    SecondaryButtonText="Cancel"
+    x:Uid="XLanguageDialog"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
     <ContentControl.Resources>
         <converter:NullableBooleanToBooleanConverter x:Key="NullableBooleanToBooleanConverter"/>

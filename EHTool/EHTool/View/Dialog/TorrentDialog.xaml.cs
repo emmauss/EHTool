@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using EHTool.EHTool.Common;
 
 // “内容对话框”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上进行了说明
 
@@ -52,7 +53,7 @@ namespace EHTool.EHTool.View
             }
             catch (System.Net.WebException)
             {
-                MessageDialog dialog = new MessageDialog($"Can not connect to the server", "Web Error");
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
                 await dialog.ShowAsync();
             }
             progressBar.IsIndeterminate = false;
@@ -76,7 +77,7 @@ namespace EHTool.EHTool.View
             progressBar.IsIndeterminate = false;
         }
 
-        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             var item = listView.SelectedItem as TorrentModel;
             if (item != null)
@@ -84,8 +85,6 @@ namespace EHTool.EHTool.View
                 DataPackage data = new DataPackage();
                 data.SetText(item.TorrentLink);
                 Clipboard.SetContent(data);
-                MessageDialog dialog = new MessageDialog($"Success");
-                await dialog.ShowAsync();
             }
         }
     }

@@ -1,5 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -15,6 +120,39 @@
   <data name="AboutButton.Text" xml:space="preserve">
     <value>關於</value>
   </data>
+  <data name="AddDownloadDialog.PrimaryButtonText" xml:space="preserve">
+    <value>開始下載</value>
+  </data>
+  <data name="AddDownloadDialog.SecondaryButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="AddDownloadDialog.Title" xml:space="preserve">
+    <value>新建下載</value>
+  </data>
+  <data name="AddFavorString" xml:space="preserve">
+    <value>Add Favor</value>
+  </data>
+  <data name="AddFolderButton.Content" xml:space="preserve">
+    <value>添加資料夾</value>
+  </data>
+  <data name="AutoDownloadSwitch.Header" xml:space="preserve">
+    <value>啟動時自動下載</value>
+  </data>
+  <data name="AutoPlayIntervalTextBox.Header" xml:space="preserve">
+    <value>自動閱讀間隔（秒）</value>
+  </data>
+  <data name="AutoPlaySwitch.Header" xml:space="preserve">
+    <value>自動閱讀</value>
+  </data>
+  <data name="CacheClearDialogContent" xml:space="preserve">
+    <value>緩存清理完畢</value>
+  </data>
+  <data name="ClearCacheButton.Content" xml:space="preserve">
+    <value>清理緩存</value>
+  </data>
+  <data name="CommentTextBlock.Text" xml:space="preserve">
+    <value>評論：</value>
+  </data>
   <data name="DecodeTypeSwitch.Header" xml:space="preserve">
     <value>解碼類型</value>
   </data>
@@ -24,16 +162,208 @@
   <data name="DecodeTypeSwitch.OnContent" xml:space="preserve">
     <value>系統</value>
   </data>
+  <data name="DeleteDialogContent" xml:space="preserve">
+    <value>從你的電腦中删除？</value>
+  </data>
+  <data name="DeleteDialogTitle" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="DeleteMenuItem.Text" xml:space="preserve">
+    <value>從清單中移除並删除資料夾</value>
+  </data>
+  <data name="DownloadButton.Content" xml:space="preserve">
+    <value>下載</value>
+  </data>
+  <data name="DownloadPivotHeader.Text" xml:space="preserve">
+    <value>下載</value>
+  </data>
+  <data name="DownloadSuggestTextBlock.Text" xml:space="preserve">
+    <value>EHTool建議你使用更可靠更快捷的Torrent下載</value>
+  </data>
+  <data name="DownloadToAppSwitch.Header" xml:space="preserve">
+    <value>下載到應用資料夾內部</value>
+  </data>
+  <data name="DownloadTorrentRun.Text" xml:space="preserve">
+    <value>下載Torrent</value>
+  </data>
+  <data name="ExHentaiAccessDialogContent" xml:space="preserve">
+    <value>你沒有進入ExHentai的許可權</value>
+  </data>
+  <data name="FavorPivotHeader.Text" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="FolderLocationTextBlock.Text" xml:space="preserve">
+    <value>資料夾位置：</value>
+  </data>
+  <data name="FolderNameTextBox.Header" xml:space="preserve">
+    <value>資料夾名稱：</value>
+  </data>
   <data name="ForceDecodeAudioSwitch.Header" xml:space="preserve">
     <value>強制解碼音訊</value>
   </data>
   <data name="ForceDecodeVideoSwitch.Header" xml:space="preserve">
     <value>強制解碼視頻</value>
   </data>
+  <data name="ImageTextBlock.Text" xml:space="preserve">
+    <value>圖片清單：</value>
+  </data>
+  <data name="InfomationTextBlock.Text" xml:space="preserve">
+    <value>資訊：</value>
+  </data>
+  <data name="LoadingTextBlock.Text" xml:space="preserve">
+    <value>載入圖片清單中…</value>
+  </data>
+  <data name="LocalFolderPivotHeader.Text" xml:space="preserve">
+    <value>本地</value>
+  </data>
+  <data name="LoginButton.Content" xml:space="preserve">
+    <value>登入</value>
+  </data>
+  <data name="LoginDialog.PrimaryButtonText" xml:space="preserve">
+    <value>登入</value>
+  </data>
+  <data name="LoginDialog.SecondaryButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="LoginDialog.Title" xml:space="preserve">
+    <value>登入</value>
+  </data>
+  <data name="LoginErrorTextBlock1.Text" xml:space="preserve">
+    <value>錯誤：你沒有進入ExHentai模式的許可權</value>
+  </data>
+  <data name="LoginErrorTextBlock2.Text" xml:space="preserve">
+    <value>錯誤：無法連接到ExHentai</value>
+  </data>
+  <data name="LoginErrorTextBlock3.Text" xml:space="preserve">
+    <value>錯誤：無法登陸，或許你可以嘗試使用Web登入</value>
+  </data>
+  <data name="LogoutButton.Content" xml:space="preserve">
+    <value>登出</value>
+  </data>
+  <data name="LogoutString" xml:space="preserve">
+    <value>註銷</value>
+  </data>
   <data name="MainPageHeader.Text" xml:space="preserve">
     <value>視訊媒體櫃</value>
   </data>
+  <data name="MainPivotHeadder.Text" xml:space="preserve">
+    <value>主頁</value>
+  </data>
+  <data name="NoHitsFoundDialogContent" xml:space="preserve">
+    <value>找不到蒐索內容</value>
+  </data>
+  <data name="NoImageDialogContent" xml:space="preserve">
+    <value>資料夾內找不到影像檔案</value>
+  </data>
+  <data name="NoString" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="Notice1.Text" xml:space="preserve">
+    <value>在進入ExHentai模式之前你必須登入</value>
+  </data>
+  <data name="Notice2.Text" xml:space="preserve">
+    <value>請使用你的E-Hentai論壇帳號登入</value>
+  </data>
+  <data name="OpenDetailMenuItem.Text" xml:space="preserve">
+    <value>打開詳情</value>
+  </data>
   <data name="OpenFileButton.Content" xml:space="preserve">
     <value>開啟檔案</value>
+  </data>
+  <data name="PauseMenuItem.Text" xml:space="preserve">
+    <value>暫停下載</value>
+  </data>
+  <data name="ReadButton.Content" xml:space="preserve">
+    <value>開始閱讀</value>
+  </data>
+  <data name="ReadingDirectionSwitch.Header" xml:space="preserve">
+    <value>閱讀方向</value>
+  </data>
+  <data name="ReadingDirectionSwitch.OffContent" xml:space="preserve">
+    <value>左→右</value>
+  </data>
+  <data name="ReadingDirectionSwitch.OnContent" xml:space="preserve">
+    <value>右→左</value>
+  </data>
+  <data name="ReadingModeSwitch.Header" xml:space="preserve">
+    <value>閱讀模式</value>
+  </data>
+  <data name="ReadingModeSwitch.OffContent" xml:space="preserve">
+    <value>單頁閱讀</value>
+  </data>
+  <data name="ReadingModeSwitch.OnContent" xml:space="preserve">
+    <value>雙頁閱讀</value>
+  </data>
+  <data name="RemoveDialogContent" xml:space="preserve">
+    <value>從清單中移除？</value>
+  </data>
+  <data name="RemoveDialogTitle" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="RemoveFavorString" xml:space="preserve">
+    <value>Remove Favor</value>
+  </data>
+  <data name="RemoveMenuItem.Text" xml:space="preserve">
+    <value>從清單中移除</value>
+  </data>
+  <data name="SearchItem.Text" xml:space="preserve">
+    <value>蒐索</value>
+  </data>
+  <data name="SearchOptionRun.Text" xml:space="preserve">
+    <value>蒐索選項</value>
+  </data>
+  <data name="ServerModeSwitch.Header" xml:space="preserve">
+    <value>服務器模式</value>
+  </data>
+  <data name="StartMenuItem.Text" xml:space="preserve">
+    <value>開始下載</value>
+  </data>
+  <data name="SureString" xml:space="preserve">
+    <value>確認？</value>
+  </data>
+  <data name="TorrentDownloadDialog.PrimaryButtonText" xml:space="preserve">
+    <value>複製連結</value>
+  </data>
+  <data name="TorrentDownloadDialog.SecondaryButtonText" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="TorrentDownloadDialog.Title" xml:space="preserve">
+    <value>下載Torrent</value>
+  </data>
+  <data name="TorrentNoticeTextBlock.Text" xml:space="preserve">
+    <value>按兩下下載到你的下載庫資料夾中</value>
+  </data>
+  <data name="UserNameTextBox.Header" xml:space="preserve">
+    <value>用戶名</value>
+  </data>
+  <data name="UserPasswordBox.Header" xml:space="preserve">
+    <value>密碼</value>
+  </data>
+  <data name="WarningString" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="WebErrorDialogContent" xml:space="preserve">
+    <value>無法連接到服務器</value>
+  </data>
+  <data name="WebErrorDialogTitle" xml:space="preserve">
+    <value>網絡錯誤</value>
+  </data>
+  <data name="WebLogButton.Content" xml:space="preserve">
+    <value>使用Web登入</value>
+  </data>
+  <data name="XLanguageButton.Content" xml:space="preserve">
+    <value>排除語言</value>
+  </data>
+  <data name="XLanguageDialog.PrimaryButtonText" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="XLanguageDialog.Title" xml:space="preserve">
+    <value>使用Web登入</value>
+  </data>
+  <data name="XLanguageDialogSecondaryButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="YesString" xml:space="preserve">
+    <value>是</value>
   </data>
 </root>

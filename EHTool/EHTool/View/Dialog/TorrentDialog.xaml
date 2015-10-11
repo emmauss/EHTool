@@ -7,9 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:model="using:EHTool.EHTool.Model"
-    Title="Download Torrent"
-    PrimaryButtonText="Copy Link"
-    SecondaryButtonText="Back"
+    x:Uid="TorrentDownloadDialog"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
 
     <Grid>
@@ -18,7 +16,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock TextWrapping="WrapWholeWords" Text="Double click to download,it will download to you download library"/>
+        <TextBlock x:Uid="TorrentNoticeTextBlock" TextWrapping="WrapWholeWords"/>
         <ProgressBar Grid.Row="1" Background="Transparent" x:Name="progressBar"/>
         <ListView Grid.Row="2" x:Name="listView" DoubleTapped="{x:Bind ListDoubleTapped}" ItemsSource="{x:Bind TorrentList,Mode=OneWay}">
             <ListView.ItemTemplate>

@@ -42,7 +42,7 @@ namespace EHTool.EHTool.ViewModel
             }
             catch (System.Net.WebException)
             {
-                MessageDialog dialog = new MessageDialog("Can not connect to server", "Web Error");
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
                 await dialog.ShowAsync();
             }
         }

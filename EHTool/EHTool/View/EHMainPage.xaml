@@ -12,11 +12,11 @@
 
     <Page.Resources>
         <MenuFlyout x:Key="DownloadMenu">
-            <MenuFlyoutItem Text="Start" Click="{x:Bind StartClicked}"/>
-            <MenuFlyoutItem Text="Pause" Click="{x:Bind PauseClicked}"/>
-            <MenuFlyoutItem Text="Remove From List" Click="{x:Bind RemoveClicked}"/>
-            <MenuFlyoutItem Text="Delete(Contain Folder)" Click="{x:Bind DeleteClicked}"/>
-            <MenuFlyoutItem Text="Open Detail" Click="{x:Bind OpenDetailClicked}"/>
+            <MenuFlyoutItem x:Uid="StartMenuItem" Click="{x:Bind StartClicked}"/>
+            <MenuFlyoutItem x:Uid="PauseMenuItem" Click="{x:Bind PauseClicked}"/>
+            <MenuFlyoutItem x:Uid="RemoveMenuItem" Click="{x:Bind RemoveClicked}"/>
+            <MenuFlyoutItem x:Uid="DeleteMenuItem" Click="{x:Bind DeleteClicked}"/>
+            <MenuFlyoutItem x:Uid="OpenDetailMenuItem" Click="{x:Bind OpenDetailClicked}"/>
         </MenuFlyout>
         <DataTemplate x:Key="MainListTemplate" x:DataType="model:GalleryListModel">
             <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
@@ -48,17 +48,6 @@
             <MenuFlyoutItem Text="Remove From List" Click="{x:Bind LocalFolderRemoveClicked}"/>
         </MenuFlyout>
         <Style x:Key="PivotStyle1" TargetType="Pivot">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="IsTabStop" Value="False"/>
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <Grid/>
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Pivot">
@@ -254,28 +243,9 @@
             </Setter>
         </Style>
         <Style x:Key="PivotItemStyle1" TargetType="PivotItem">
-            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="IsTabStop" Value="False"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="PivotItem">
-                        <Grid Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="Pivot">
-                                    <VisualState x:Name="Right"/>
-                                    <VisualState x:Name="Left"/>
-                                    <VisualState x:Name="Center"/>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -298,19 +268,19 @@
         <Pivot x:Name="pivot" Grid.Row="1" Style="{StaticResource PivotStyle1}" ItemContainerStyle="{StaticResource PivotItemStyle1}">
             <PivotItem>
                 <PivotItem.Header>
-                    <local:PivotItemHeaderControl Icon="Home" Text="MainPage" />
+                    <local:PivotItemHeaderControl x:Uid="MainPivotHeadder" Icon="Home" />
                 </PivotItem.Header>
                 <SplitView IsPaneOpen="{x:Bind IsMainPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <ScrollViewer>
                             <StackPanel Margin="8,0" RequestedTheme="Dark">
-                                <Button Click="{x:Bind LoginClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Content="Login" Visibility="{x:Bind HasLogin,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}"/>
-                                <Button Click="{x:Bind LogoutClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Content="Logout" Visibility="{x:Bind HasLogin,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=false}"/>
-                                <Button Content="Clear Cache" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
-                                <Button Click="{x:Bind SetExcludedLanguageClick}" Content="Set Excluded Languages" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch"/>
-                                <ToggleSwitch IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" Header="Server Mode" OffContent="E-Hentai" OnContent="ExHentai"/>
-                                <ToggleSwitch IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}" Header="Layout Direction" OnContent="Right To Left" OffContent="Left To Right"/>
-                                <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                                <Button x:Uid="LoginButton" Click="{x:Bind LoginClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Visibility="{x:Bind HasLogin,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}"/>
+                                <Button x:Uid="LogoutButton" Click="{x:Bind LogoutClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch"  Visibility="{x:Bind HasLogin,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=false}"/>
+                                <Button x:Uid="ClearCacheButton" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind CacheClearClick}"/>
+                                <Button x:Uid="XLanguageButton" Click="{x:Bind SetExcludedLanguageClick}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch"/>
+                                <ToggleSwitch x:Uid="ServerModeSwitch" IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" OffContent="E-Hentai" OnContent="ExHentai"/>
+                                <ToggleSwitch x:Uid="ReadingDirectionSwitch" IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}"/>
+                                <ToggleSwitch x:Uid="ReadingModeSwitch" Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}"/>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
@@ -318,7 +288,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock Tapped="{x:Bind SearchOptionTapped}" Style="{ThemeResource TitleTextBlockStyle}">
                                         <!--<Run FontFamily="Segoe MDL2 Assets" Text="&#xE937;"/>-->
-                                        <Run Text="Search Option"/>
+                                        <Run x:Uid="SearchOptionRun"/>
                                     </TextBlock>
                                     <Grid Visibility="{x:Bind IsSearchOptionShow,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="1" Padding="8" BorderBrush="#7FFFFFFF" BorderThickness="0,2,0,0">
                                         <Grid.RowDefinitions>
@@ -380,13 +350,13 @@
             </PivotItem>
             <PivotItem >
                 <PivotItem.Header>
-                    <local:PivotItemHeaderControl Icon="Favorite" Text="Favor" />
+                    <local:PivotItemHeaderControl Icon="Favorite" x:Uid="FavorPivotHeader" />
                 </PivotItem.Header>
                 <SplitView IsPaneOpen="{x:Bind IsFavorPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
-                            <ToggleSwitch IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}" Header="Layout Direction" OnContent="Right To Left" OffContent="Left To Right"/>
-                            <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                            <ToggleSwitch x:Uid="ReadingDirectionSwitch" IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}"/>
+                            <ToggleSwitch x:Uid="ReadingModeSwitch" Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}"/>
                         </StackPanel>
                     </SplitView.Pane>
                     <GridView IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.FavorList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" ></GridView>
@@ -394,14 +364,14 @@
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
-                    <local:PivotItemHeaderControl Icon="Download" Text="Download" />
+                    <local:PivotItemHeaderControl Icon="Download" x:Uid="DownloadPivotHeader"/>
                 </PivotItem.Header>
                 <SplitView IsPaneOpen="{x:Bind IsDownloadPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
-                            <ToggleSwitch IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}" Header="Layout Direction" OnContent="Right To Left" OffContent="Left To Right"/>
-                            <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
-                            <ToggleSwitch IsOn="{x:Bind IsAutoDownload,Mode=TwoWay}" Header="Auto Download" />
+                            <ToggleSwitch x:Uid="ReadingDirectionSwitch" IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}"/>
+                            <ToggleSwitch x:Uid="ReadingModeSwitch" Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}"/>
+                            <ToggleSwitch x:Uid="AutoDownloadSwitch" IsOn="{x:Bind IsAutoDownload,Mode=TwoWay}" />
                         </StackPanel>
                     </SplitView.Pane>
                     <GridView Holding="{x:Bind DownloadRightHolding}" RightTapped="{x:Bind DownloadRightTapped}" ItemClick="{x:Bind DownloadItemClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.DownloadList,Mode=OneWay}" >
@@ -440,14 +410,14 @@
             </PivotItem>
             <PivotItem AllowDrop="True" DragOver="PivotItem_DragOver" Drop="PivotItem_Drop">
                 <PivotItem.Header>
-                    <local:PivotItemHeaderControl Icon="Folder" Text="Local Folder" />
+                    <local:PivotItemHeaderControl Icon="Folder" x:Uid="LocalFolderPivotHeader" />
                 </PivotItem.Header>
                 <SplitView IsPaneOpen="{x:Bind IsLocalFolderPaneOpen,Mode=TwoWay}" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
                     <SplitView.Pane>
                         <StackPanel Margin="8,0" RequestedTheme="Dark">
-                            <Button Content="Add Folder" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind AddFolderClick}"/>
-                            <ToggleSwitch IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}" Header="Layout Direction" OnContent="Right To Left" OffContent="Left To Right"/>
-                            <ToggleSwitch Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}" Header="Reading Mode" OnContent="Double Page" OffContent="Single Page"/>
+                            <Button x:Uid="AddFolderButton" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" HorizontalAlignment="Stretch" Click="{x:Bind AddFolderClick}"/>
+                            <ToggleSwitch x:Uid="ReadingDirectionSwitch" IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}"/>
+                            <ToggleSwitch x:Uid="ReadingModeSwitch" Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}"/>
                         </StackPanel>
                     </SplitView.Pane>
                     <ListView Holding="{x:Bind LocalFolderRightHolding}" RightTapped="{x:Bind LocalFolderRightTapped}" ItemClick="{x:Bind LocalFolderClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.LocalFolderList,Mode=OneWay}" >

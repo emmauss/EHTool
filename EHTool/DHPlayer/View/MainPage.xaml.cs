@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI;
 using EHTool.EHTool;
+using EHTool.EHTool.Common;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
 
@@ -241,13 +242,13 @@ namespace EHTool
         {
             if (args.QueryText.ToUpper() == "I AM HENTAI")
             {
-                MessageDialog dialog = new MessageDialog("Sure?");
-                dialog.Commands.Add(new UICommand("Yes", (IUICommand command) =>
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.SureString);
+                dialog.Commands.Add(new UICommand(StaticResourceLoader.YesString, (IUICommand command) =>
                 {
                     Frame.Navigate(typeof(EHMainPage));
                     Frame.BackStack.Clear();
                 }));
-                dialog.Commands.Add(new UICommand("No", (IUICommand command) =>
+                dialog.Commands.Add(new UICommand(StaticResourceLoader.NoString, (IUICommand command) =>
                  {
                      Frame.Navigate(typeof(SearchResultPage), args.QueryText);
                  }));

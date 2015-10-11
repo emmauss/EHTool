@@ -1,4 +1,5 @@
-﻿using EHTool.EHTool.Model;
+﻿using EHTool.EHTool.Common;
+using EHTool.EHTool.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace EHTool.EHTool.ViewModel
             }
             if (ImageList.Count == 0)
             {
-                MessageDialog dialog = new MessageDialog("Can not find any image in this folder", "Error");
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.NoImageDialogContent, StaticResourceLoader.WarningString);
                 await dialog.ShowAsync();
             }
         }

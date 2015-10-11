@@ -77,7 +77,7 @@ namespace EHTool.EHTool.View
                 }
                 catch (ExHentaiAccessException)
                 {
-                    MessageDialog dialog = new MessageDialog("You have NO ACCESS to exhentai", "WARNING");
+                    MessageDialog dialog = new MessageDialog(StaticResourceLoader.ExHentaiAccessDialogContent);
                     await dialog.ShowAsync();
                 }
                 Hide();

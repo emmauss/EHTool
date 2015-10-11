@@ -92,10 +92,6 @@
     <Prefer32Bit>true</Prefer32Bit>
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
-  <PropertyGroup Label="MultilingualAppToolkit">
-    <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
-    <MultilingualFallbackLanguage>en-US</MultilingualFallbackLanguage>
-  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <Content Include="ApplicationInsights.config">
@@ -145,6 +141,7 @@
     <Compile Include="EHTool\Common\Helpers\DownloadHelper.cs" />
     <Compile Include="EHTool\Common\Helpers\FavorHelper.cs" />
     <Compile Include="EHTool\Common\Helpers\LocalFolderHelper.cs" />
+    <Compile Include="EHTool\Common\StaticResourceLoader.cs" />
     <Compile Include="EHTool\Common\TagGallery.cs" />
     <Compile Include="EHTool\Common\Login.cs" />
     <Compile Include="EHTool\Common\ReadingViewSelector.cs" />
@@ -183,7 +180,7 @@
     <Compile Include="EHTool\ViewModel\MainViewModel.cs" />
     <Compile Include="EHTool\ViewModel\ReadingViewModel.cs" />
     <Compile Include="EHTool\ViewModel\TagSearchViewModel.cs" />
-    <Compile Include="EHTool\View\AddDownloadDialog.xaml.cs">
+    <Compile Include="EHTool\View\Dialog\AddDownloadDialog.xaml.cs">
       <DependentUpon>AddDownloadDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="EHTool\View\EHDetailPage.xaml.cs">
@@ -195,23 +192,23 @@
     <Compile Include="EHTool\View\EHReadingPage.xaml.cs">
       <DependentUpon>EHReadingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EHTool\View\FlipBookControl.cs" />
-    <Compile Include="EHTool\View\LanguageFilterDialog.xaml.cs">
+    <Compile Include="EHTool\View\Control\FlipBookControl.cs" />
+    <Compile Include="EHTool\View\Dialog\LanguageFilterDialog.xaml.cs">
       <DependentUpon>LanguageFilterDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EHTool\View\LoginDialog.xaml.cs">
+    <Compile Include="EHTool\View\Dialog\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EHTool\View\PivotItemHeaderControl.xaml.cs">
+    <Compile Include="EHTool\View\Control\PivotItemHeaderControl.xaml.cs">
       <DependentUpon>PivotItemHeaderControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EHTool\View\SearchBarControl.xaml.cs">
+    <Compile Include="EHTool\View\Control\SearchBarControl.xaml.cs">
       <DependentUpon>SearchBarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EHTool\View\TagSearchPage.xaml.cs">
       <DependentUpon>TagSearchPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EHTool\View\TorrentDialog.xaml.cs">
+    <Compile Include="EHTool\View\Dialog\TorrentDialog.xaml.cs">
       <DependentUpon>TorrentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -276,7 +273,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EHTool\View\AddDownloadDialog.xaml">
+    <Page Include="EHTool\View\Dialog\AddDownloadDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -292,24 +289,24 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EHTool\View\FlipBookControl.xaml">
+    <Page Include="EHTool\View\Control\FlipBookControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="EHTool\View\LanguageFilterDialog.xaml">
+    <Page Include="EHTool\View\Dialog\LanguageFilterDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EHTool\View\LoginDialog.xaml">
+    <Page Include="EHTool\View\Dialog\LoginDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EHTool\View\PivotItemHeaderControl.xaml">
+    <Page Include="EHTool\View\Control\PivotItemHeaderControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EHTool\View\SearchBarControl.xaml">
+    <Page Include="EHTool\View\Control\SearchBarControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -317,7 +314,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EHTool\View\TorrentDialog.xaml">
+    <Page Include="EHTool\View\Dialog\TorrentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -334,20 +331,11 @@
       <Implementation>FFmpegInterop.dll</Implementation>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <XliffResource Include="MultilingualResources\EHTool.ja-JP.xlf" />
-    <XliffResource Include="MultilingualResources\EHTool.zh-CN.xlf" />
-    <XliffResource Include="MultilingualResources\EHTool.zh-TW.xlf" />
-  </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.PriResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.PriResources.targets')" />
-  <Target Name="MATPrerequisite" BeforeTargets="PrepareForBuild" Condition="!Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.PriResources.targets')" Label="MultilingualAppToolkit">
-    <Warning Text="$(MSBuildProjectFile) is Multilingual build enabled, but the Multilingual App Toolkit is unavailable during the build. If building with Visual Studio, please check to ensure that toolkit is properly installed." />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

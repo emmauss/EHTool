@@ -17,6 +17,7 @@ using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using System.Collections.Generic;
+using EHTool.EHTool.Common;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -206,19 +207,19 @@ namespace EHTool.EHTool.View
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
                 return;
             }
-            MessageDialog dialog = new MessageDialog("Sure?", "Logout");
-            dialog.Commands.Add(new UICommand("Logout", (IUICommand command) =>
+            MessageDialog dialog = new MessageDialog(StaticResourceLoader.SureString, StaticResourceLoader.LogoutString);
+            dialog.Commands.Add(new UICommand(StaticResourceLoader.LogoutString, (IUICommand command) =>
              {
                  CookieHelper.Cookie = null;
                  PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasLogin)));
              }));
-            dialog.Commands.Add(new UICommand("No"));
+            dialog.Commands.Add(new UICommand(StaticResourceLoader.NoString));
             await dialog.ShowAsync();
         }
         public async void CacheClearClick()
         {
             await CacheHelper.ClearCache();
-            MessageDialog dialog = new MessageDialog("Chche cleared");
+            MessageDialog dialog = new MessageDialog(StaticResourceLoader.CacheClearDialogContent);
             await dialog.ShowAsync();
         }
         public async void LoadMoreClick()
@@ -283,26 +284,26 @@ namespace EHTool.EHTool.View
         }
         public async void DeleteClicked()
         {
-            MessageDialog dialog = new MessageDialog("Delete From Your Computer?", "Delete");
-            dialog.Commands.Add(new UICommand("Delete", async (IUICommand command) =>
+            MessageDialog dialog = new MessageDialog(StaticResourceLoader.DeleteDialogContent, StaticResourceLoader.DeleteDialogTitle);
+            dialog.Commands.Add(new UICommand(StaticResourceLoader.DeleteDialogTitle, async (IUICommand command) =>
             {
                 _clickedItem.Pause();
                 MainVM.DownloadList.Remove(_clickedItem);
                 await DownloadHelper.RemoveDownload(_clickedItem);
             }));
-            dialog.Commands.Add(new UICommand("No"));
+            dialog.Commands.Add(new UICommand(StaticResourceLoader.NoString));
             await dialog.ShowAsync();
         }
         public async void RemoveClicked()
         {
-            MessageDialog dialog = new MessageDialog("Remove From The List?", "Remove");
-            dialog.Commands.Add(new UICommand("Remove", async (IUICommand command) =>
+            MessageDialog dialog = new MessageDialog(StaticResourceLoader.RemoveDialogContent, StaticResourceLoader.RemoveDialogTitle);
+            dialog.Commands.Add(new UICommand(StaticResourceLoader.RemoveDialogTitle, async (IUICommand command) =>
             {
                 _clickedItem.Pause();
                 MainVM.DownloadList.Remove(_clickedItem);
                 await DownloadHelper.RemoveDownload(_clickedItem, false);
             }));
-            dialog.Commands.Add(new UICommand("No"));
+            dialog.Commands.Add(new UICommand(StaticResourceLoader.NoString));
             await dialog.ShowAsync();
         }
 

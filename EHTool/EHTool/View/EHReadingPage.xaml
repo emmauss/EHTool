@@ -70,8 +70,8 @@
                     </Grid.RowDefinitions>
                     <Rectangle Height="{x:Bind TitleBarHeight,Mode=OneWay}"/>
                     <StackPanel Margin="8" Grid.Row="1" Orientation="Vertical">
-                        <ToggleSwitch IsOn="{x:Bind ReadingVM.IsAutoPlay,Mode=TwoWay}" Header="AutoPlay"/>
-                        <TextBox Visibility="{x:Bind ReadingVM.IsAutoPlay,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" Header="AutoPlay Interval(From Seconds)" Text="{x:Bind ReadingVM.TimerInterval,Mode=TwoWay}" InputScope="NumberFullWidth"/>
+                        <ToggleSwitch x:Uid="AutoPlaySwitch" IsOn="{x:Bind ReadingVM.IsAutoPlay,Mode=TwoWay}"/>
+                        <TextBox Visibility="{x:Bind ReadingVM.IsAutoPlay,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" x:Uid="AutoPlayIntervalTextBox" Text="{x:Bind ReadingVM.TimerInterval,Mode=TwoWay}" InputScope="NumberFullWidth"/>
                     </StackPanel>
                 </Grid>
             </SplitView.Pane>
@@ -100,7 +100,6 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Button/>
                 <Button Content="&#xE117;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind RefreshClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
                 <Slider FlowDirection="{x:Bind ReadingVM.ReadingDirection}" Grid.Column="1" Value="{x:Bind ReadingVM.SelectedIndex, Mode=TwoWay,Converter={StaticResource IntToDoubleConverter}}" Maximum="{x:Bind ReadingVM.MaxPageCount, Mode=OneWay,Converter={StaticResource IntToDoubleConverter}}"/>
                 <Button Grid.Column="2" HorizontalAlignment="Center" Click="{x:Bind SettingButtonClick}" FontSize="{ThemeResource HubHeaderThemeFontSize}" Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}"/>
@@ -110,7 +109,7 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
                     <Button Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="0" Content="&#xE112;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind BackClick}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <TextBlock Grid.Row="0" Text="Loading Image List"/>
+                    <TextBlock x:Uid="LoadingTextBlock" Grid.Row="0" />
                 </StackPanel>
                 <ProgressBar Grid.Row="1" IsIndeterminate="{x:Bind ReadingVM.IsLoading,Mode=OneWay}"/>
             </StackPanel>

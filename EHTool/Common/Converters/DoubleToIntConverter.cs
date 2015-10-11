@@ -9,7 +9,7 @@ namespace Common.Converters
 {
     public sealed class DoubleToIntConverter : IValueConverter
     {
-        object IValueConverter.Convert(object value, Type targetType, object parameter, string language)
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (!value.GetType().Equals(typeof(double)))
             {
@@ -29,7 +29,7 @@ namespace Common.Converters
             }
         }
 
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, string language)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             return (double)((int)value);
         }

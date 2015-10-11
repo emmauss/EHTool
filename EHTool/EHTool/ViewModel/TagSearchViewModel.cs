@@ -43,7 +43,7 @@ namespace EHTool.EHTool.ViewModel
             {
                 IsFailed = true;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
-                MessageDialog dialog = new MessageDialog($"Can not connect to {ServerType}", "Web Error");
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
                 await dialog.ShowAsync();
             }
             IsLoading = false;
@@ -72,7 +72,7 @@ namespace EHTool.EHTool.ViewModel
             catch (System.Net.WebException)
             {
                 _currentPage--;
-                MessageDialog dialog = new MessageDialog($"Can not connect to {ServerType}", "Web Error");
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
                 await dialog.ShowAsync();
             }
             IsLoading = false;

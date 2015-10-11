@@ -120,6 +120,39 @@
   <data name="AboutButton.Text" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AddDownloadDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="AddDownloadDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AddDownloadDialog.Title" xml:space="preserve">
+    <value>New Download</value>
+  </data>
+  <data name="AddFavorString" xml:space="preserve">
+    <value>Add Favor</value>
+  </data>
+  <data name="AddFolderButton.Content" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="AutoDownloadSwitch.Header" xml:space="preserve">
+    <value>Auto Download</value>
+  </data>
+  <data name="AutoPlayIntervalTextBox.Header" xml:space="preserve">
+    <value>AutoPlay Interval(From Seconds)</value>
+  </data>
+  <data name="AutoPlaySwitch.Header" xml:space="preserve">
+    <value>Auto Play</value>
+  </data>
+  <data name="CacheClearDialogContent" xml:space="preserve">
+    <value>Cache Cleared</value>
+  </data>
+  <data name="ClearCacheButton.Content" xml:space="preserve">
+    <value>Clear Cache</value>
+  </data>
+  <data name="CommentTextBlock.Text" xml:space="preserve">
+    <value>Comment:</value>
+  </data>
   <data name="DecodeTypeSwitch.Header" xml:space="preserve">
     <value>Decode Type</value>
   </data>
@@ -129,16 +162,208 @@
   <data name="DecodeTypeSwitch.OnContent" xml:space="preserve">
     <value>System</value>
   </data>
+  <data name="DeleteDialogContent" xml:space="preserve">
+    <value>Delete From Your Computer?</value>
+  </data>
+  <data name="DeleteDialogTitle" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteMenuItem.Text" xml:space="preserve">
+    <value>Delete(Contain Folder)</value>
+  </data>
+  <data name="DownloadButton.Content" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="DownloadPivotHeader.Text" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="DownloadSuggestTextBlock.Text" xml:space="preserve">
+    <value>EHTool suggest that you should download torrent which is more reliable and faster than this way</value>
+  </data>
+  <data name="DownloadToAppSwitch.Header" xml:space="preserve">
+    <value>Download to application's folder</value>
+  </data>
+  <data name="DownloadTorrentRun.Text" xml:space="preserve">
+    <value>Download Torrent</value>
+  </data>
+  <data name="ExHentaiAccessDialogContent" xml:space="preserve">
+    <value>You have NO ACCESS to exhentai</value>
+  </data>
+  <data name="FavorPivotHeader.Text" xml:space="preserve">
+    <value>Favor</value>
+  </data>
+  <data name="FolderLocationTextBlock.Text" xml:space="preserve">
+    <value>Folder Location:</value>
+  </data>
+  <data name="FolderNameTextBox.Header" xml:space="preserve">
+    <value>Folder Name:</value>
+  </data>
   <data name="ForceDecodeAudioSwitch.Header" xml:space="preserve">
     <value>Force Decode Audio</value>
   </data>
   <data name="ForceDecodeVideoSwitch.Header" xml:space="preserve">
     <value>Force Decode Video</value>
   </data>
+  <data name="ImageTextBlock.Text" xml:space="preserve">
+    <value>Image:</value>
+  </data>
+  <data name="InfomationTextBlock.Text" xml:space="preserve">
+    <value>Informations:</value>
+  </data>
+  <data name="LoadingTextBlock.Text" xml:space="preserve">
+    <value>Loading Image List...</value>
+  </data>
+  <data name="LocalFolderPivotHeader.Text" xml:space="preserve">
+    <value>Local Folder</value>
+  </data>
+  <data name="LoginButton.Content" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LoginDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LoginDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="LoginDialog.Title" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LoginErrorTextBlock1.Text" xml:space="preserve">
+    <value>ERROR:YOU HAVE NO ACCESS TO EXHENTAI</value>
+  </data>
+  <data name="LoginErrorTextBlock2.Text" xml:space="preserve">
+    <value>ERROR:CAN NOT CONNECT TO EXHENTAI</value>
+  </data>
+  <data name="LoginErrorTextBlock3.Text" xml:space="preserve">
+    <value>ERROR:CAN NOT LOGIN,MAYBE YOU SHOULD USE WEB TO LOGIN</value>
+  </data>
+  <data name="LogoutButton.Content" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="LogoutString" xml:space="preserve">
+    <value>Logout</value>
+  </data>
   <data name="MainPageHeader.Text" xml:space="preserve">
     <value>Video Library</value>
   </data>
+  <data name="MainPivotHeadder.Text" xml:space="preserve">
+    <value>Main</value>
+  </data>
+  <data name="NoHitsFoundDialogContent" xml:space="preserve">
+    <value>No hits found</value>
+  </data>
+  <data name="NoImageDialogContent" xml:space="preserve">
+    <value>Can not find any images in this folder</value>
+  </data>
+  <data name="NoString" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Notice1.Text" xml:space="preserve">
+    <value>You MUST login before entering exhentai mode</value>
+  </data>
+  <data name="Notice2.Text" xml:space="preserve">
+    <value>Please login with your E-Hentai Forums account</value>
+  </data>
+  <data name="OpenDetailMenuItem.Text" xml:space="preserve">
+    <value>Open Detail</value>
+  </data>
   <data name="OpenFileButton.Content" xml:space="preserve">
     <value>Open File</value>
+  </data>
+  <data name="PauseMenuItem.Text" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="ReadButton.Content" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="ReadingDirectionSwitch.Header" xml:space="preserve">
+    <value>Layout Direction</value>
+  </data>
+  <data name="ReadingDirectionSwitch.OffContent" xml:space="preserve">
+    <value>Left To Right</value>
+  </data>
+  <data name="ReadingDirectionSwitch.OnContent" xml:space="preserve">
+    <value>Right To Left</value>
+  </data>
+  <data name="ReadingModeSwitch.Header" xml:space="preserve">
+    <value>Reading Mode</value>
+  </data>
+  <data name="ReadingModeSwitch.OffContent" xml:space="preserve">
+    <value>Single Page</value>
+  </data>
+  <data name="ReadingModeSwitch.OnContent" xml:space="preserve">
+    <value>Double Page</value>
+  </data>
+  <data name="RemoveDialogContent" xml:space="preserve">
+    <value>Remove From The List?</value>
+  </data>
+  <data name="RemoveDialogTitle" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RemoveFavorString" xml:space="preserve">
+    <value>Remove Favor</value>
+  </data>
+  <data name="RemoveMenuItem.Text" xml:space="preserve">
+    <value>Remove From List</value>
+  </data>
+  <data name="SearchItem.Text" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchOptionRun.Text" xml:space="preserve">
+    <value>Search Option</value>
+  </data>
+  <data name="ServerModeSwitch.Header" xml:space="preserve">
+    <value>Server Mode</value>
+  </data>
+  <data name="StartMenuItem.Text" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="SureString" xml:space="preserve">
+    <value>Sure?</value>
+  </data>
+  <data name="TorrentDownloadDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Copy Link</value>
+  </data>
+  <data name="TorrentDownloadDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="TorrentDownloadDialog.Title" xml:space="preserve">
+    <value>Download Torrent</value>
+  </data>
+  <data name="TorrentNoticeTextBlock.Text" xml:space="preserve">
+    <value>Double click to download,it will download to you download library</value>
+  </data>
+  <data name="UserNameTextBox.Header" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="UserPasswordBox.Header" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="WarningString" xml:space="preserve">
+    <value>WARNING</value>
+  </data>
+  <data name="WebErrorDialogContent" xml:space="preserve">
+    <value>Can not connect to the server</value>
+  </data>
+  <data name="WebErrorDialogTitle" xml:space="preserve">
+    <value>Web Error</value>
+  </data>
+  <data name="WebLogButton.Content" xml:space="preserve">
+    <value>Web Login</value>
+  </data>
+  <data name="XLanguageButton.Content" xml:space="preserve">
+    <value>Excluded Language</value>
+  </data>
+  <data name="XLanguageDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="XLanguageDialog.Title" xml:space="preserve">
+    <value>Excluded Languages</value>
+  </data>
+  <data name="XLanguageDialogSecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="YesString" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

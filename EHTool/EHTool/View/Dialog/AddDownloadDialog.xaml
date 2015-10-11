@@ -6,10 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="New Download"
+    x:Uid="AddDownloadDialog"
     MaxWidth="300"
-    PrimaryButtonText="Start"
-    SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
 
     <Grid>
@@ -18,10 +16,9 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock TextWrapping="WrapWholeWords">
-            EHTool suggest that your should download torrent which is more reliable and faster than this way
+        <TextBlock x:Uid="DownloadSuggestTextBlock" TextWrapping="WrapWholeWords">
         </TextBlock>
-        <ToggleSwitch x:Name="toggleSwitch" Header="Download to application's folder" Grid.Row="1" IsOn="{x:Bind IsDownloadInApp,Mode=TwoWay}"/>
+        <ToggleSwitch x:Uid="DownloadToAppSwitch" x:Name="toggleSwitch" Grid.Row="1" IsOn="{x:Bind IsDownloadInApp,Mode=TwoWay}"/>
         <Grid Grid.Row="2" Visibility="{Binding IsOn, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}, ElementName=toggleSwitch}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -29,8 +26,8 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <TextBox Header="Folder Name:" Text="{x:Bind FolderName,Mode=TwoWay}"/>
-            <TextBlock Grid.Row="2" Text="Folder Location:"/>
+            <TextBox x:Uid="FolderNameTextBox" Text="{x:Bind FolderName,Mode=TwoWay}"/>
+            <TextBlock x:Uid="FolderLocationTextBlock" Grid.Row="2"/>
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Content="{x:Bind FolderLocation,Mode=OneWay}" Click="{x:Bind SetFolderClick}" Style="{StaticResource DateTimePickerFlyoutButtonStyle}"/>
         </Grid>
     </Grid>
