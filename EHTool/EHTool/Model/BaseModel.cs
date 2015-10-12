@@ -93,6 +93,10 @@ namespace EHTool.EHTool.Model
                     imageBytes = await GetByteArrayWith("GET", link, Cookie, HostLink);
                     await SaveByteArrayCache(ServerType.ToString(), Path.GetFileName(ImageLink), imageBytes);
                 }
+                catch (System.Net.Http.HttpRequestException)
+                {
+                    imageBytes = default(byte[]);
+                }
                 catch (System.Net.WebException)
                 {
                     imageBytes = default(byte[]);

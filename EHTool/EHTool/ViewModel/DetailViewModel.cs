@@ -105,6 +105,13 @@ namespace EHTool.EHTool.ViewModel
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Pages)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPage)));
             }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                IsFailed = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
+                await dialog.ShowAsync();
+            }
             catch (System.Net.WebException)
             {
                 IsFailed = true;
@@ -138,6 +145,13 @@ namespace EHTool.EHTool.ViewModel
                 var item = await GetDetail(page);
                 DetailItem.ImageList = item.ImageList;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DetailItem)));
+            }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                IsFailed = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
+                await dialog.ShowAsync();
             }
             catch (System.Net.WebException)
             {

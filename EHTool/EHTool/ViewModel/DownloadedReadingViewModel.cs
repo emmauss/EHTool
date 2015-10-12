@@ -49,6 +49,11 @@ namespace EHTool.EHTool.ViewModel
                     _selectedIndex = ImageList.ToList().FindIndex((a) => a.ImagePage == _indexItem.ImagePage);
                 }
             }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
+                await dialog.ShowAsync();
+            }
             catch (System.Net.WebException)
             {
                 MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);

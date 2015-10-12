@@ -39,6 +39,13 @@ namespace EHTool.EHTool.ViewModel
                 MainList = new ObservableCollection<GalleryListModel>(await GetGalleryList());
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainList)));
             }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                IsFailed = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
+                await dialog.ShowAsync();
+            }
             catch (System.Net.WebException)
             {
                 IsFailed = true;

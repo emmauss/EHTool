@@ -51,6 +51,11 @@ namespace EHTool.EHTool.View
                 TorrentList = new ObservableCollection<TorrentModel>(await task);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TorrentList)));
             }
+            catch (HttpRequestException)
+            {
+                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
+                await dialog.ShowAsync();
+            }
             catch (System.Net.WebException)
             {
                 MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
