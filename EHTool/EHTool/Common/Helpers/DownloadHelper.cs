@@ -10,8 +10,9 @@ using EHTool.EHTool.Entities;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 
-using static Common.Helpers.JsonHelper;
+using static EHTool.Shared.Helpers.JsonHelper;
 using static EHTool.EHTool.Common.Helpers.DatabaseHelper;
+using EHTool.Shared.Entities;
 
 namespace EHTool.EHTool.Common.Helpers
 {

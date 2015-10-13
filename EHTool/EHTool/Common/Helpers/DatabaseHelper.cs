@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EHTool.EHTool.Model;
 using Windows.Data.Json;
 using Windows.Storage;
 using Common.Extension;
-using static Common.Helpers.JsonHelper;
+using EHTool.Shared.Model;
+using EHTool.Shared.Entities;
+
+using static EHTool.Shared.Helpers.JsonHelper;
 
 namespace EHTool.EHTool.Common.Helpers
 {
@@ -79,7 +81,7 @@ namespace EHTool.EHTool.Common.Helpers
             => from item in JsonArray.Parse(json)
                select new GalleryListModel
                {
-                   ServerType = (Entities.ServerTypes)item.GetNamedNumber("ServerType"),
+                   ServerType = (ServerTypes)item.GetNamedNumber("ServerType"),
                    ImageLink = item.GetNamedString("ImageLink"),
                    FileCount = item.GetNamedString("FileCount"),
                    ID = item.GetNamedString("ID"),

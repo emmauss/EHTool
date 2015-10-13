@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:model="using:EHTool.EHTool.Model"
+    xmlns:model="using:EHTool.Shared.Model"
+    xmlns:uwpmodel="using:EHTool.EHTool.Model"
     xmlns:triggers="using:Common.Triggers"
     >
 
@@ -376,7 +377,7 @@
                     </SplitView.Pane>
                     <GridView Holding="{x:Bind DownloadRightHolding}" RightTapped="{x:Bind DownloadRightTapped}" ItemClick="{x:Bind DownloadItemClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.DownloadList,Mode=OneWay}" >
                         <GridView.ItemTemplate>
-                            <DataTemplate x:DataType="model:DownloadItemModel">
+                            <DataTemplate x:DataType="uwpmodel:DownloadItemModel">
                                 <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
                                     <!--<Image Source="{x:Bind Image,Mode=OneWay}" Stretch="Uniform"/>-->
                                     <Border RequestedTheme="Dark">
@@ -422,7 +423,7 @@
                     </SplitView.Pane>
                     <ListView Holding="{x:Bind LocalFolderRightHolding}" RightTapped="{x:Bind LocalFolderRightTapped}" ItemClick="{x:Bind LocalFolderClick}" IsItemClickEnabled="True" SelectionMode="None" ItemsSource="{x:Bind MainVM.LocalFolderList,Mode=OneWay}" >
                         <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="model:LocalFolderModel">
+                            <DataTemplate x:DataType="uwpmodel:LocalFolderModel">
                                 <TextBlock Text="{x:Bind FolderName}"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>

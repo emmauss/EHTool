@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using EHTool.EHTool.Model;
-using Windows.Storage;
+using EHTool.Shared.Model;
 using static EHTool.EHTool.Common.Helpers.DatabaseHelper;
 
 namespace EHTool.EHTool.Common.Helpers

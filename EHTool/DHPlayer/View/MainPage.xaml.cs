@@ -21,6 +21,8 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI;
 using EHTool.EHTool;
 using EHTool.EHTool.Common;
+using EHTool.Shared.Helpers;
+using EHTool.Shared.Entities;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
 
@@ -90,22 +92,22 @@ namespace EHTool
         {
             get
             {
-                return SettingHelpers.GetSetting(SettingNames.IsForceDecodeAudio,true);
+                return SettingHelper.GetSetting(SettingNames.IsForceDecodeAudio,true);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsForceDecodeAudio, value);
+                SettingHelper.SetSetting(SettingNames.IsForceDecodeAudio, value);
             }
         }
         public bool IsForceDecodeVideo
         {
             get
             {
-                return SettingHelpers.GetSetting(SettingNames.IsForceDecodeVideo,true);
+                return SettingHelper.GetSetting(SettingNames.IsForceDecodeVideo,true);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsForceDecodeVideo, value);
+                SettingHelper.SetSetting(SettingNames.IsForceDecodeVideo, value);
             }
         }
 
@@ -161,7 +163,7 @@ namespace EHTool
                                 VideoList.Add(new VideoListModel()
                                 {
                                     Name = file.Name,
-                                    ThumbImage = await Converter.ByteArrayToBitmapImage(bytes),
+                                    ThumbImage = await ConvertHelper.ByteArrayToBitmapImage(bytes),
                                     Detail = await file.Properties.GetVideoPropertiesAsync(),
                                     FilePath = file.Path,
                                 });

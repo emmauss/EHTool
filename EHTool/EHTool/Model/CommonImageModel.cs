@@ -1,5 +1,6 @@
 ﻿using Common.Extension;
 using EHTool.EHTool.Entities;
+using EHTool.Shared.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

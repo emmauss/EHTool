@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using EHTool.Shared.Helpers;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -125,7 +126,7 @@ namespace EHTool.DHPlayer.View
                                     VideoList.Add(new VideoListModel()
                                     {
                                         Name = file.Name,
-                                        ThumbImage = await Converter.ByteArrayToBitmapImage(bytes),
+                                        ThumbImage = await ConvertHelper.ByteArrayToBitmapImage(bytes),
                                         Detail = await file.Properties.GetVideoPropertiesAsync(),
                                         FilePath = file.Path,
                                     });

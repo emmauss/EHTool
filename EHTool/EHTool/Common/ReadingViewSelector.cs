@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Common.Helpers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using EHTool.Shared.Entities;
 
 namespace EHTool.EHTool.Common
 {
@@ -17,7 +18,7 @@ namespace EHTool.EHTool.Common
 
         protected override DataTemplate SelectTemplateCore(object item)
         {
-            return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage) ? FlipBookView : CommonView;
+            return SettingHelper.GetSetting<bool>(SettingNames.IsReadingDoublePage) ? FlipBookView : CommonView;
         }
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {

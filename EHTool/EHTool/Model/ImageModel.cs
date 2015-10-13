@@ -10,11 +10,10 @@ using Windows.Storage;
 using System.Threading;
 using System.Text.RegularExpressions;
 using Common.Extension;
-using Windows.Storage.AccessCache;
-using EHTool.EHTool.Common.Helpers;
 
-using static EHTool.Common.Helpers.CookieHelper;
+using static EHTool.Shared.Helpers.CookieHelper;
 using System.Runtime.CompilerServices;
+using EHTool.Shared.Entities;
 
 namespace EHTool.EHTool.Model
 {

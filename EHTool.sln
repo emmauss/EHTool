@@ -9,7 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHTool.Core", "EHTool.Core\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHTool.Droid", "EHTool.Droid\EHTool.Droid.csproj", "{8C1F2E14-37CF-4E3E-99B4-789714A34009}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EHTool.Shared", "EHTool.Shared\EHTool.Shared.shproj", "{9EE521B8-D72D-4E41-AADD-3323A68DF4E0}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		EHTool.Shared\EHTool.Shared.projitems*{67f9d3a8-f71e-4428-913f-c37ae82cdb24}*SharedItemsImports = 4
+		EHTool.Shared\EHTool.Shared.projitems*{75c1744b-9c26-4927-8eac-88f442dd91c0}*SharedItemsImports = 4
+		EHTool.Shared\EHTool.Shared.projitems*{9ee521b8-d72d-4e41-aadd-3323a68df4e0}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
 		Ad-Hoc|ARM = Ad-Hoc|ARM

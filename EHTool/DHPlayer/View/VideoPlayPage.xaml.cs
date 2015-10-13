@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using EHTool.EHTool;
+using EHTool.Shared.Entities;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -95,11 +96,11 @@ namespace EHTool.DHPlayer
         {
             get
             {
-                return SettingHelpers.GetSetting(SettingNames.IsForceDecodeAudio,true);
+                return SettingHelper.GetSetting(SettingNames.IsForceDecodeAudio,true);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsForceDecodeAudio, value);
+                SettingHelper.SetSetting(SettingNames.IsForceDecodeAudio, value);
                 ReloadVideo();
             }
         }
@@ -107,11 +108,11 @@ namespace EHTool.DHPlayer
         {
             get
             {
-                return SettingHelpers.GetSetting(SettingNames.IsForceDecodeVideo,true);
+                return SettingHelper.GetSetting(SettingNames.IsForceDecodeVideo,true);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsForceDecodeVideo, value);
+                SettingHelper.SetSetting(SettingNames.IsForceDecodeVideo, value);
                 ReloadVideo();
             }
         }

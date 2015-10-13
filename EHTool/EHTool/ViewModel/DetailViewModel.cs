@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using EHTool.EHTool.Common;
-using EHTool.EHTool.Entities;
 using EHTool.EHTool.Model;
 using Windows.UI.Popups;
-using static EHTool.EHTool.Common.Helpers.FavorHelper;
 using EHTool.EHTool.Common.Helpers;
 using Windows.UI.Xaml;
+using EHTool.Shared;
+using EHTool.Shared.Model;
+using static EHTool.EHTool.Common.Helpers.FavorHelper;
 
 namespace EHTool.EHTool.ViewModel
 {

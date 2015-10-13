@@ -1,5 +1,6 @@
 ﻿using EHTool.EHTool.Model;
 using EHTool.EHTool.ViewModel;
+using EHTool.Shared.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

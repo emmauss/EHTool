@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Storage;
-using static Common.Helpers.JsonHelper;
+using static EHTool.Shared.Helpers.JsonHelper;
 using static EHTool.EHTool.Common.Helpers.DatabaseHelper;
 
 namespace EHTool.EHTool.Common.Helpers

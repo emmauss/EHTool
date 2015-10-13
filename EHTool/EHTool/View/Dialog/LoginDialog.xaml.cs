@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Popups;
+using EHTool.Shared;
+using EHTool.Shared.Helpers;
 
 // “内容对话框”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上进行了说明
 

@@ -2,6 +2,9 @@
 using EHTool.EHTool.Common.Helpers;
 using EHTool.EHTool.Entities;
 using EHTool.EHTool.Model;
+using EHTool.Shared;
+using EHTool.Shared.Entities;
+using EHTool.Shared.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

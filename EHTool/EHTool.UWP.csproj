@@ -109,7 +109,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Common\Converters\Converter.cs" />
     <Compile Include="Common\Converters\DoubleToIntConverter.cs" />
     <Compile Include="Common\Converters\NullableBooleanToBooleanConverter.cs" />
     <Compile Include="Common\Converters\TimeSpanToDoubleConverter.cs" />
@@ -119,8 +118,6 @@
     <Compile Include="Common\Helpers\CacheHelper.cs" />
     <Compile Include="Common\Helpers\EnumHelper.cs" />
     <Compile Include="Common\Helpers\FileTypeHelper.cs" />
-    <Compile Include="Common\Helpers\HttpHelper.cs" />
-    <Compile Include="Common\Helpers\JsonHelper.cs" />
     <Compile Include="Common\Helpers\SettingHelper.cs" />
     <Compile Include="Common\Triggers\ControlSizeTrigger.cs" />
     <Compile Include="DHPlayer\Entities\FileType.cs" />
@@ -133,46 +130,26 @@
     <Compile Include="DHPlayer\View\VideoPlayPage.xaml.cs">
       <DependentUpon>VideoPlayPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EHTool\Common\Gallery.cs" />
-    <Compile Include="EHTool\Common\GalleryDetail.cs" />
-    <Compile Include="EHTool\Common\GalleryImages.cs" />
-    <Compile Include="EHTool\Common\Helpers\CookieHelper.cs" />
     <Compile Include="EHTool\Common\Helpers\DatabaseHelper.cs" />
     <Compile Include="EHTool\Common\Helpers\DownloadHelper.cs" />
     <Compile Include="EHTool\Common\Helpers\FavorHelper.cs" />
     <Compile Include="EHTool\Common\Helpers\LocalFolderHelper.cs" />
     <Compile Include="EHTool\Common\StaticResourceLoader.cs" />
-    <Compile Include="EHTool\Common\TagGallery.cs" />
-    <Compile Include="EHTool\Common\Login.cs" />
     <Compile Include="EHTool\Common\ReadingViewSelector.cs" />
     <Compile Include="EHTool\Entities\CurrentState.cs" />
     <Compile Include="EHTool\Entities\DownloadState.cs" />
-    <Compile Include="EHTool\Entities\ServerTypes.cs" />
     <Compile Include="EHTool\Interface\ISearchOption.cs" />
-    <Compile Include="EHTool\Model\BaseModel.cs" />
-    <Compile Include="EHTool\Model\CommentModel.cs" />
     <Compile Include="EHTool\Model\CommonImageModel.cs" />
-    <Compile Include="EHTool\Model\DetailModel.cs" />
     <Compile Include="EHTool\Model\DownloadedImageModel.cs" />
     <Compile Include="EHTool\Model\DownloadItemModel.cs" />
     <Compile Include="EHTool\Model\DownloadItemPagesModel.cs" />
-    <Compile Include="EHTool\Model\GalleryListModel.cs" />
-    <Compile Include="EHTool\Model\GallerySearchOption.cs" />
-    <Compile Include="EHTool\Model\HeaderModel.cs" />
-    <Compile Include="EHTool\Model\HostLinkModel.cs" />
-    <Compile Include="EHTool\Model\ImageListModel.cs" />
     <Compile Include="EHTool\Model\ImageModel.cs" />
-    <Compile Include="EHTool\Model\LanguageModel.cs" />
     <Compile Include="EHTool\Model\LocalFolderModel.cs" />
     <Compile Include="EHTool\Model\LocalImageModel.cs" />
-    <Compile Include="EHTool\Model\TagModel.cs" />
-    <Compile Include="EHTool\Model\TagValueModel.cs" />
-    <Compile Include="EHTool\Model\TorrentModel.cs" />
     <Compile Include="EHTool\Model\TorrentSearchOption.cs" />
     <Compile Include="DHPlayer\View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EHTool\SettingNames.cs" />
     <Compile Include="EHTool\ViewModel\CommonReadingViewModel.cs" />
     <Compile Include="EHTool\ViewModel\DetailViewModel.cs" />
     <Compile Include="EHTool\ViewModel\DownloadedReadingViewModel.cs" />
@@ -332,6 +309,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\EHTool.Shared\EHTool.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

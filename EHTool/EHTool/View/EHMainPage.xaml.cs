@@ -18,6 +18,9 @@ using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using System.Collections.Generic;
 using EHTool.EHTool.Common;
+using EHTool.Shared.Helpers;
+using EHTool.Shared.Entities;
+using EHTool.Shared.Model;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -93,11 +96,11 @@ namespace EHTool.EHTool.View
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingRightToLeft);
+                return SettingHelper.GetSetting<bool>(SettingNames.IsReadingRightToLeft);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsReadingRightToLeft, value);
+                SettingHelper.SetSetting(SettingNames.IsReadingRightToLeft, value);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReadingRTL)));
             }
         }
@@ -105,11 +108,11 @@ namespace EHTool.EHTool.View
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage);
+                return SettingHelper.GetSetting<bool>(SettingNames.IsReadingDoublePage);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsReadingDoublePage, value);
+                SettingHelper.SetSetting(SettingNames.IsReadingDoublePage, value);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReadingDoublePage)));
             }
         }
@@ -117,11 +120,11 @@ namespace EHTool.EHTool.View
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>(SettingNames.IsAutoDownload);
+                return SettingHelper.GetSetting<bool>(SettingNames.IsAutoDownload);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsAutoDownload, value);
+                SettingHelper.SetSetting(SettingNames.IsAutoDownload, value);
             }
         }
 

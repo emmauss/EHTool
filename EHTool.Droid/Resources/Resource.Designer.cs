@@ -26,6 +26,8 @@ namespace EHTool.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::PCLStorage.Resource.String.ApplicationName = global::EHTool.Droid.Resource.String.ApplicationName;
+			global::PCLStorage.Resource.String.Hello = global::EHTool.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Resource.String.ApplicationName = global::EHTool.Droid.Resource.String.ApplicationName;
 			global::Xamarin.Forms.Platform.Resource.String.Hello = global::EHTool.Droid.Resource.String.Hello;
 		}
@@ -47,7 +49,10 @@ namespace EHTool.Droid
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			public const int ic_action_image_dehaze = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int Icon = 2130837505;
 			
 			static Drawable()
 			{

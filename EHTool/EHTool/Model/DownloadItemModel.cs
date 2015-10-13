@@ -2,6 +2,9 @@
 using EHTool.EHTool.Common;
 using EHTool.EHTool.Common.Helpers;
 using EHTool.EHTool.Entities;
+using EHTool.Shared;
+using EHTool.Shared.Entities;
+using EHTool.Shared.Model;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -16,7 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
-using static EHTool.Common.Helpers.CookieHelper;
+using static EHTool.Shared.Helpers.CookieHelper;
 
 namespace EHTool.EHTool.Model
 {

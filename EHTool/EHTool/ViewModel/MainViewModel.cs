@@ -10,12 +10,15 @@ using EHTool.EHTool.Model;
 using EHTool.EHTool.View;
 using Windows.UI.Popups;
 
-using static Common.Helpers.SettingHelpers;
+using static Common.Helpers.SettingHelper;
 using Windows.UI.Xaml;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using System.IO;
 using Common.Helpers;
+using EHTool.Shared;
+using EHTool.Shared.Model;
+using EHTool.Shared.Entities;
 
 namespace EHTool.EHTool.ViewModel
 {

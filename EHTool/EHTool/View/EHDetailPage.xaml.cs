@@ -21,6 +21,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using EHTool.EHTool.Common.Helpers;
 using System.Diagnostics;
+using EHTool.Shared.Entities;
+using EHTool.Shared.Model;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -91,22 +93,22 @@ namespace EHTool.EHTool.View
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingRightToLeft);
+                return SettingHelper.GetSetting<bool>(SettingNames.IsReadingRightToLeft);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsReadingRightToLeft, value);
+                SettingHelper.SetSetting(SettingNames.IsReadingRightToLeft, value);
             }
         }
         public bool IsReadingDoublePage
         {
             get
             {
-                return SettingHelpers.GetSetting<bool>(SettingNames.IsReadingDoublePage);
+                return SettingHelper.GetSetting<bool>(SettingNames.IsReadingDoublePage);
             }
             set
             {
-                SettingHelpers.SetSetting(SettingNames.IsReadingDoublePage, value);
+                SettingHelper.SetSetting(SettingNames.IsReadingDoublePage, value);
             }
         }
         public bool IsPhone => Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");

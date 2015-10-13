@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Common.Converters;
 using Windows.Storage;
+using static EHTool.Shared.Helpers.ConvertHelper;
 
 namespace Common.Helpers
 {
@@ -22,11 +23,12 @@ namespace Common.Helpers
             return await FileIO.ReadTextAsync(file);
         }
 
-        public static async Task SaveByteArrayCache(string fileFolder, string fileName, byte[] fileText)
+        public static async Task<string> SaveByteArrayCache(string fileFolder, string fileName, byte[] fileText)
         {
             var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(fileFolder, CreationCollisionOption.OpenIfExists);
             var file = await cachefolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteBytesAsync(file, fileText);
+            return file.Path;
         }
 
         public static async Task<byte[]> GetByteArrayCache(string fileFolder, string fileName)
@@ -35,7 +37,7 @@ namespace Common.Helpers
             var file = await cachefolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
             using (var stream = await file.OpenStreamForReadAsync())
             {
-                return await Converter.StreamToBytes(stream);
+                return await StreamToBytes(stream);
             }
         }
         public static async Task<ulong> GetCacheSize()

@@ -1,6 +1,8 @@
 ﻿using EHTool.EHTool.Common;
 using EHTool.EHTool.Common.Helpers;
 using EHTool.EHTool.Model;
+using EHTool.Shared;
+using EHTool.Shared.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

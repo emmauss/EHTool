@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EHTool.Core.View.MainPage">
+  <MasterDetailPage.Master Title="321">
+    <ContentPage Title="asd" Icon="drawable/ic_action_image_dehaze.png">
+      <Label Text="test32"/>
+    </ContentPage>
+  </MasterDetailPage.Master>
+  <MasterDetailPage.Detail>
+    <ContentPage>
+      <ListView x:Name="listView">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <ViewCell.View>
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Image Grid.RowSpan="2" Source="{Binding Image}"/>
+                  <Label FontSize="20" Text="{Binding Title}" Grid.Row="0" Grid.Column="1"/>
+                  <Label FontSize="10" Text="{Binding Type}" Grid.Row="1" Grid.Column="1"/>
+                </Grid>
+              </ViewCell.View>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </ContentPage>
+  </MasterDetailPage.Detail>
+</MasterDetailPage>
