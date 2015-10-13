@@ -11,4 +11,7 @@ Xamarin
 # License  
 Released under GPL licensing.  
 # References  
-FFmpegInterop: https://github.com/Microsoft/FFmpegInterop  
+FFmpegInterop:https://github.com/Microsoft/FFmpegInterop  
+Html Agility Pack:http://htmlagilitypack.codeplex.com/  
+Xamarin.Plugins:https://github.com/jamesmontemagno/Xamarin.Plugins  
+PCLStorage:https://github.com/dsplaisted/PCLStorage  
