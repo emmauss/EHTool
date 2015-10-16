@@ -26,6 +26,5 @@ namespace EHTool.EHTool.Common
         internal static string YesString => GetString(nameof(YesString));
         internal static string NoString => GetString(nameof(NoString));
         internal static string AddFavorString => GetString(nameof(AddFavorString));
-        internal static string RemoveFavorString => GetString(nameof(RemoveFavorString));
     }
 }

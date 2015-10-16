@@ -11,7 +11,7 @@
     <AssemblyName>EHTool</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.10563.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
@@ -136,7 +136,6 @@
     <Compile Include="EHTool\Common\Helpers\LocalFolderHelper.cs" />
     <Compile Include="EHTool\Common\StaticResourceLoader.cs" />
     <Compile Include="EHTool\Common\ReadingViewSelector.cs" />
-    <Compile Include="EHTool\Entities\CurrentState.cs" />
     <Compile Include="EHTool\Entities\DownloadState.cs" />
     <Compile Include="EHTool\Interface\ISearchOption.cs" />
     <Compile Include="EHTool\Model\CommonImageModel.cs" />
@@ -156,7 +155,6 @@
     <Compile Include="EHTool\ViewModel\LocalReadingViewModel.cs" />
     <Compile Include="EHTool\ViewModel\MainViewModel.cs" />
     <Compile Include="EHTool\ViewModel\ReadingViewModel.cs" />
-    <Compile Include="EHTool\ViewModel\TagSearchViewModel.cs" />
     <Compile Include="EHTool\View\Dialog\AddDownloadDialog.xaml.cs">
       <DependentUpon>AddDownloadDialog.xaml</DependentUpon>
     </Compile>

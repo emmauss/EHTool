@@ -1,6 +1,7 @@
 ﻿using EHTool.EHTool.Model;
 using EHTool.EHTool.ViewModel;
 using EHTool.Shared.Model;
+using EHTool.Shared.ViewModelBase;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,7 +41,7 @@ namespace EHTool.EHTool.View
         }
         public void FullScreenClick()
         {
-            if (ApplicationView.GetForCurrentView().IsFullScreen)
+            if (ApplicationView.GetForCurrentView().IsFullScreenMode)
             {
                 ApplicationView.GetForCurrentView().ExitFullScreenMode();
             }

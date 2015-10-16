@@ -41,7 +41,7 @@ namespace EHTool
         }
         public void FullScreenClick()
         {
-            if (ApplicationView.GetForCurrentView().IsFullScreen)
+            if (ApplicationView.GetForCurrentView().IsFullScreenMode)
             {
                 ApplicationView.GetForCurrentView().ExitFullScreenMode();
             }

@@ -9,7 +9,7 @@
   </MasterDetailPage.Master>
   <MasterDetailPage.Detail>
     <ContentPage>
-      <ListView x:Name="listView">
+      <ListView x:Name="listView" HasUnevenRows="True">
         <ListView.ItemTemplate>
           <DataTemplate>
             <ViewCell>

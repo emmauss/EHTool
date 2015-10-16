@@ -31,11 +31,8 @@ namespace EHTool.Shared
             ServerType = type;
         }
 
-        public GalleryDetail(GalleryListModel item)
+        public GalleryDetail(GalleryListModel item):this(item.ID,item.Token,item.ServerType)
         {
-            Id = item.ID;
-            Token = item.Token;
-            ServerType = item.ServerType;
             ListItem = item;
         }
 

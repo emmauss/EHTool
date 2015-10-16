@@ -1,20 +1,16 @@
-﻿using EHTool.EHTool.Common;
-using EHTool.EHTool.Common.Helpers;
-using EHTool.EHTool.Entities;
-using EHTool.EHTool.Model;
-using EHTool.Shared;
-using EHTool.Shared.Entities;
+﻿using EHTool.Shared.Entities;
 using EHTool.Shared.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+#if WINDOWS_UWP
 using Windows.UI.Popups;
+using EHTool.EHTool.Common;
+#endif
 
-namespace EHTool.EHTool.ViewModel
+namespace EHTool.Shared.ViewModelBase
 {
     public class TagSearchViewModel : TagGallery, INotifyPropertyChanged
     {
@@ -26,7 +22,7 @@ namespace EHTool.EHTool.ViewModel
         private int _currentPage = 0;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal TagSearchViewModel(string tagValue,ServerTypes type):base(tagValue,type)
+        internal TagSearchViewModel(string tagValue, ServerTypes type) : base(tagValue, type)
         {
             Initialize();
         }
@@ -44,21 +40,27 @@ namespace EHTool.EHTool.ViewModel
             }
             catch (System.Net.Http.HttpRequestException)
             {
-                IsFailed = true;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
-                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
-                await dialog.ShowAsync();
+                OnWebError();
             }
             catch (System.Net.WebException)
             {
-                IsFailed = true;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
-                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
-                await dialog.ShowAsync();
+                OnWebError();
             }
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
+
+        private async void OnWebError()
+        {
+            IsFailed = true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFailed)));
+#if WINDOWS_UWP
+                await new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle).ShowAsync();
+#else
+
+#endif
+        }
+
         internal async Task LoadMore()
         {
             if (IsFailed)
@@ -79,11 +81,13 @@ namespace EHTool.EHTool.ViewModel
                     }
                 }
             }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                OnWebError();
+            }
             catch (System.Net.WebException)
             {
-                _currentPage--;
-                MessageDialog dialog = new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle);
-                await dialog.ShowAsync();
+                OnWebError();
             }
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));

@@ -23,6 +23,7 @@ using EHTool.EHTool.Common.Helpers;
 using System.Diagnostics;
 using EHTool.Shared.Entities;
 using EHTool.Shared.Model;
+using EHTool.Shared.ViewModelBase;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -41,7 +42,7 @@ namespace EHTool.EHTool.View
         }
         public void FullScreenClick()
         {
-            if (ApplicationView.GetForCurrentView().IsFullScreen)
+            if (ApplicationView.GetForCurrentView().IsFullScreenMode)
             {
                 ApplicationView.GetForCurrentView().ExitFullScreenMode();
             }
