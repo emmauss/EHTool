@@ -1,4 +1,7 @@
-﻿using EHTool.Shared;
+﻿using EHTool.Core.ViewModel;
+using EHTool.Shared;
+using EHTool.Shared.Entities;
+using EHTool.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +17,10 @@ namespace EHTool.Core.View
         public MainPage()
         {
             InitializeComponent();
-            NavigationPage.SetHasNavigationBar(this, true);
-            Init();
         }
-
-        private async void Init()
+        private void ListView_Refreshing(object sender, EventArgs e)
         {
-            Gallery gallery = new Gallery(Shared.Entities.ServerTypes.EHentai);
-            listView.ItemsSource = await gallery.GetGalleryList();
+
         }
     }
 }

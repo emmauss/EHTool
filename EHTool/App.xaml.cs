@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using System.Diagnostics;
 
 namespace EHTool
 {
@@ -41,8 +42,16 @@ namespace EHTool
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+#if DEBUG
+            UnhandledException += App_UnhandledException;
+#endif
         }
-        
+
+        private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Debug.WriteLine(e.Exception.StackTrace);
+        }
+
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。

@@ -15,7 +15,7 @@ namespace EHTool.Shared.ViewModelBase
     public abstract class GalleryViewModel : Gallery, INotifyPropertyChanged
     {
         protected abstract void OnWebErrorOverride();
-        protected abstract void OnExHentaiAccessOverride();
+        protected abstract void OnExHentaiAccessExceptionOverride();
         protected abstract void OnNoHitOverride();
         protected abstract Task LoadOtherAsyncOverride();
         protected void OnPropertyChanged([CallerMemberName]string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -69,7 +69,7 @@ namespace EHTool.Shared.ViewModelBase
             {
                 IsLoading = false;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
-                OnExHentaiAccessOverride();
+                OnExHentaiAccessExceptionOverride();
             }
             catch (System.Net.Http.HttpRequestException)
             {
@@ -103,7 +103,7 @@ namespace EHTool.Shared.ViewModelBase
             {
                 IsLoading = false;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
-                OnExHentaiAccessOverride();
+                OnExHentaiAccessExceptionOverride();
             }
             catch (System.Net.Http.HttpRequestException)
             {

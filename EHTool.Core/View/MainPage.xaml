@@ -1,15 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="EHTool.Core.View.MainPage">
-  <MasterDetailPage.Master Title="321">
-    <ContentPage Title="asd" Icon="drawable/ic_action_image_dehaze.png">
-      <Label Text="test32"/>
+             x:Class="EHTool.Core.View.MainPage"
+             xmlns:control="clr-namespace:EHTool.Core.Control;assembly=EHTool.Core"
+             xmlns:local="clr-namespace:EHTool.Core.View;assembly=EHTool.Core"
+             Title="EHTool"
+             >
+  <MasterDetailPage.Master Title="EHTool">
+    <ContentPage Title="EHTool" Icon="drawable/ic_action_image_dehaze.png">
     </ContentPage>
   </MasterDetailPage.Master>
   <MasterDetailPage.Detail>
     <ContentPage>
-      <ListView x:Name="listView" HasUnevenRows="True">
+      <ListView IsPullToRefreshEnabled="True" Refreshing="ListView_Refreshing" x:Name="listView" HasUnevenRows="True">
         <ListView.ItemTemplate>
           <DataTemplate>
             <ViewCell>
@@ -20,11 +23,11 @@
                     <RowDefinition Height="auto"/>
                   </Grid.RowDefinitions>
                   <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
                   </Grid.ColumnDefinitions>
                   <Image Grid.RowSpan="2" Source="{Binding Image}"/>
-                  <Label FontSize="20" Text="{Binding Title}" Grid.Row="0" Grid.Column="1"/>
+                  <control:TextBlock MaxLine="2" FontSize="20" Text="{Binding Title}" Grid.Row="0" Grid.Column="1"/>
                   <Label FontSize="10" Text="{Binding Type}" Grid.Row="1" Grid.Column="1"/>
                 </Grid>
               </ViewCell.View>
@@ -32,6 +35,7 @@
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>
+      <ActivityIndicator x:Name="indecator"/>
     </ContentPage>
   </MasterDetailPage.Detail>
 </MasterDetailPage>

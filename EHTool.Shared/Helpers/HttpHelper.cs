@@ -70,7 +70,7 @@ namespace EHTool.Shared.Helpers
                 using (var getContent = new StreamReader(webResponse.GetResponseStream(), Encoding.UTF8))
                 {
                     returnStr = await getContent.ReadToEndAsync();
-                }
+                } 
             }
             return returnStr;
         }

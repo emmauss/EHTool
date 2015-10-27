@@ -11,9 +11,20 @@ namespace Common.Helpers
     {
         public static async Task SaveTextCache(string fileFolder, string fileName, string fileText)
         {
-            var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("textcache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(fileFolder, CreationCollisionOption.OpenIfExists);
-            var file = await cachefolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(file, fileText);
+            try
+            {
+                var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("textcache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(fileFolder, CreationCollisionOption.OpenIfExists);
+                var file = await cachefolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(file, fileText);
+            }
+            catch (UnauthorizedAccessException)
+            {
+
+            }
+            catch (FileLoadException)
+            {
+
+            }
         }
 
         public static async Task<string> GetTextCache(string fileFolder, string fileName)
@@ -25,10 +36,21 @@ namespace Common.Helpers
 
         public static async Task<string> SaveByteArrayCache(string fileFolder, string fileName, byte[] fileText)
         {
-            var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(fileFolder, CreationCollisionOption.OpenIfExists);
-            var file = await cachefolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteBytesAsync(file, fileText);
-            return file.Path;
+            try
+            {
+                var cachefolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("bytescache", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(fileFolder, CreationCollisionOption.OpenIfExists);
+                var file = await cachefolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteBytesAsync(file, fileText);
+                return file.Path;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return string.Empty;
+            }
+            catch (FileLoadException)
+            {
+                return string.Empty;
+            }
         }
 
         public static async Task<byte[]> GetByteArrayCache(string fileFolder, string fileName)

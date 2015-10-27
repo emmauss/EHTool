@@ -92,6 +92,7 @@ namespace EHTool.EHTool.View
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Window.Current.SetTitleBar(TitleBarRect);
             TagSearchVM = e.Parameter as TagSearchViewModel;
             base.OnNavigatedTo(e);
         }

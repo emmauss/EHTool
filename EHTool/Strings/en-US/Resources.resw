@@ -187,7 +187,7 @@
     <value>Download Torrent</value>
   </data>
   <data name="ExHentaiAccessDialogContent" xml:space="preserve">
-    <value>You have NO ACCESS to exhentai</value>
+    <value>You don't have access to exhentai</value>
   </data>
   <data name="FavorPivotHeader.Text" xml:space="preserve">
     <value>Favor</value>

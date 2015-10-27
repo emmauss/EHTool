@@ -22,7 +22,7 @@ using static Common.Helpers.SettingHelper;
 
 namespace EHTool.EHTool.ViewModel
 {
-    public class MainViewModel : GalleryViewModel, INotifyPropertyChanged
+    public class MainViewModel : GalleryViewModel
     {
 
         public static MainViewModel Current;
@@ -142,7 +142,7 @@ namespace EHTool.EHTool.ViewModel
         protected override async void OnWebErrorOverride()
             => await new MessageDialog(StaticResourceLoader.WebErrorDialogContent, StaticResourceLoader.WebErrorDialogTitle).ShowAsync();
 
-        protected override async void OnExHentaiAccessOverride()
+        protected override async void OnExHentaiAccessExceptionOverride()
         {
             LoginDialog dialog = new LoginDialog();
             await dialog.ShowAsync();

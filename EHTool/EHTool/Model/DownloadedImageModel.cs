@@ -62,13 +62,10 @@ namespace EHTool.EHTool.Model
             var downloadedfilesize = downloadedfileprops?.Size;
             if (downloadedfilesize != null && downloadedfilesize != 0)
             {
-                using (var fstream = await downloadedfile.OpenStreamForReadAsync())
+                using (var fstream = await downloadedfile.OpenReadAsync())
                 {
-                    using (var ranstream = fstream.AsRandomAccessStream())
-                    {
-                        _image = new BitmapImage();
-                        await _image.SetSourceAsync(ranstream);
-                    }
+                    _image = new BitmapImage();
+                    await _image.SetSourceAsync(fstream);
                 }
                 OnPropertyChanged(nameof(Image));
             }

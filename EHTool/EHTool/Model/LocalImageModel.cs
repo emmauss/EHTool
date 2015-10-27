@@ -19,13 +19,10 @@ namespace EHTool.EHTool.Model
 
         protected override async Task GetImageOverrideAsync()
         {
-            using (var fstream = await storageFile.OpenStreamForReadAsync())
+            using (var fstream = await storageFile.OpenReadAsync())
             {
-                using (var franstream = fstream.AsRandomAccessStream())
-                {
-                    _image = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
-                    await _image.SetSourceAsync(franstream);
-                }
+                _image = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+                await _image.SetSourceAsync(fstream);
                 OnPropertyChanged(nameof(Image));
             }
         }

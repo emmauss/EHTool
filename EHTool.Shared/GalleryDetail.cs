@@ -11,6 +11,7 @@ using static System.Text.RegularExpressions.Regex;
 using static HtmlAgilityPack.HtmlEntity;
 using static EHTool.Shared.Helpers.HttpHelper;
 using static EHTool.Shared.Helpers.CookieHelper;
+using System;
 
 namespace EHTool.Shared
 {
@@ -71,6 +72,7 @@ namespace EHTool.Shared
                     {
                         list = list.Concat(GetDetailFromString(item).ImageList);
                     }
+                    list = list.Distinct((a) => a.ImagePage);
                     list = list.OrderBy((a) => a.ImageIndex);
                 }
                 else
@@ -200,4 +202,5 @@ namespace EHTool.Shared
             };
         }
     }
+
 }

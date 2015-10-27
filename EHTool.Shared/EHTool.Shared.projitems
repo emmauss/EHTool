@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ServerTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SettingNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extension\HtmlNodeExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extension\IEnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gallery.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GalleryDetail.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GalleryImages.cs" />

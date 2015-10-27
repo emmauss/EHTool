@@ -51,7 +51,7 @@ namespace EHTool.EHTool.View
         {
             IsMiniAutoSuggestBoxShowed = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMiniAutoSuggestBoxShowed)));
-            MiniAutoSuggestBox.Focus(FocusState.Programmatic);
+            MiniAutoSuggestBox.Focus(FocusState.Keyboard);
         }
 
         private void MiniAutoSuggestBox_LostFocus(object sender, RoutedEventArgs e)
