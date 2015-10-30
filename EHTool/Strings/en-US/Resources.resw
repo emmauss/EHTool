@@ -153,6 +153,9 @@
   <data name="CommentTextBlock.Text" xml:space="preserve">
     <value>Comment:</value>
   </data>
+  <data name="CopyLinkButton.Content" xml:space="preserve">
+    <value>Copy Link</value>
+  </data>
   <data name="DecodeTypeSwitch.Header" xml:space="preserve">
     <value>Decode Type</value>
   </data>
@@ -185,6 +188,9 @@
   </data>
   <data name="DownloadTorrentRun.Text" xml:space="preserve">
     <value>Download Torrent</value>
+  </data>
+  <data name="EHFirstSwitch.Header" xml:space="preserve">
+    <value>Set EHTool as startup</value>
   </data>
   <data name="ExHentaiAccessDialogContent" xml:space="preserve">
     <value>You don't have access to exhentai</value>
@@ -269,6 +275,9 @@
   </data>
   <data name="OpenFileButton.Content" xml:space="preserve">
     <value>Open File</value>
+  </data>
+  <data name="OpenInBrowserButton.Content" xml:space="preserve">
+    <value>Open In Browser</value>
   </data>
   <data name="PauseMenuItem.Text" xml:space="preserve">
     <value>Pause</value>

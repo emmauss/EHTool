@@ -17,6 +17,7 @@ namespace EHTool.Shared
 {
     public class GalleryDetail : HostLinkModel
     {
+        public string Link { get; protected set; }
         public string Id { get; protected set; }
         public string Token { get; protected set; }
         public GalleryListModel ListItem { get; protected set; }
@@ -30,6 +31,7 @@ namespace EHTool.Shared
             Id = id;
             Token = token;
             ServerType = type;
+            Link = $"{HostLink}g/{Id}/{Token}";
         }
 
         public GalleryDetail(GalleryListModel item):this(item.ID,item.Token,item.ServerType)

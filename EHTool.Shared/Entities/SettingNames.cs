@@ -14,5 +14,6 @@ namespace EHTool.Shared.Entities
         internal const string IsReadingRightToLeft = "IsReadingRTL";
         internal const string IsAutoDownload = "IsAutoDownload";
         internal const string IsExhentaiMode = "IsExhentaiMode";
+        internal const string IsEHFirst = "IsEHFirst";
     }
 }

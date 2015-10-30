@@ -89,6 +89,10 @@ namespace EHTool.Shared.ViewModelBase
 
         internal async Task Refresh()
         {
+            if (IsLoading)
+            {
+                return;
+            }
             _currentState = CurrentState.MainList;
             _currentPage = 0;
             IsLoading = true;
@@ -120,8 +124,13 @@ namespace EHTool.Shared.ViewModelBase
             IsLoading = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
         }
+
         internal async Task Search(string keyword)
         {
+            if (IsLoading)
+            {
+                return;
+            }
             _currentState = CurrentState.Search;
             _currentPage = 0;
             IsLoading = true;

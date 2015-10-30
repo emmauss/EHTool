@@ -21,6 +21,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
+using Common.Helpers;
+using EHTool.Shared.Entities;
 
 namespace EHTool
 {
@@ -96,7 +98,14 @@ namespace EHTool
                 // 参数
                 rootFrame.ContentTransitions = null;
                 rootFrame.Navigated += this.RootFrame_FirstNavigated;
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                if (SettingHelper.GetSetting<bool>(SettingNames.IsEHFirst))
+                {
+                    rootFrame.Navigate(typeof(EHMainPage), e.Arguments);
+                }
+                else
+                {
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                }
                 //rootFrame.Navigate(typeof(EHMainPage), e.Arguments);
             }
             // 确保当前窗口处于活动状态

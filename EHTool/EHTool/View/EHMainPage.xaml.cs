@@ -21,6 +21,7 @@ using EHTool.EHTool.Common;
 using EHTool.Shared.Helpers;
 using EHTool.Shared.Entities;
 using EHTool.Shared.Model;
+using Windows.UI;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -128,6 +129,18 @@ namespace EHTool.EHTool.View
             }
         }
 
+        public bool IsEHFirst
+        {
+            get
+            {
+                return SettingHelper.GetSetting<bool>(SettingNames.IsEHFirst);
+            }
+            set
+            {
+                SettingHelper.SetSetting(SettingNames.IsEHFirst, value);
+            }
+        }
+
 
         public EHMainPage()
         {
@@ -146,12 +159,22 @@ namespace EHTool.EHTool.View
                 await MainVM.LoadFavorList();
                 //await MainVM.LoadDownloadList();
             }
+            if (e.NavigationMode == NavigationMode.New)
+            {
+
+                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+                {
+                    StatusBar.GetForCurrentView().BackgroundColor = ColorHelper.FromArgb(255, 90, 77, 174);
+                    StatusBar.GetForCurrentView().BackgroundOpacity = 1d;
+                    StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
+                }
+            }
             base.OnNavigatedTo(e);
         }
 
-        private void RefreshClick(object sender, RoutedEventArgs e)
+        private async void RefreshClick(object sender, RoutedEventArgs e)
         {
-            MainVM.Refresh();
+            await MainVM.Refresh();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -387,6 +410,11 @@ namespace EHTool.EHTool.View
         {
             LanguageFilterDialog dialog = new LanguageFilterDialog();
             await dialog.ShowAsync();
+        }
+
+        private async void pullToRefresh_RefreshInvoked(DependencyObject sender, object args)
+        {
+            await MainVM.Refresh();
         }
     }
 }

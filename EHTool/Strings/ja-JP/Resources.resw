@@ -153,6 +153,9 @@
   <data name="CommentTextBlock.Text" xml:space="preserve">
     <value>コメント：</value>
   </data>
+  <data name="CopyLinkButton.Content" xml:space="preserve">
+    <value>リンクをコピー</value>
+  </data>
   <data name="DecodeTypeSwitch.Header" xml:space="preserve">
     <value>デコードの種類</value>
   </data>
@@ -185,6 +188,9 @@
   </data>
   <data name="DownloadTorrentRun.Text" xml:space="preserve">
     <value>Torrentをダウンロードする</value>
+  </data>
+  <data name="EHFirstSwitch.Header" xml:space="preserve">
+    <value>EHToolモードで起動</value>
   </data>
   <data name="ExHentaiAccessDialogContent" xml:space="preserve">
     <value>あなたがExHentaiへのアクセスを持っていない</value>
@@ -269,6 +275,9 @@
   </data>
   <data name="OpenFileButton.Content" xml:space="preserve">
     <value>ファイルを開く</value>
+  </data>
+  <data name="OpenInBrowserButton.Content" xml:space="preserve">
+    <value>ブラウザで開く</value>
   </data>
   <data name="PauseMenuItem.Text" xml:space="preserve">
     <value>ダウンロードを停止する</value>

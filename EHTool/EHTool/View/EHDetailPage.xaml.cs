@@ -24,6 +24,7 @@ using System.Diagnostics;
 using EHTool.Shared.Entities;
 using EHTool.Shared.Model;
 using EHTool.Shared.ViewModelBase;
+using Windows.ApplicationModel.DataTransfer;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -225,6 +226,40 @@ namespace EHTool.EHTool.View
         {
             var item = (sender as MenuFlyoutItem).DataContext as TagValueModel;
             Frame.Navigate(typeof(TagSearchPage), new TagSearchViewModel(item.FullValue, DetailVM.ServerType));
+        }
+
+        private void HeaderJP_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            var item = (sender as TextBlock).Text;
+            if (!string.IsNullOrEmpty(item))
+            {
+                DataPackage data = new DataPackage();
+                data.SetText(item);
+                Clipboard.SetContent(data);
+            }
+        }
+
+        private void HeaderJP_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            var item = (sender as TextBlock).Text;
+            if (!string.IsNullOrEmpty(item))
+            {
+                DataPackage data = new DataPackage();
+                data.SetText(item);
+                Clipboard.SetContent(data);
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DataPackage data = new DataPackage();
+            data.SetText(DetailVM.Link);
+            Clipboard.SetContent(data);
+        }
+
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri(DetailVM.Link));
         }
     }
 }

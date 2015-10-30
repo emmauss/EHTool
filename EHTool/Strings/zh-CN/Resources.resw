@@ -153,6 +153,9 @@
   <data name="CommentTextBlock.Text" xml:space="preserve">
     <value>评论：</value>
   </data>
+  <data name="CopyLinkButton.Content" xml:space="preserve">
+    <value>复制链接</value>
+  </data>
   <data name="DecodeTypeSwitch.Header" xml:space="preserve">
     <value>解码类型</value>
   </data>
@@ -185,6 +188,9 @@
   </data>
   <data name="DownloadTorrentRun.Text" xml:space="preserve">
     <value>下载种子</value>
+  </data>
+  <data name="EHFirstSwitch.Header" xml:space="preserve">
+    <value>以EHTool模式启动</value>
   </data>
   <data name="ExHentaiAccessDialogContent" xml:space="preserve">
     <value>你没有进入ExHentai的权限</value>
@@ -269,6 +275,9 @@
   </data>
   <data name="OpenFileButton.Content" xml:space="preserve">
     <value>打开文件</value>
+  </data>
+  <data name="OpenInBrowserButton.Content" xml:space="preserve">
+    <value>在浏览器中打开</value>
   </data>
   <data name="PauseMenuItem.Text" xml:space="preserve">
     <value>暂停下载</value>

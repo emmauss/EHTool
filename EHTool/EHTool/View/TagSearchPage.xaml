@@ -9,7 +9,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <DataTemplate x:Key="MainListTemplate" x:DataType="model:GalleryListModel">
-            <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
+            <Grid Height="{Binding Height,Mode=OneWay}" Width="{Binding Width,Mode=OneWay}">
                 <!--<Image Source="{x:Bind Image,Mode=OneWay}" Stretch="Uniform"/>-->
                 <Border RequestedTheme="Dark">
                     <Border.Background>

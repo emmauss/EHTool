@@ -94,6 +94,7 @@ namespace EHTool.Shared.Model
                 return;
             }
             _isbusy = true;
+            System.Diagnostics.Debug.WriteLine($"{ImageLink} req!");
             byte[] imageBytes;
             //check cache if exists
             imageBytes = await GetByteArrayCache(ServerType.ToString(), Path.GetFileName(ImageLink));

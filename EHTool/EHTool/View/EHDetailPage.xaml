@@ -87,7 +87,7 @@
             </Grid.ColumnDefinitions>
             <ProgressBar Grid.Column="1" Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter}}" Background="Transparent" Foreground="White" IsIndeterminate="{x:Bind DetailVM.IsLoading,Mode=OneWay}" VerticalAlignment="Stretch"/>
             <Button Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="0" Content="&#xE112;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind BackClick}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <TextBlock MaxLines="1" TextTrimming="CharacterEllipsis" Grid.Column="1" Margin="8" Text="{x:Bind DetailVM.DetailItem.Header.TitleEn,Mode=OneWay}" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <TextBlock Holding="HeaderJP_Holding" DoubleTapped="HeaderJP_DoubleTapped" MaxLines="1" TextTrimming="CharacterEllipsis" Grid.Column="1" Margin="8" Text="{x:Bind DetailVM.DetailItem.Header.TitleEn,Mode=OneWay}" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
             <Button Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Click="{x:Bind SettingButtonClick}" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="3"/>
         </Grid>
         <SplitView IsPaneOpen="{x:Bind IsPaneOpen,Mode=TwoWay}" Grid.Row="2" PanePlacement="Right" PaneBackground="{StaticResource AppTheme}">
@@ -95,6 +95,8 @@
                 <StackPanel Padding="8,0" RequestedTheme="Dark" Orientation="Vertical">
                     <ToggleSwitch x:Uid="ReadingModeSwitch" Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}"/>
                     <ToggleSwitch x:Uid="ReadingDirectionSwitch" IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}"/>
+                    <Button Click="Button_Click" x:Uid="CopyLinkButton" HorizontalAlignment="Stretch" Style="{StaticResource DateTimePickerFlyoutButtonStyle}"/>
+                    <Button Click="Button_Click_1" x:Uid="OpenInBrowserButton" HorizontalAlignment="Stretch" Style="{StaticResource DateTimePickerFlyoutButtonStyle}"/>
                 </StackPanel>
             </SplitView.Pane>
             <ScrollViewer Visibility="{x:Bind DetailVM.IsLoading,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}">
@@ -105,7 +107,7 @@
                     </Grid.RowDefinitions>
                     <RelativePanel Padding="8" Background="LightGray">
                         <Image Margin="4" x:Name="HeaderImage" MaxHeight="400" MaxWidth="300" Width="{x:Bind ImageWidth,Mode=OneWay}" Height="{x:Bind ImageHeight,Mode=OneWay}" Source="{x:Bind DetailVM.DetailItem.Header.Image,Mode=OneWay}"/>
-                        <TextBlock x:Name="HeaderJP" RelativePanel.RightOf="HeaderImage" TextWrapping="WrapWholeWords" Text="{x:Bind DetailVM.DetailItem.Header.TitleJp,Mode=OneWay}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+                        <TextBlock DoubleTapped="HeaderJP_DoubleTapped" Holding="HeaderJP_Holding" x:Name="HeaderJP" RelativePanel.RightOf="HeaderImage" TextWrapping="WrapWholeWords" Text="{x:Bind DetailVM.DetailItem.Header.TitleJp,Mode=OneWay}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                         <rating:RatingControl x:Name="Rating" RelativePanel.Below="HeaderJP" RelativePanel.RightOf="HeaderImage" Padding="0,4" Height="{ThemeResource TextControlThemeMinHeight}" Grid.Row="1" HorizontalAlignment="Left" RoundValueSlice="0" Value="{x:Bind DetailVM.DetailItem.RateValue,Mode=OneWay}" ItemsCount="5" >
                             <rating:RatingControl.EmptyItemsDefinition>
                                 <rating:RateItemDefinition OutlineColor="#FFBCBCBC" BackgroundColor="#FFBCBCBC"/>

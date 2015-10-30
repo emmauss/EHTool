@@ -9,6 +9,7 @@
     xmlns:model="using:EHTool.Shared.Model"
     xmlns:uwpmodel="using:EHTool.EHTool.Model"
     xmlns:triggers="using:Common.Triggers"
+    xmlns:pr="using:PullToRefresh.UWP"
     >
 
     <Page.Resources>
@@ -20,7 +21,7 @@
             <MenuFlyoutItem x:Uid="OpenDetailMenuItem" Click="{x:Bind OpenDetailClicked}"/>
         </MenuFlyout>
         <DataTemplate x:Key="MainListTemplate" x:DataType="model:GalleryListModel">
-            <Grid Height="{x:Bind Height,Mode=OneWay}" Width="{x:Bind Width,Mode=OneWay}">
+            <Grid Height="{Binding Height,Mode=OneWay}" Width="{Binding Width,Mode=OneWay}">
                 <!--<Image Source="{x:Bind Image,Mode=OneWay}" Stretch="Uniform"/>-->
                 <Border RequestedTheme="Dark">
                     <Border.Background>
@@ -282,6 +283,7 @@
                                 <ToggleSwitch x:Uid="ServerModeSwitch" IsOn="{x:Bind MainVM.IsExhentaiMode,Mode=TwoWay}" OffContent="E-Hentai" OnContent="ExHentai"/>
                                 <ToggleSwitch x:Uid="ReadingDirectionSwitch" IsOn="{x:Bind IsReadingRTL,Mode=TwoWay}"/>
                                 <ToggleSwitch x:Uid="ReadingModeSwitch" Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" IsOn="{x:Bind IsReadingDoublePage,Mode=TwoWay}"/>
+                                <ToggleSwitch x:Uid="EHFirstSwitch" IsOn="{x:Bind IsEHFirst,Mode=TwoWay}"/>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
@@ -335,18 +337,20 @@
                             </StackPanel>
                         </ScrollViewer>
                     </SplitView.Pane>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <ProgressBar Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter}}" Background="Transparent" IsIndeterminate="{x:Bind MainVM.IsLoading,Mode=OneWay}" VerticalAlignment="Stretch"/>
-                        <GridView Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.MainList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" >
-                            <GridView.Footer>
-                                <Button Visibility="{x:Bind MainVM.IsLoading,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" HorizontalAlignment="Stretch" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Content="Load More" Click="{x:Bind LoadMoreClick}"/>
-                            </GridView.Footer>
-                        </GridView>
-                    </Grid>
+                    <pr:PullToRefreshBox x:Name="pullToRefresh" RefreshInvoked="pullToRefresh_RefreshInvoked">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <ProgressBar Visibility="{x:Bind IsPhone,Converter={StaticResource BoolToVisibilityConverter}}" Background="Transparent" IsIndeterminate="{x:Bind MainVM.IsLoading,Mode=OneWay}" VerticalAlignment="Stretch"/>
+                            <GridView Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.MainList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" >
+                                <GridView.Footer>
+                                    <Button Visibility="{x:Bind MainVM.IsLoading,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true,Mode=OneWay}" HorizontalAlignment="Stretch" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Content="Load More" Click="{x:Bind LoadMoreClick}"/>
+                                </GridView.Footer>
+                            </GridView>
+                        </Grid>
+                    </pr:PullToRefreshBox>
                 </SplitView>
             </PivotItem>
             <PivotItem >
@@ -361,6 +365,8 @@
                         </StackPanel>
                     </SplitView.Pane>
                     <GridView IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.FavorList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" ></GridView>
+
+
                 </SplitView>
             </PivotItem>
             <PivotItem>
