@@ -30,49 +30,17 @@ namespace EHTool.Shared.Helpers
             }
         }
 
-        internal static async Task<byte[]> GetByteArray(string link, string cookie)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Add("Cookie", cookie);
-                return await client.GetByteArrayAsync(link);
-            }
-        }
-
-        internal async static Task<string> GetStringWithPostString(string uriString, string postStr, string contentType)
-        {
-            string returnStr;
-            byte[] data = Encoding.UTF8.GetBytes(postStr);
-            HttpWebRequest req = WebRequest.CreateHttp(uriString);
-            req.Method = "POST";
-            req.ContentType = contentType;
-            using (Stream stream = await req.GetRequestStreamAsync())
-            {
-                stream.Write(data, 0, data.Length);
-            }
-            using (var res = await req.GetResponseAsync() as HttpWebResponse)
-            {
-                using (var getcontent = new StreamReader(res.GetResponseStream(), Encoding.UTF8))
-                {
-                    returnStr = getcontent.ReadToEnd();
-                }
-            }
-            return returnStr;
-        }
 
         internal async static Task<string> GetStringWithCookie(string uriString, string cookie)
         {
-            string returnStr;
-            HttpWebRequest webRequest = WebRequest.CreateHttp(uriString);
-            webRequest.Headers["Cookie"] = cookie;
-            using (HttpWebResponse webResponse = await webRequest.GetResponseAsync() as HttpWebResponse)
+            using (var handler = new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip | DecompressionMethods.None, UseCookies = false, })
+            using (var client = new HttpClient(handler))
             {
-                using (var getContent = new StreamReader(webResponse.GetResponseStream(), Encoding.UTF8))
-                {
-                    returnStr = await getContent.ReadToEndAsync();
-                } 
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add("Cookie", cookie);
+                client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate");
+                return await client.GetStringAsync(uriString);
             }
-            return returnStr;
         }
     }
 }

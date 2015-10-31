@@ -365,8 +365,6 @@
                         </StackPanel>
                     </SplitView.Pane>
                     <GridView IsItemClickEnabled="True" SelectionMode="None" ItemClick="{x:Bind MainItemClick}" ItemsSource="{x:Bind MainVM.FavorList,Mode=OneWay}" ItemTemplate="{StaticResource MainListTemplate}" ></GridView>
-
-
                 </SplitView>
             </PivotItem>
             <PivotItem>
@@ -435,7 +433,6 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </SplitView>
-
             </PivotItem>
         </Pivot>
     </Grid>

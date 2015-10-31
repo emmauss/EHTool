@@ -19,10 +19,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
-using static EHTool.Shared.Helpers.CookieHelper;
+using static EHTool.Shared.Helpers.CookieHelper; 
 
 namespace EHTool.EHTool.Model
 {
+    [KnownType(typeof(DownloadItemModel))]
     [DataContract]
     public class DownloadItemModel : GalleryListModel
     {

@@ -66,8 +66,8 @@ namespace EHTool.EHTool.Model
                 {
                     _image = new BitmapImage();
                     await _image.SetSourceAsync(fstream);
+                    OnPropertyChanged(nameof(Image));
                 }
-                OnPropertyChanged(nameof(Image));
             }
             else
             {

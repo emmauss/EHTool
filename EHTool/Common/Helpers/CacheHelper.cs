@@ -17,11 +17,7 @@ namespace Common.Helpers
                 var file = await cachefolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
                 await FileIO.WriteTextAsync(file, fileText);
             }
-            catch (UnauthorizedAccessException)
-            {
-
-            }
-            catch (FileLoadException)
+            catch
             {
 
             }
@@ -43,11 +39,7 @@ namespace Common.Helpers
                 await FileIO.WriteBytesAsync(file, fileText);
                 return file.Path;
             }
-            catch (UnauthorizedAccessException)
-            {
-                return string.Empty;
-            }
-            catch (FileLoadException)
+            catch
             {
                 return string.Empty;
             }

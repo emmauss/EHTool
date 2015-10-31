@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.FileProperties;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace EHTool.EHTool.Model
@@ -40,7 +41,15 @@ namespace EHTool.EHTool.Model
             cachefolder = await cachefolder.CreateFolderAsync(_id, CreationCollisionOption.OpenIfExists);
             var file = await cachefolder.GetFileWithoutExtensionAsync($"{_pageIndex}");
             //if current file is now downloading,it will throw UnauthorizedAccessException
-            var fileprops = file == null ? null : await file.GetBasicPropertiesAsync();
+            BasicProperties fileprops;
+            try
+            {
+                fileprops = file == null ? null : await file.GetBasicPropertiesAsync();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                fileprops = null;
+            }
             var filesize = fileprops?.Size;
             if (filesize != null && filesize != 0)
             {

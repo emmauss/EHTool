@@ -12,6 +12,7 @@ using static HtmlAgilityPack.HtmlEntity;
 using static EHTool.Shared.Helpers.HttpHelper;
 using static EHTool.Shared.Helpers.CookieHelper;
 using System;
+using System.Net.Http;
 
 namespace EHTool.Shared
 {
@@ -56,6 +57,49 @@ namespace EHTool.Shared
 
         public async Task<IEnumerable<ImageListModel>> GetImagePageList()
         {
+            /// TODO:Solve the problem about the cookie will send more than once
+            /// Below doesn't work well because GetStringWithCookie well send Cookie more than once
+            /// I have no idea why,can anyone help me?
+            ///
+            //var detailHtmlStr = await GetStringWithCookie(Link, Cookie + ";uconfig=tl_m-uh_y-tr_2-ts_m-dm_t-ar_0-xns_0-rc_0-rx_0-ry_0-cs_a-to_a-pn_0-sc_0-cats_0-prn_y-ms_n-mt_n-sa_y-oi_n-qb_n-tf_n-hp_-hk_-xl_");
+            //HtmlDocument doc = new HtmlDocument();                       
+            //doc.LoadHtml(detailHtmlStr);
+            //var detailPageCount = int.Parse(doc.DocumentNode.GetNodeByClassName("ptt").FirstChild.ChildNodes[doc.DocumentNode.GetNodeByClassName("ptt").FirstChild.ChildNodes.Count - 2].InnerText);
+            //var nodeList = doc.GetElementbyId("gdt").GetNodesByClassName("gdtm");
+            //if (detailPageCount > 1)
+            //{
+            //    string[] pagelinklist = new string[detailPageCount - 1];
+            //    for (int i = 1; i < detailPageCount; i++)
+            //    {
+            //        pagelinklist[i - 1] = $"{HostLink}g/{Id}/{Token}/?p={i}";
+            //    }
+            //    var downloads = pagelinklist.Select(link => GetStringWithCookie(link, Cookie + ";uconfig=tl_m-uh_y-tr_2-ts_m-dm_t-ar_0-xns_0-rc_0-rx_0-ry_0-cs_a-to_a-pn_0-sc_0-cats_0-prn_y-ms_n-mt_n-sa_y-oi_n-qb_n-tf_n-hp_-hk_-xl_"));
+            //    var task = Task.WhenAll(downloads);                                            
+            //    var htmls = await task;
+            //    if (task.Status == TaskStatus.RanToCompletion)
+            //    {
+            //        foreach (var item in htmls)
+            //        {
+            //            HtmlDocument tempdoc = new HtmlDocument();
+            //            tempdoc.LoadHtml(detailHtmlStr);
+            //            nodeList = nodeList.Concat(tempdoc.GetElementbyId("gdt").GetNodesByClassName("gdtm"));
+            //        }
+            //    }
+            //    else
+            //    {
+            //        throw new System.Net.WebException();
+            //    }
+            //}
+            //return from node in nodeList
+            //       where node.HasChildNodes
+            //       select new ImageListModel
+            //       {
+            //           ServerType = ServerType,
+            //           ImageName = node.InnerText,
+            //           ImageIndex = int.Parse(node.GetNodeByName("img").Attributes["alt"].Value),
+            //           ImagePage = $"{node.GetNodeByName("a").Attributes["href"].Value}?",
+            //       };
+
             var detail = await GetDetail();
             IEnumerable<ImageListModel> list = detail.ImageList;
             if (detail.DetailPageCount > 1)
@@ -85,22 +129,23 @@ namespace EHTool.Shared
             return list;
         }
 
-        public async Task<IEnumerable<ImageListModel>> GetImagePageList(IEnumerable<ImageListModel> pageList, int pageCount)
-        {
-            var list = pageList;
-            for (int i = 1; i < pageCount; i++)
-            {
-                var temp = await GetDetail(i);
-                list = list.Concat(temp.ImageList);
-            }
-            return list;
-        }
+
+        //public async Task<IEnumerable<ImageListModel>> GetImagePageList(IEnumerable<ImageListModel> pageList, int pageCount)
+        //{
+        //    var list = pageList;
+        //    for (int i = 1; i < pageCount; i++)
+        //    {
+        //        var temp = await GetDetail(i);
+        //        list = list.Concat(temp.ImageList);
+        //    }
+        //    return list;
+        //}
 
         public async Task<DetailModel> GetDetail(int page = 0)
         {
             string link = $"{HostLink}g/{Id}/{Token}/?p={page}";
             string htmlStr = await CheckIfCached(link, page == 0);
-            var detailItem = htmlStr != "" ? GetDetailFromString(htmlStr) : null;
+            var detailItem = string.IsNullOrEmpty(htmlStr) ? null : GetDetailFromString(htmlStr);
             return detailItem;
         }
         private async Task<string> CheckIfCached(string link, bool canCache)
@@ -140,14 +185,14 @@ namespace EHTool.Shared
                    where b.Name == "table"
                    select new TorrentModel()
                    {
-                       PostDate = b.GetElements("tr")[0].GetElements("td")[0].InnerText,
-                       Size = b.GetElements("tr")[0].GetElements("td")[1].InnerText,
-                       Seeds = b.GetElements("tr")[0].GetElements("td")[3].InnerText,
-                       Peers = b.GetElements("tr")[0].GetElements("td")[4].InnerText,
-                       Downloads = b.GetElements("tr")[0].GetElements("td")[5].InnerText,
-                       Uploader = b.GetElements("tr")[1].GetElements("td")[0].InnerText,
-                       Name = b.GetElements("tr")[2].Element("td").Element("a").InnerText,
-                       TorrentLink = b.GetElements("tr")[2].Element("td").Element("a").Attributes["href"].Value,
+                       PostDate = b.GetElements("tr").ToList()[0].GetElements("td").ToList()[0].InnerText,
+                       Size = b.GetElements("tr").ToList()[0].GetElements("td").ToList()[1].InnerText,
+                       Seeds = b.GetElements("tr").ToList()[0].GetElements("td").ToList()[3].InnerText,
+                       Peers = b.GetElements("tr").ToList()[0].GetElements("td").ToList()[4].InnerText,
+                       Downloads = b.GetElements("tr").ToList()[0].GetElements("td").ToList()[5].InnerText,
+                       Uploader = b.GetElements("tr").ToList()[1].GetElements("td").ToList()[0].InnerText,
+                       Name = b.GetElements("tr").ToList()[2].Element("td").Element("a").InnerText,
+                       TorrentLink = b.GetElements("tr").ToList()[2].Element("td").Element("a").Attributes["href"].Value,
                    };
         }
 
@@ -180,8 +225,8 @@ namespace EHTool.Shared
                 RateValue = double.Parse(Match(doc.GetElementbyId("rating_label").InnerText, "([0-9]+.[0-9]+)").Value),
                 UpLoadInformation = (from a in doc.GetElementbyId("gdd").FirstChild.ChildNodes
                                      select DeEntitize(a.InnerText)).ToArray(),
-                MaxImageCount = GetMaxImageCount(doc.DocumentNode.GetNodebyClassName("gpc").InnerText),
-                DetailPageCount = int.Parse(doc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes[doc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes.Count - 2].InnerText),
+                MaxImageCount = GetMaxImageCount(doc.DocumentNode.GetNodeByClassName("gpc").InnerText),
+                DetailPageCount = int.Parse(doc.DocumentNode.GetNodeByClassName("ptt").FirstChild.ChildNodes[doc.DocumentNode.GetNodeByClassName("ptt").FirstChild.ChildNodes.Count - 2].InnerText),
                 ImageList = (from a in doc.GetElementbyId("gdt").ChildNodes
                              where a.HasChildNodes
                              select new ImageListModel
@@ -196,10 +241,10 @@ namespace EHTool.Shared
                                where a.HasChildNodes && a.FirstChild.Name == "div"
                                select new CommentModel
                                {
-                                   Poster = DeEntitize(a.GetNodebyClassName("c3").InnerText),
-                                   Content = DeEntitize(a.GetNodebyClassName("c6").InnerText),
-                                   Score = a.GetNodebyClassName("c5 nosel") != null ? a.GetNodebyClassName("c5 nosel").InnerText : a.GetNodebyClassName("c4 nosel") != null ? a.GetNodebyClassName("c4 nosel").InnerText : "",
-                                   Base = a.GetNodebyClassName("c7") == null ? "" : a.GetNodebyClassName("c7").InnerText,
+                                   Poster = DeEntitize(a.GetNodeByClassName("c3").InnerText),
+                                   Content = DeEntitize(a.GetNodeByClassName("c6").InnerText),
+                                   Score = a.GetNodeByClassName("c5 nosel") != null ? a.GetNodeByClassName("c5 nosel").InnerText : a.GetNodeByClassName("c4 nosel") != null ? a.GetNodeByClassName("c4 nosel").InnerText : "",
+                                   Base = a.GetNodeByClassName("c7") == null ? "" : a.GetNodeByClassName("c7").InnerText,
                                }).ToList(),
             };
         }

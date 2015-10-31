@@ -44,20 +44,20 @@ namespace EHTool.Shared
         {
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlString);
-            var ptt = doc.DocumentNode.GetNodebyClassName("ptt").FirstChild;
+            var ptt = doc.DocumentNode.GetNodeByClassName("ptt").FirstChild;
             MaxPageCount = int.Parse(ptt.ChildNodes[ptt.ChildNodes.Count - 2].InnerText);
-            var htmlnode = doc.DocumentNode.GetNodebyClassName("itg");
+            var htmlnode = doc.DocumentNode.GetNodeByClassName("itg");
             return from a in htmlnode.ChildNodes
                    where a.HasChildNodes
                    select new GalleryListModel
                    {
-                       Title = DeEntitize(a.GetNodebyClassName("id2").InnerText),
-                       ImageLink = (a.GetNodebyClassName("id3").Element("a").Element("img").Attributes["src"].Value),
-                       Link = (a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value),
-                       FileCount = (a.GetNodebyClassName("id42").InnerText),
-                       Token = Match(a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value, "/g/([^/]+)/([^-]+)/").Groups[2].Value,
-                       ID = Match(a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value, "/g/([^/]+)/([^-]+)/").Groups[1].Value,
-                       Type = a.GetNodebyClassName("id41").Attributes["title"].Value,
+                       Title = DeEntitize(a.GetNodeByClassName("id2").InnerText),
+                       ImageLink = (a.GetNodeByClassName("id3").Element("a").Element("img").Attributes["src"].Value),
+                       Link = (a.GetNodeByClassName("id2").Element("a").Attributes["href"].Value),
+                       FileCount = (a.GetNodeByClassName("id42").InnerText),
+                       Token = Match(a.GetNodeByClassName("id2").Element("a").Attributes["href"].Value, "/g/([^/]+)/([^-]+)/").Groups[2].Value,
+                       ID = Match(a.GetNodeByClassName("id2").Element("a").Attributes["href"].Value, "/g/([^/]+)/([^-]+)/").Groups[1].Value,
+                       Type = a.GetNodeByClassName("id41").Attributes["title"].Value,
                        ServerType = ServerType,
                    };
         }
