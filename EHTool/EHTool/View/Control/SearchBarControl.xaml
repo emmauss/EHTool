@@ -53,11 +53,11 @@
         <Button Click="button_Click_2" x:Name="button" Grid.Column="1" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}">
             <SymbolIcon Symbol="Find"/>
         </Button>
-        <AutoSuggestBox x:Name="autoSuggestBox" Visibility="Collapsed" Grid.Column="1" QueryIcon="Find" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8"/>
+        <AutoSuggestBox GotFocus="autoSuggestBox_GotFocus" TextChanged="autoSuggestBox_TextChanged" x:Name="autoSuggestBox" Visibility="Collapsed" Grid.Column="1" QueryIcon="Find" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8"/>
         <Button Content="&#xE117;" FontFamily="Segoe MDL2 Assets" Click="Button_Click" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="2"/>
         <Button Content="&#xE700;" FontFamily="Segoe MDL2 Assets" Click="Button_Click_1" Margin="4,0" Style="{ThemeResource DateTimePickerFlyoutButtonStyle}" Grid.Column="3"/>
         <Grid Background="{ThemeResource AppTheme}" Grid.ColumnSpan="4" Visibility="{x:Bind IsMiniAutoSuggestBoxShowed,Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}">
-            <AutoSuggestBox LostFocus="MiniAutoSuggestBox_LostFocus" x:Name="MiniAutoSuggestBox" QueryIcon="Find" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8"/>
+            <AutoSuggestBox GotFocus="autoSuggestBox_GotFocus" TextChanged="autoSuggestBox_TextChanged" LostFocus="MiniAutoSuggestBox_LostFocus" x:Name="MiniAutoSuggestBox" QueryIcon="Find" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="8"/>
         </Grid>
     </Grid>
 </UserControl>
