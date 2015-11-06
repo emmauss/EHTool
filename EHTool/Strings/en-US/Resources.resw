@@ -165,6 +165,9 @@
   <data name="DecodeTypeSwitch.OnContent" xml:space="preserve">
     <value>System</value>
   </data>
+  <data name="DefaultDownloadFolderCheckBox.Content" xml:space="preserve">
+    <value>Default download folder</value>
+  </data>
   <data name="DeleteDialogContent" xml:space="preserve">
     <value>Delete From Your Computer?</value>
   </data>

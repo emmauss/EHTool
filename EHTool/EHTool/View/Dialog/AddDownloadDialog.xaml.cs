@@ -18,6 +18,11 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.AccessCache;
 using EHTool.Shared.Model;
+using Common.Helpers;
+using EHTool.Shared.Entities;
+
+using static EHTool.Shared.Entities.SettingNames;
+using static Common.Helpers.SettingHelper;
 
 // “内容对话框”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上进行了说明
 
@@ -28,22 +33,53 @@ namespace EHTool.EHTool.View
         public event PropertyChangedEventHandler PropertyChanged;
         private GalleryListModel _item;
         private StorageFolder _folder;
+        private bool? _isDefaultDownloadFolder = false;
         public bool IsDownloadInApp { get; set; }
         public string FolderLocation { get; set; } = "Click To Pick";
         public string FolderName { get; set; }
         public string Token { get; set; }
+        public bool? IsDefaultDownloadFolder
+        {
+            get
+            {
+                return _isDefaultDownloadFolder;
+            }
+            set
+            {
+                if (_folder != null)
+                {
+                    _isDefaultDownloadFolder = value;
+                    if (value.HasValue)
+                    {
+                        SetSetting(DefaultDownloadFolder, value.Value ? StorageApplicationPermissions.FutureAccessList.Add(_folder) : null);
+                    }       
+                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDefaultDownloadFolder)));
+            }
+        }
 
 
         public AddDownloadDialog(GalleryListModel item)
         {
             InitializeComponent();
+            Init();
             _item = item;
             FolderName = _item.Title;
             foreach (var charitem in Path.GetInvalidFileNameChars())
             {
                 FolderName = FolderName.Replace($"{charitem}", "");
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FolderName)));
+        }
+
+        private async void Init()
+        {
+            if (GetSetting<string>(DefaultDownloadFolder) != null && StorageApplicationPermissions.FutureAccessList.ContainsItem(GetSetting<string>(DefaultDownloadFolder)))
+            {
+                _folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(GetSetting<string>(DefaultDownloadFolder));
+                FolderLocation = _folder.Path;
+                _isDefaultDownloadFolder = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FolderLocation)));
+            }
         }
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -74,6 +110,8 @@ namespace EHTool.EHTool.View
             if (_folder != null)
             {
                 FolderLocation = _folder.Path;
+                _isDefaultDownloadFolder = false;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDefaultDownloadFolder)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FolderLocation)));
             }
         }
